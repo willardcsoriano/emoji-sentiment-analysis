@@ -24,7 +24,7 @@ def main(
     # Load the dataset
     logger.info(f"Loading data from {input_path}...")
     try:
-        df = pd.read_excel(input_path)
+        df = pd.read_csv(input_path)
     except FileNotFoundError:
         logger.error(f"File not found at {input_path}. Please place the file in the data/raw directory.")
         return
