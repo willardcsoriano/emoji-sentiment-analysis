@@ -1,3 +1,5 @@
+# emoji_sentiment_analysis\emoji_sentiment_analysis\dataset.py
+
 import pandas as pd
 from pathlib import Path
 
@@ -12,7 +14,7 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    input_path: Path = RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.xlsx",
+    input_path: Path = RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv",
     output_path: Path = PROCESSED_DATA_DIR / "1k_data_processed.csv",
 ):
     """
