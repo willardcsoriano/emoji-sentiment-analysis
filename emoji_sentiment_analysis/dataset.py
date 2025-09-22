@@ -1,5 +1,4 @@
-# emoji_sentiment_analysis/emoji_sentiment_analysis/dataset.py
-
+import re
 import pandas as pd
 from pathlib import Path
 
@@ -16,10 +15,40 @@ from emoji_sentiment_analysis.config import (
 app = typer.Typer()
 
 
+def load_emoticon_data(path: Path) -> dict[str, str]:
+    """
+    Loads the emoticon data and creates a mapping from emoji to a
+    normalized sentiment word.
+    """
+    try:
+        # The exploration notebook showed this file has an 'Unnamed: 0' column
+        df = pd.read_csv(path, index_col=0) 
+        # Create a dictionary mapping the Emoji to a normalized word.
+        return {emoji: "_EMOJI_" for emoji in df['Emoji'].tolist()}
+    except Exception as e:
+        logger.error(f"Failed to load emoticon data from {path}: {e}")
+        return {}
+
+
+# A regex-based function to replace all emojis in one pass
+def process_text_with_emojis(text: str, emoji_map: dict[str, str]) -> str:
+    """
+    Replaces recognized emojis in text with a placeholder word.
+    """
+    emoji_pattern = "|".join(re.escape(emoji) for emoji in emoji_map.keys())
+    if not emoji_pattern:
+        return text  # Return original text if no emojis are in the map
+    
+    return re.sub(f"({emoji_pattern})", emoji_map.get, text)
+
+
+# A cleaner way to organize the main function
 @app.command()
 def main(
-    input_paths: list[Path] = typer.Argument(
-        [RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv"],
+    input_paths: list[Path] = typer.Option(
+        None,
+        "--input-paths",
+        "-i",
         help="List of paths to raw CSV datasets to be processed.",
     ),
     output_path: Path = PROCESSED_DATA_DIR / "combined_data_processed.csv",
@@ -28,58 +57,56 @@ def main(
     Load raw data from multiple files, align column names to config,
     clean minimal issues, and save a combined, processed dataset.
     """
-    # -------------------------------------------------------------
-    combined_df = pd.DataFrame()
+    # Define default input paths if none are provided
+    if not input_paths:
+        input_paths = [
+            RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv",
+            RAW_DATA_DIR / "15_emoticon_data.csv"
+        ]
+
+    # Load emoticon data first
+    emoticon_path = RAW_DATA_DIR / "15_emoticon_data.csv"
+    emoji_lookup = load_emoticon_data(emoticon_path)
+    if not emoji_lookup:
+        logger.warning("No emoticon data found. Emojis will not be processed.")
     
+    combined_df = pd.DataFrame()
+
+    # Then, load and process the other datasets
     for input_path in input_paths:
+        if input_path.name == "15_emoticon_data.csv":
+            continue # Skip the emoticon data file
+
         logger.info(f"Loading data from {input_path}...")
         try:
-            df = pd.read_csv(input_path)
+            # Your existing loading and processing logic here
+            df = pd.read_csv(input_path, index_col=0)
             
-            # Inspect the initial columns
-            logger.info(f"Initial columns: {df.columns.tolist()}")
-
-            # Rename columns for consistency with global knobs.
             column_mapping = {
-                # text aliases
                 "post": TEXT_COL,
                 "tweet": TEXT_COL,
-                "text": TEXT_COL,   # idempotent if already equal
-                # target/label aliases
+                "text": TEXT_COL,
                 "sentiment": TARGET_COL,
-                "label": TARGET_COL,  # idempotent
+                "label": TARGET_COL,
                 "target": TARGET_COL,
             }
             df = df.rename(columns=column_mapping)
-            logger.info(f"Columns renamed to: {df.columns.tolist()}")
-
-            # Drop any auto-generated index columns like 'Unnamed: 0'
-            df = df.drop(
-                columns=[c for c in df.columns if str(c).lower().startswith("unnamed")],
-                errors="ignore",
-            )
             
-            # Sanity checks: required columns must exist after renaming
             missing = [col for col in (TEXT_COL, TARGET_COL) if col not in df.columns]
             if missing:
-                logger.error(
-                    f"Skipping {input_path}. Required column(s) missing after renaming: {missing}. "
-                    f"Available columns: {df.columns.tolist()}"
-                )
-                continue  # Skip to the next file
+                logger.error(f"Skipping {input_path}. Missing column(s): {missing}.")
+                continue
             
-            # Add to combined dataframe
+            if emoji_lookup:
+                df[TEXT_COL] = df[TEXT_COL].apply(
+                    lambda x: process_text_with_emojis(str(x), emoji_lookup)
+                )
+            
             combined_df = pd.concat([combined_df, df], ignore_index=True)
             logger.info(f"DataFrame shape after adding {input_path.name}: {combined_df.shape}")
 
-        except FileNotFoundError:
-            logger.error(f"File not found at {input_path}. Skipping.")
         except Exception as e:
             logger.error(f"An error occurred processing {input_path.name}: {e}")
-
-    if combined_df.empty:
-        logger.error("No valid data was loaded. Exiting.")
-        return
 
     # -------------------------------------------------------------
     # Final processing on the combined dataframe
