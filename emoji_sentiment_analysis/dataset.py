@@ -1,10 +1,12 @@
-import re
 import pandas as pd
 from pathlib import Path
 
 from loguru import logger
 import typer
+from pandas.api.types import is_numeric_dtype
 
+# Import the feature engineering function from the features script
+from emoji_sentiment_analysis.features import process_text_with_emojis
 from emoji_sentiment_analysis.config import (
     PROCESSED_DATA_DIR,
     RAW_DATA_DIR,
@@ -28,18 +30,6 @@ def load_emoticon_data(path: Path) -> dict[str, str]:
     except Exception as e:
         logger.error(f"Failed to load emoticon data from {path}: {e}")
         return {}
-
-
-# A regex-based function to replace all emojis in one pass
-def process_text_with_emojis(text: str, emoji_map: dict[str, str]) -> str:
-    """
-    Replaces recognized emojis in text with a placeholder word.
-    """
-    emoji_pattern = "|".join(re.escape(emoji) for emoji in emoji_map.keys())
-    if not emoji_pattern:
-        return text  # Return original text if no emojis are in the map
-    
-    return re.sub(f"({emoji_pattern})", emoji_map.get, text)
 
 
 # A cleaner way to organize the main function
@@ -98,8 +88,8 @@ def main(
                 continue
             
             if emoji_lookup:
-                df[TEXT_COL] = df[TEXT_COL].apply(
-                    lambda x: process_text_with_emojis(str(x), emoji_lookup)
+                df[TEXT_COL] = df[TEXT_COL].astype(str).apply(
+                    lambda x: process_text_with_emojis(x, emoji_lookup)
                 )
             
             combined_df = pd.concat([combined_df, df], ignore_index=True)
@@ -119,8 +109,6 @@ def main(
     )
 
     # Normalize target labels
-    from pandas.api.types import is_numeric_dtype
-
     if is_numeric_dtype(combined_df[TARGET_COL]):
         combined_df[TARGET_COL] = combined_df[TARGET_COL].astype("Int64")
     else:
