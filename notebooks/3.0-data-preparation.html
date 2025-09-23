@@ -7510,22 +7510,72 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=06e0f2d3">
+<main>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a4aec6bb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="3.0-Data-Preparation">3.0 Data Preparation<a class="anchor-link" href="#3.0-Data-Preparation">¶</a></h1><h2 id="%F0%9F%93%91-Notebook-Overview">📑 Notebook Overview<a class="anchor-link" href="#%F0%9F%93%91-Notebook-Overview">¶</a></h2><p>This notebook prepares the cleaned dataset for model training by:</p>
+<ul>
+<li>Loading the processed CSV output from the preprocessing pipeline.</li>
+<li>Splitting the data into training, validation, and test sets with stratification.</li>
+<li>Vectorizing text using TF-IDF (fit on train only).</li>
+<li>Saving the vectorized datasets and the fitted vectorizer for reproducible training and inference.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ec4294a5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="1-%E2%80%94-Purpose-&amp;-High-Level-Workflow">1 — Purpose &amp; High-Level Workflow<a class="anchor-link" href="#1-%E2%80%94-Purpose-&amp;-High-Level-Workflow">¶</a></h2><p><strong>Why:</strong> ensure train/validation/test splits are reproducible and to prevent data leakage during vectorization.<br/>
+<strong>Workflow:</strong></p>
+<ol>
+<li>Load <code>data/processed/combined_data_processed.csv</code>.</li>
+<li>Split: 70% train, 15% validation, 15% test (stratified by label).</li>
+<li>Fit <code>TfidfVectorizer</code> on training text only; transform val/test with the same vocabulary.</li>
+<li>Persist prepared artifacts (<code>X_*_vec</code>, <code>y_*</code>, <code>vectorizer</code>) to disk for downstream modeling.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ed8420db">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2-%E2%80%94-Data-Loading">2 — Data Loading<a class="anchor-link" href="#2-%E2%80%94-Data-Loading">¶</a></h2><p>Load the processed data into a pandas DataFrame and confirm that key columns exist:</p>
+<ul>
+<li>Expected columns: <code>text</code> (features) and <code>label</code> (target).</li>
+<li>File path (example): <code>../data/processed/combined_data_processed.csv</code> (relative to notebooks folder).</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=06e0f2d3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># --- 3.0 Data Preparation ---</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span> <span class="c1"># Library for saving and loading Python objects</span>
 
-<span class="c1"># Load the cleaned and processed data using the correct file path</span>
-<span class="n">file_path</span> <span class="o">=</span> <span class="s1">'data/processed/combined_data_processed.csv'</span>
+<span class="c1"># Define the correct file path to the processed data</span>
+<span class="c1"># The '../' moves up one directory from the 'notebooks' folder</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="s1">'../data/processed/combined_data_processed.csv'</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
 <span class="c1"># Display the first few rows to confirm the data is loaded correctly</span>
@@ -7553,12 +7603,32 @@ a.anchor-link {
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fa0562b5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="3-%E2%80%94-Splitting-Strategy-(Train-/-Val-/-Test)">3 — Splitting Strategy (Train / Val / Test)<a class="anchor-link" href="#3-%E2%80%94-Splitting-Strategy-(Train-/-Val-/-Test)">¶</a></h2><p><strong>Splitting details:</strong></p>
+<ul>
+<li>First split: train (70%) and temp (30%) with <code>stratify=y</code> to keep label proportions consistent.</li>
+<li>Second split: temp → validation (15%) and test (15%) by splitting temp 50/50 with <code>stratify=y_temp</code>.</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Use <code>random_state</code> for reproducibility.</li>
+<li>Confirm resulting shapes to ensure splits are as expected.</li>
+</ul>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1e884e8b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Define features (X) and target (y) based on the DataFrame's columns</span>
@@ -7605,12 +7675,29 @@ Test set shape: X=(150,), y=(150,)
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1a140778">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="4-%E2%80%94-Text-Vectorization-(TF-IDF)">4 — Text Vectorization (TF-IDF)<a class="anchor-link" href="#4-%E2%80%94-Text-Vectorization-(TF-IDF)">¶</a></h2><p><strong>Approach:</strong></p>
+<ul>
+<li>Initialize <code>TfidfVectorizer(max_features=1000)</code> to limit vocabulary and reduce dimensionality.</li>
+<li><strong>Fit</strong> the vectorizer only on <code>X_train</code> to avoid leaking validation/test information.</li>
+<li><strong>Transform</strong> <code>X_val</code> and <code>X_test</code> using the fitted vectorizer.</li>
+</ul>
+<p><strong>Why:</strong> TF-IDF provides a simple, interpretable baseline representation for text-based classification.</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=54c16185">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Initialize the TF-IDF Vectorizer</span>
@@ -7648,6 +7735,85 @@ Vectorized Validation set shape: (150, 1000)
 Vectorized Test set shape: (150, 1000)
 </pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=66d84e62">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="5-%E2%80%94-Persistence-&amp;-Reproducibility">5 — Persistence &amp; Reproducibility<a class="anchor-link" href="#5-%E2%80%94-Persistence-&amp;-Reproducibility">¶</a></h2><p>Save a single artifact (e.g., <code>models/prepared_data.pkl</code>) containing:</p>
+<ul>
+<li>Vectorized datasets: <code>X_train_vec</code>, <code>X_val_vec</code>, <code>X_test_vec</code></li>
+<li>Labels: <code>y_train</code>, <code>y_val</code>, <code>y_test</code></li>
+<li>The fitted <code>vectorizer</code> object</li>
+</ul>
+<p><strong>Why:</strong> Storing these artifacts allows model training to be deterministic and decouples preparation from training scripts.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9d7c63e4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Define the file path for saving</span>
+<span class="c1"># The '../' moves up one directory from the 'notebooks' folder</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s1">'../models/prepared_data.pkl'</span>
+
+<span class="c1"># Define a dictionary to store all the prepared data</span>
+<span class="n">prepared_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'X_train_vec'</span><span class="p">:</span> <span class="n">X_train_vec</span><span class="p">,</span>
+    <span class="s1">'X_val_vec'</span><span class="p">:</span> <span class="n">X_val_vec</span><span class="p">,</span>
+    <span class="s1">'X_test_vec'</span><span class="p">:</span> <span class="n">X_test_vec</span><span class="p">,</span>
+    <span class="s1">'y_train'</span><span class="p">:</span> <span class="n">y_train</span><span class="p">,</span>
+    <span class="s1">'y_val'</span><span class="p">:</span> <span class="n">y_val</span><span class="p">,</span>
+    <span class="s1">'y_test'</span><span class="p">:</span> <span class="n">y_test</span><span class="p">,</span>
+    <span class="s1">'vectorizer'</span><span class="p">:</span> <span class="n">vectorizer</span>
+<span class="p">}</span>
+
+<span class="c1"># Save the dictionary of prepared data to a single file</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">prepared_data</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Prepared data and vectorizer saved to '</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+Prepared data and vectorizer saved to '../models/prepared_data.pkl'
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=880dedfe">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Next-Steps">Next Steps<a class="anchor-link" href="#Next-Steps">¶</a></h2><p>With prepared data and the vectorizer saved:</p>
+<ol>
+<li>Implement baseline training scripts (Logistic Regression, SVM).</li>
+<li>Run hyperparameter search on the validation set.</li>
+<li>Evaluate the final model on the held-out test set and save the best model.</li>
+<li>Iterate on feature engineering (emoji placeholder binary feature, n-grams, embeddings) and measure impact against the baseline.</li>
+</ol>
 </div>
 </div>
 </div>
