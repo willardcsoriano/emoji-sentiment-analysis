@@ -16,7 +16,7 @@ Workflow:
    to the `models` directory for future inference.
 
 Usage Example:
-    python train.py
+    python -m emoji_sentiment_analysis.modeling.train
 
 Expected Output:
     - Validation accuracy and classification report
@@ -26,7 +26,6 @@ Expected Output:
 
 import pandas as pd
 from pathlib import Path
-import re
 import joblib
 
 from loguru import logger
@@ -36,29 +35,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 
+# Import the feature engineering function from the features script
+from emoji_sentiment_analysis.features import add_emoji_feature
 from emoji_sentiment_analysis.config import MODELS_DIR, PROCESSED_DATA_DIR, SEED, TEXT_COL, TARGET_COL
 
 app = typer.Typer()
-
-# Regex to find emojis and their UTF-8 codes
-# This pattern matches common emoji Unicode ranges
-# Adjust as needed based on the dataset
-EMOJI_PATTERN = re.compile(
-    "["
-    "\U0001F600-\U0001F64F"  # Emoticons
-    "\U0001F300-\U0001F5FF"  # Symbols & Pictographs
-    "\U0001F680-\U0001F6FF"  # Transport & Map Symbols
-    "\U0001F1E0-\U0001F1FF"  # Flags (iOS)
-    "\U00002702-\U000027B0"  # Dingbats
-    "]+",
-    flags=re.UNICODE
-)
-
-def extract_emojis(text):
-    """
-    Extracts emojis from text and returns them as a single string.
-    """
-    return " ".join(re.findall(EMOJI_PATTERN, text))
 
 @app.command()
 def main(
@@ -78,8 +59,8 @@ def main(
         logger.error(f"Processed data file not found at {processed_data_path}. Please run the data processing pipeline first.")
         return
 
-    # Create a new column to amplify the emoji signal
-    df['text_with_emojis'] = df[TEXT_COL] + ' ' + df[TEXT_COL].apply(lambda x: extract_emojis(x) * 5)
+    # Call the feature engineering function from features.py
+    df = add_emoji_feature(df)
     
     X = df['text_with_emojis']
     y = df[TARGET_COL]
