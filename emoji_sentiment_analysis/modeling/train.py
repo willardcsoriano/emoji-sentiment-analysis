@@ -4,11 +4,10 @@ import re
 import joblib
 
 from loguru import logger
-from tqdm import tqdm
 import typer
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 
 from emoji_sentiment_analysis.config import MODELS_DIR, PROCESSED_DATA_DIR, SEED, TEXT_COL, TARGET_COL
@@ -37,20 +36,20 @@ def extract_emojis(text):
 
 @app.command()
 def main(
-    processed_data_path: Path = PROCESSED_DATA_DIR / "1k_data_processed.csv",
+    processed_data_path: Path = PROCESSED_DATA_DIR / "combined_data_processed.csv",
     model_path: Path = MODELS_DIR / "sentiment_model.pkl",
     vectorizer_path: Path = MODELS_DIR / "tfidf_vectorizer.pkl"
 ):
     """
-    Loads processed data, trains a LinearSVC model, and saves the trained model.
+    Loads processed data, trains a Multinomial Naive Bayes model, and saves the trained model.
     """
     logger.info("Starting model training...")
-    
+
     # Load the processed data
     try:
         df = pd.read_csv(processed_data_path)
     except FileNotFoundError:
-        logger.error(f"Processed data file not found at {processed_data_path}. Please run 'python -m emoji_sentiment_analysis.dataset' first.")
+        logger.error(f"Processed data file not found at {processed_data_path}. Please run the data processing pipeline first.")
         return
 
     # Create a new column to amplify the emoji signal
@@ -59,31 +58,48 @@ def main(
     X = df['text_with_emojis']
     y = df[TARGET_COL]
 
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=SEED, stratify=y
+    # Perform a three-way split for train, validation, and test sets
+    logger.info("Splitting data into training, validation, and test sets...")
+    X_train_temp, X_test, y_train_temp, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=SEED, stratify=y
     )
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_train_temp, y_train_temp, test_size=0.5, random_state=SEED, stratify=y_train_temp
+    )
+    
+    logger.info(f"Training set size: {len(X_train)}")
+    logger.info(f"Validation set size: {len(X_val)}")
+    logger.info(f"Test set size: {len(X_test)}")
 
-    # Initialize and fit the TF-IDF vectorizer
+    # Initialize and fit the TF-IDF vectorizer on the training data
     logger.info("Fitting TF-IDF Vectorizer...")
     vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=5, max_df=0.8)
-    X_train_transformed = vectorizer.fit_transform(X_train)
-    X_test_transformed = vectorizer.transform(X_test)
+    X_train_vec = vectorizer.fit_transform(X_train)
+    X_val_vec = vectorizer.transform(X_val)
+    X_test_vec = vectorizer.transform(X_test)
     
-    # Initialize and train the Linear SVC model
-    logger.info("Training LinearSVC model...")
-    model = LinearSVC(random_state=SEED, C=0.5)
-    model.fit(X_train_transformed, y_train)
+    # Initialize and train the best model (Multinomial Naive Bayes)
+    logger.info("Training Multinomial Naive Bayes model...")
+    model = MultinomialNB()
+    model.fit(X_train_vec, y_train)
 
-    # Make predictions and evaluate the model
-    logger.info("Evaluating model performance...")
-    y_pred = model.predict(X_test_transformed)
+    # Evaluate the model on the validation set
+    logger.info("Evaluating model performance on the validation set...")
+    y_val_pred = model.predict(X_val_vec)
+    accuracy = accuracy_score(y_val, y_val_pred)
+    report = classification_report(y_val, y_val_pred)
     
-    accuracy = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred)
-    
-    logger.info(f"Model Accuracy: {accuracy:.4f}")
+    logger.info(f"Validation Accuracy: {accuracy:.4f}")
     logger.info(f"Classification Report:\n{report}")
+
+    # Final evaluation on the test set
+    logger.info("Performing final evaluation on the test set...")
+    y_test_pred = model.predict(X_test_vec)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+    test_report = classification_report(y_test, y_test_pred)
+    
+    logger.info(f"Test Set Accuracy: {test_accuracy:.4f}")
+    logger.info(f"Test Set Classification Report:\n{test_report}")
 
     # Save the trained model and vectorizer
     logger.info(f"Saving model to {model_path}...")
@@ -93,7 +109,6 @@ def main(
     joblib.dump(vectorizer, vectorizer_path)
     
     logger.success("Model training and saving complete.")
-
 
 if __name__ == "__main__":
     app()
