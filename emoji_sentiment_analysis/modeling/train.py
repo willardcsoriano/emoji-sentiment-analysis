@@ -1,3 +1,29 @@
+# emoji_sentiment_analysis\emoji_sentiment_analysis\modeling\train.py
+
+"""
+📑 Script: train.py
+-------------------
+This script handles **training, evaluation, and saving** of a sentiment 
+analysis model using preprocessed text data.
+
+Workflow:
+1. Load processed dataset from `combined_data_processed.csv`.
+2. Amplify the emoji signal by appending extracted emojis to text.
+3. Split the data into train, validation, and test sets (stratified).
+4. Fit a TF-IDF vectorizer and train a Multinomial Naive Bayes classifier.
+5. Evaluate the model on validation and test sets.
+6. Save the trained model (`sentiment_model.pkl`) and vectorizer (`tfidf_vectorizer.pkl`) 
+   to the `models` directory for future inference.
+
+Usage Example:
+    python train.py
+
+Expected Output:
+    - Validation accuracy and classification report
+    - Test accuracy and classification report
+    - Confirmation logs that the model and vectorizer have been saved
+"""
+
 import pandas as pd
 from pathlib import Path
 import re
