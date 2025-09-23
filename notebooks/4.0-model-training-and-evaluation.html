@@ -7517,18 +7517,15 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Summary-of-Notebook-4.0:-Model-Training-and-Evaluation">Summary of Notebook 4.0: Model Training and Evaluation<a class="anchor-link" href="#Summary-of-Notebook-4.0:-Model-Training-and-Evaluation">¶</a></h3><p>This notebook serves as the <strong>model training and evaluation stage</strong> of the machine learning project pipeline. Its primary objective is to select the best-performing model for sentiment analysis and prepare it for deployment.</p>
-<p>The notebook's workflow consists of the following key steps:</p>
-<h4 id="Data-Loading">Data Loading<a class="anchor-link" href="#Data-Loading">¶</a></h4><p>The notebook begins by efficiently loading the <strong>prepared and vectorized data</strong> from a <code>.pkl</code> file. This data, which includes training, validation, and test sets, was generated in the previous <code>3.0-data-preparation</code> notebook. This approach ensures reproducibility and avoids the need to re-run the entire data preparation pipeline.</p>
-<h4 id="Model-Experimentation-and-Selection">Model Experimentation and Selection<a class="anchor-link" href="#Model-Experimentation-and-Selection">¶</a></h4><p>A <strong>comparative analysis</strong> of three different machine learning algorithms is performed on the validation set:</p>
-<ul>
-<li>Logistic Regression</li>
-<li>Multinomial Naive Bayes</li>
-<li>Linear Support Vector Machine (SVM)</li>
-</ul>
-<p>This process, facilitated by the shared API of Scikit-learn's models, allows for the rapid identification of the best-performing algorithm. Based on the validation results, the <strong>Multinomial Naive Bayes</strong> model was selected for its superior performance.</p>
-<h4 id="Final-Evaluation">Final Evaluation<a class="anchor-link" href="#Final-Evaluation">¶</a></h4><p>The selected model is then evaluated on a completely <strong>unseen test set</strong>. This single, final run provides an unbiased and reliable measure of the model's true real-world performance. This step is crucial for validating the model's generalizability and ensuring that its performance is not a result of overfitting to the validation data.</p>
-<h4 id="Model-Persistence">Model Persistence<a class="anchor-link" href="#Model-Persistence">¶</a></h4><p>The final, best-performing model and the TF-IDF vectorizer are saved to the project's <code>models</code> directory as <code>.pkl</code> files. This allows the trained model to be loaded and used for new predictions without the need for time-consuming retraining, a practice essential for model deployment.</p>
+<h1 id="4.0-Model-Training-and-Evaluation">4.0 Model Training and Evaluation<a class="anchor-link" href="#4.0-Model-Training-and-Evaluation">¶</a></h1><h2 id="%F0%9F%93%91-Notebook-Overview">📑 Notebook Overview<a class="anchor-link" href="#%F0%9F%93%91-Notebook-Overview">¶</a></h2><p>This notebook implements the <strong>model training and evaluation stage</strong> of the pipeline.<br/>
+Its primary goal is to select the best-performing model for sentiment analysis and prepare it for deployment.</p>
+<p><strong>Workflow Overview:</strong></p>
+<ol>
+<li>Load prepared, vectorized datasets from the <code>3.0-data-preparation</code> stage.</li>
+<li>Train and compare baseline models on the validation set.</li>
+<li>Select the best model and evaluate on the held-out test set.</li>
+<li>Save the final model and vectorizer for reproducible inference.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7539,7 +7536,13 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Section-1:-Load-Prepared-Data-and-Libraries">Section 1: Load Prepared Data and Libraries<a class="anchor-link" href="#Section-1:-Load-Prepared-Data-and-Libraries">¶</a></h4><p>This first cell loads all the necessary libraries and the prepared data from the .pkl file created in the previous notebook.</p>
+<h2 id="1-%E2%80%94-Load-Prepared-Data-and-Libraries">1 — Load Prepared Data and Libraries<a class="anchor-link" href="#1-%E2%80%94-Load-Prepared-Data-and-Libraries">¶</a></h2><p>Load all dependencies and import the preprocessed data artifacts (<code>prepared_data.pkl</code>).<br/>
+This file contains:</p>
+<ul>
+<li>Train, validation, and test splits (already vectorized).</li>
+<li>Target labels (<code>y_train</code>, <code>y_val</code>, <code>y_test</code>).</li>
+<li>The fitted TF-IDF vectorizer (ensures consistent transformations for new data).</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7599,7 +7602,19 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Section-2:-Model-Experimentation-and-Evaluation">Section 2: Model Experimentation and Evaluation<a class="anchor-link" href="#Section-2:-Model-Experimentation-and-Evaluation">¶</a></h4><p>This section defines a dictionary of models to test and then uses a loop to train and evaluate each one on the validation set.</p>
+<h2 id="2-%E2%80%94-Model-Experimentation-(Validation-Set)">2 — Model Experimentation (Validation Set)<a class="anchor-link" href="#2-%E2%80%94-Model-Experimentation-(Validation-Set)">¶</a></h2><p><strong>Goal:</strong> compare baseline models using the validation set.<br/>
+<strong>Models tested:</strong></p>
+<ul>
+<li>Logistic Regression</li>
+<li>Multinomial Naive Bayes</li>
+<li>Linear Support Vector Machine (SVM)</li>
+</ul>
+<p>Each model is trained on the training set, evaluated on the validation set, and compared using:</p>
+<ul>
+<li>Accuracy</li>
+<li>Classification Report (Precision, Recall, F1)</li>
+</ul>
+<p>This stage identifies the best candidate before touching the test set.</p>
 </div>
 </div>
 </div>
@@ -7699,7 +7714,18 @@ weighted avg       0.79      0.79      0.79       150
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Section-3:-Final-Evaluation-on-the-Test-Set">Section 3: Final Evaluation on the Test Set<a class="anchor-link" href="#Section-3:-Final-Evaluation-on-the-Test-Set">¶</a></h4><p>After reviewing the results from the previous cell, we identified Multinomial Naive Bayes as the best-performing model. This cell performs the final, single evaluation on the unseen test set to get an unbiased performance score.</p>
+<h2 id="3-%E2%80%94-Final-Evaluation-(Test-Set)">3 — Final Evaluation (Test Set)<a class="anchor-link" href="#3-%E2%80%94-Final-Evaluation-(Test-Set)">¶</a></h2><p>After reviewing validation results, the best-performing model is retrained on the <strong>training set</strong> and evaluated once on the <strong>held-out test set</strong>.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Provides an unbiased estimate of real-world performance.</li>
+<li>Ensures that model selection was not overly influenced by validation data.</li>
+</ul>
+<p><strong>Outputs:</strong></p>
+<ul>
+<li>Test set accuracy</li>
+<li>Classification report</li>
+<li>Confusion matrix</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7770,7 +7796,12 @@ Test Set Confusion Matrix:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Section-4:-Save-Final-Model-and-Vectorizer">Section 4: Save Final Model and Vectorizer<a class="anchor-link" href="#Section-4:-Save-Final-Model-and-Vectorizer">¶</a></h4><p>This final cell saves the trained model to disk. Model persistence is a crucial step that enables the trained model to be used for making predictions on new data without requiring retraining.</p>
+<h2 id="4-%E2%80%94-Model-Persistence">4 — Model Persistence<a class="anchor-link" href="#4-%E2%80%94-Model-Persistence">¶</a></h2><p>The final model and TF-IDF vectorizer are saved as <code>.pkl</code> files in the <code>models/</code> directory.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>Enables reproducible predictions without retraining.</li>
+<li>Critical step for deployment and integration into production pipelines.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7806,6 +7837,28 @@ Test Set Confusion Matrix:
 Selected model saved to ../models/sentiment_model.pkl
 </pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4e4394ff">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%93%8A-Summary-&amp;-Next-Steps">📊 Summary &amp; Next Steps<a class="anchor-link" href="#%F0%9F%93%8A-Summary-&amp;-Next-Steps">¶</a></h2><p><strong>Findings (example based on validation results):</strong></p>
+<ul>
+<li>Multinomial Naive Bayes outperformed Logistic Regression and Linear SVM on this dataset.</li>
+<li>Test set results confirm that performance generalizes well to unseen data.</li>
+</ul>
+<p><strong>Next Steps:</strong></p>
+<ol>
+<li>Extend experiments with hyperparameter tuning (GridSearchCV, RandomizedSearchCV).</li>
+<li>Explore richer text features (n-grams, embeddings, engineered features).</li>
+<li>Wrap the final model in a simple prediction service (e.g., FastAPI or Flask).</li>
+<li>Monitor model performance on new, real-world data.</li>
+</ol>
 </div>
 </div>
 </div>
