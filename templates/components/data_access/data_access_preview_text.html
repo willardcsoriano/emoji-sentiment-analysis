@@ -1,0 +1,42 @@
+<!-- templates/components/data_access/data_access_preview_text.html -->
+<details class="group space-y-4">
+
+    <!-- Header / affordance -->
+    <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+        <div class="flex items-center gap-2">
+            <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+            <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Dataset 01 · Text Corpus (Sample)
+            </h5>
+        </div>
+
+        <span class="text-[10px] text-slate-400 group-open:hidden">
+            Show table
+        </span>
+        <span class="text-[10px] text-slate-400 hidden group-open:inline">
+            Hide table
+        </span>
+    </summary>
+
+    <!-- Context always visible -->
+    <p class="text-xs text-slate-500 italic">
+        Representative examples highlighting sentiment polarity and emoji presence
+    </p>
+
+    <!-- Collapsible content -->
+    <div class="overflow-x-auto rounded-2xl border border-slate-300 shadow-md bg-slate-50">
+        <table class="w-full text-left text-[11px] font-mono leading-tight">
+            <thead class="bg-slate-200 border-b border-slate-300 text-slate-600 uppercase">
+                <tr>
+                    <th class="px-4 py-3 font-black">Index</th>
+                    <th class="px-4 py-3 font-black">Sentiment</th>
+                    <th class="px-4 py-3 font-black">Post (Raw)</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 [&>tr:nth-child(even)]:bg-white">
+                <!-- rows unchanged -->
+            </tbody>
+        </table>
+    </div>
+
+</details>

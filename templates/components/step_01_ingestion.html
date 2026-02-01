@@ -1,0 +1,25 @@
+<div class="space-y-6 text-slate-600">
+    <p class="text-sm leading-relaxed">
+        The pipeline begins with the synthesis of disparate linguistic sources into a unified, high-integrity training corpus. This stage focused on eliminating "noise" from raw social media exports.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Sources Merged</h4>
+            <ul class="text-xs space-y-1 font-mono text-slate-700">
+                <li>• 1k_emoji_tweets_senti.csv</li>
+                <li>• 15_emoticon_dictionary.csv</li>
+            </ul>
+        </div>
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">ETL Operations</h4>
+            <ul class="text-xs space-y-1 text-slate-700">
+                <li>• Dropped redundant <code class="bg-slate-200 px-1 rounded text-blue-700 font-bold">Unnamed: 0</code> indices</li>
+                <li>• Standardized schema to <code class="bg-slate-200 px-1 rounded text-blue-700 font-bold">text</code> | <code class="bg-slate-200 px-1 rounded text-blue-700 font-bold">label</code></li>
+            </ul>
+        </div>
+    </div>
+    <div class="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <div class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+        <p class="text-xs font-bold text-blue-800 uppercase tracking-tighter">Integrity Check: 50/50 Class Balance (500 POS / 500 NEG)</p>
+    </div>
+</div>

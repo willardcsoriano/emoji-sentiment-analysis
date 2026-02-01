@@ -1,0 +1,22 @@
+<div class="space-y-6">
+    <p class="text-sm text-slate-600">
+        To capitalize on the EDA findings, a custom <strong>Feature Engineering</strong> layer was implemented to amplify the signal of emotional markers before they reach the vectorizer.
+    </p>
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner">
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <span class="text-slate-500 tracking-widest uppercase">Transformation Protocol</span>
+            <span class="text-blue-500">v3.0.prepare</span>
+        </div>
+        <div class="space-y-2">
+            <p><span class="text-slate-500"># 1. Extract & Sanitize</span></p>
+            <p class="text-slate-300">raw_emoji = <span class="text-green-400">"✨"</span></p>
+            <p><span class="text-slate-500"># 2. Assign Global Placeholder</span></p>
+            <p class="text-slate-300">placeholder = <span class="text-green-400">"_EMOJI_"</span></p>
+            <p><span class="text-slate-500"># 3. Amplify Weighting (w=5)</span></p>
+            <p class="text-slate-300">engineered_feature = placeholder * <span class="text-blue-400">5</span></p>
+        </div>
+    </div>
+    <p class="text-xs text-slate-400 italic text-center">
+        This forces the TF-IDF calculation to prioritize the <u>emotional state</u> over standard vocabulary.
+    </p>
+</div>
