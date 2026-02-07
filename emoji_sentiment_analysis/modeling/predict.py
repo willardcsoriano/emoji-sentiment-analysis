@@ -1,37 +1,64 @@
-# emoji_sentiment_analysis\emoji_sentiment_analysis\modeling\predict.py
-
 """
 📑 Script: predict.py
 ---------------------
-This script provides a command-line interface (CLI) for **sentiment inference** 
-using a previously trained model and TF-IDF vectorizer.
-
-Workflow:
-1. Load the saved model (`sentiment_model.pkl`) and vectorizer (`tfidf_vectorizer.pkl`).
-2. Transform the input text into numerical features.
-3. Predict the sentiment (0 = Negative, 1 = Positive).
-4. Output the sentiment label in human-readable form.
-
-Usage Example:
-    python predict.py "I'm so happy right now! _EMOJI_"
-
-Expected Output:
-    Original Text: "I'm so happy right now! _EMOJI_"
-    Predicted Sentiment: Positive
+Updated with deep decision logging and emoji-aware inference.
 """
 
 from pathlib import Path
 import pandas as pd
 import joblib
-
+import numpy as np
+import json
 from loguru import logger
 import typer
 
 from emoji_sentiment_analysis.config import MODELS_DIR
+from emoji_sentiment_analysis.features import extract_emojis
 
-# Initialize Typer for building a CLI interface
+# Initialize Typer
 app = typer.Typer()
 
+def generate_inference_log(text, model, vectorizer):
+    """
+    Core logging logic extracted from Notebook 7.0.
+    Identifies decision drivers using model.feature_log_prob_.
+    """
+    # 1. Pipeline Execution: Emoji Signal Amplification
+    emojis = extract_emojis(text)
+    engine_input = f"{text} {emojis * 5}"
+    vec = vectorizer.transform([engine_input])
+    
+    # 2. Probability & Prediction (Ref: Notebook 5.0)
+    probs = model.predict_proba(vec)[0]
+    prediction = int(model.predict(vec)[0])
+    
+    # 3. Feature Importance Extraction (Ref: Notebook 4.0/5.0 Artifacts)
+    feature_names = vectorizer.get_feature_names_out()
+    nonzero_indices = vec.nonzero()[1]
+    
+    feature_impacts = []
+    for idx in nonzero_indices:
+        token = feature_names[idx]
+        # Weight = LogProb(Pos) - LogProb(Neg)
+        weight = model.feature_log_prob_[1][idx] - model.feature_log_prob_[0][idx]
+        feature_impacts.append({
+            "token": token,
+            "weight": round(weight, 4),
+            "sentiment_lean": "Positive" if weight > 0 else "Negative"
+        })
+    
+    # 4. Construct the Deep Log Entry
+    log_entry = {
+        "raw_text": text,
+        "engine_input": engine_input,
+        "prediction": "Positive" if prediction == 1 else "Negative",
+        "confidence": round(float(np.max(probs)), 4),
+        "entropy_flag": "High Ambiguity" if abs(probs[0] - probs[1]) < 0.15 else "Clear Signal",
+        "top_drivers": sorted(feature_impacts, key=lambda x: abs(x['weight']), reverse=True)[:3],
+        "emoji_detected": len(emojis) > 0
+    }
+    
+    return log_entry
 
 @app.command()
 def main(
@@ -40,48 +67,27 @@ def main(
     vectorizer_path: Path = MODELS_DIR / "tfidf_vectorizer.pkl"
 ):
     """
-    Command-line tool to predict sentiment of input text using a trained model.
-
-    Args:
-        text (str): Input text for which sentiment should be predicted.
-        model_path (Path): Path to the trained sentiment model file.
-        vectorizer_path (Path): Path to the saved TF-IDF vectorizer file.
+    Predicts sentiment and outputs a detailed decision log.
     """
+    logger.info(f"Starting audit-level inference for: '{text}'")
 
-    # Log start of inference
-    logger.info(f"Starting inference for the text: '{text}'")
-
-    # Load the trained model and vectorizer
     try:
         model = joblib.load(model_path)
-        logger.info("Model loaded successfully!")
-
         vectorizer = joblib.load(vectorizer_path)
-        logger.info("Vectorizer loaded successfully!")
-
     except FileNotFoundError:
-        # Catch missing model/vectorizer files
-        logger.error("Model or vectorizer files not found. Please ensure train.py has been run.")
+        logger.error("Model or vectorizer not found. Please check MODELS_DIR.")
         return
 
-    # Wrap the input text in a Pandas Series (vectorizer expects this format)
-    new_text_series = pd.Series([text])
+    # Generate the deep log
+    log_data = generate_inference_log(text, model, vectorizer)
 
-    # Transform the new text into numerical features using the TF-IDF vectorizer
-    new_text_vec = vectorizer.transform(new_text_series)
-
-    # Generate sentiment prediction using the trained model
-    prediction = model.predict(new_text_vec)
-
-    # Map numeric prediction to human-readable sentiment label
-    sentiment_map = {0: "Negative", 1: "Positive"}
-    predicted_sentiment = sentiment_map[prediction[0]]
-
-    # Log the final result
-    logger.info(f"Original Text: '{text}'")
-    logger.success(f"Predicted Sentiment: {predicted_sentiment}")
+    # Output to CLI
+    logger.success(f"Sentiment: {log_data['prediction']} (Confidence: {log_data['confidence']*100:.2f}%)")
+    logger.info(f"Entropy Status: {log_data['entropy_flag']}")
+    
+    print("\n--- Decision Audit Log ---")
+    print(json.dumps(log_data, indent=2))
 
 
-# Entry point for running as a script
 if __name__ == "__main__":
     app()
