@@ -1,15 +1,38 @@
+# emoji_sentiment_analysis\dataset.py
+
+"""
+Dataset Ingestion & Cleaning Pipeline
+-------------------------------------
+
+This script operationalizes the deterministic data cleaning
+specification defined in Notebooks 1.0 and 1.5.
+
+Responsibilities:
+
+• Load raw datasets
+• Standardize schemas
+• Remove structural artifacts
+• Preserve emoji text exactly
+• Validate dataset contracts
+• Export cleaned datasets to data/processed/
+
+Outputs:
+
+data/processed/tweets_clean.csv
+data/processed/emoji_reference_clean.csv
+"""
+
+from __future__ import annotations
+
 import pandas as pd
 from pathlib import Path
 
 from loguru import logger
 import typer
-from pandas.api.types import is_numeric_dtype
 
-# Import the feature engineering function from the features script
-from emoji_sentiment_analysis.features import process_text_with_emojis
 from emoji_sentiment_analysis.config import (
-    PROCESSED_DATA_DIR,
     RAW_DATA_DIR,
+    PROCESSED_DATA_DIR,
     TEXT_COL,
     TARGET_COL,
 )
@@ -17,139 +40,172 @@ from emoji_sentiment_analysis.config import (
 app = typer.Typer()
 
 
-def load_emoticon_data(path: Path) -> dict[str, str]:
+# ---------------------------------------------------------------------
+# Validation Helpers
+# ---------------------------------------------------------------------
+
+def validate_tweets(df: pd.DataFrame) -> None:
     """
-    Loads the emoticon data and creates a mapping from emoji to a
-    normalized sentiment word.
+    Enforces tweet dataset invariants.
+    Raises AssertionError if violated.
     """
-    try:
-        # The exploration notebook showed this file has an 'Unnamed: 0' column
-        df = pd.read_csv(path, index_col=0) 
-        # Create a dictionary mapping the Emoji to a normalized word.
-        return {emoji: "_EMOJI_" for emoji in df['Emoji'].tolist()}
-    except Exception as e:
-        logger.error(f"Failed to load emoticon data from {path}: {e}")
-        return {}
+
+    assert list(df.columns) == [TARGET_COL, TEXT_COL], \
+        f"Tweet schema mismatch: {df.columns}"
+
+    assert df[TARGET_COL].isin([0, 1]).all(), \
+        "Labels must be binary (0/1)."
+
+    assert df[TEXT_COL].str.len().gt(0).all(), \
+        "Empty text rows detected."
 
 
-# A cleaner way to organize the main function
+def validate_emoji_reference(df: pd.DataFrame) -> None:
+    """
+    Enforces emoji reference dataset invariants.
+    """
+
+    assert "emoji" in df.columns, \
+        "Emoji column missing."
+
+    assert df["emoji"].nunique() == len(df), \
+        "Duplicate emojis detected."
+
+
+# ---------------------------------------------------------------------
+# Cleaning Functions
+# ---------------------------------------------------------------------
+
+def clean_tweets_dataset(path: Path) -> pd.DataFrame:
+    """
+    Cleans the tweet sentiment dataset.
+
+    Cleaning operations:
+
+    • Drop redundant index columns
+    • Rename schema fields
+    • Enforce data types
+    • Remove nulls
+    • Reset index
+    """
+
+    logger.info(f"Loading tweets dataset: {path.name}")
+
+    df = pd.read_csv(path)
+
+    # Drop redundant columns
+    df = df.drop(columns=["Unnamed: 0"], errors="ignore")
+
+    # Rename schema
+    df = df.rename(columns={
+        "post": TEXT_COL,
+        "tweet": TEXT_COL,
+        "text": TEXT_COL,
+        "sentiment": TARGET_COL,
+        "label": TARGET_COL,
+    })
+
+    # Keep only required columns
+    df = df[[TARGET_COL, TEXT_COL]]
+
+    # Enforce types
+    df[TEXT_COL] = df[TEXT_COL].astype(str)
+    df[TARGET_COL] = df[TARGET_COL].astype(int)
+
+    # Remove nulls
+    df = df.dropna(subset=[TEXT_COL, TARGET_COL])
+
+    # Reset index
+    df = df.reset_index(drop=True)
+
+    logger.info(f"Cleaned tweets shape: {df.shape}")
+
+    # Validate contract
+    validate_tweets(df)
+
+    return df
+
+
+def clean_emoji_reference(path: Path) -> pd.DataFrame:
+    """
+    Cleans emoji metadata reference dataset.
+    """
+
+    logger.info(f"Loading emoji reference: {path.name}")
+
+    df = pd.read_csv(path)
+
+    # Drop redundant index column
+    df = df.drop(columns=["Unnamed: 0"], errors="ignore")
+
+    # Rename columns
+    df = df.rename(columns={
+        "Emoji": "emoji",
+        "Unicode codepoint": "unicode_codepoint",
+        "Unicode name": "unicode_name",
+    })
+
+    # Enforce string types
+    for col in df.columns:
+        df[col] = df[col].astype(str)
+
+    df = df.reset_index(drop=True)
+
+    logger.info(f"Cleaned emoji reference shape: {df.shape}")
+
+    # Validate contract
+    validate_emoji_reference(df)
+
+    return df
+
+
+# ---------------------------------------------------------------------
+# Main Pipeline Entry
+# ---------------------------------------------------------------------
+
 @app.command()
-def main(
-    input_paths: list[Path] = typer.Option(
-        None,
-        "--input-paths",
-        "-i",
-        help="List of paths to raw CSV datasets to be processed.",
-    ),
-    output_path: Path = PROCESSED_DATA_DIR / "combined_data_processed.csv",
-):
+def main():
     """
-    Load raw data from multiple files, align column names to config,
-    clean minimal issues, and save a combined, processed dataset.
+    Executes the full ingestion + cleaning pipeline.
     """
-    # Define default input paths if none are provided
-    if not input_paths:
-        input_paths = [
-            RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv",
-            RAW_DATA_DIR / "15_emoticon_data.csv"
-        ]
 
-    # Load emoticon data first
-    emoticon_path = RAW_DATA_DIR / "15_emoticon_data.csv"
-    emoji_lookup = load_emoticon_data(emoticon_path)
-    if not emoji_lookup:
-        logger.warning("No emoticon data found. Emojis will not be processed.")
-    
-    combined_df = pd.DataFrame()
+    logger.info("Starting dataset ingestion pipeline...")
 
-    # Then, load and process the other datasets
-    for input_path in input_paths:
-        if input_path.name == "15_emoticon_data.csv":
-            continue # Skip the emoticon data file
+    # Ensure output directory exists
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Loading data from {input_path}...")
-        try:
-            # Your existing loading and processing logic here
-            df = pd.read_csv(input_path, index_col=0)
-            
-            column_mapping = {
-                "post": TEXT_COL,
-                "tweet": TEXT_COL,
-                "text": TEXT_COL,
-                "sentiment": TARGET_COL,
-                "label": TARGET_COL,
-                "target": TARGET_COL,
-            }
-            df = df.rename(columns=column_mapping)
-            
-            missing = [col for col in (TEXT_COL, TARGET_COL) if col not in df.columns]
-            if missing:
-                logger.error(f"Skipping {input_path}. Missing column(s): {missing}.")
-                continue
-            
-            if emoji_lookup:
-                df[TEXT_COL] = df[TEXT_COL].astype(str).apply(
-                    lambda x: process_text_with_emojis(x, emoji_lookup)
-                )
-            
-            combined_df = pd.concat([combined_df, df], ignore_index=True)
-            logger.info(f"DataFrame shape after adding {input_path.name}: {combined_df.shape}")
+    # -----------------------------------------------------------------
+    # Load + clean tweets dataset
+    # -----------------------------------------------------------------
 
-        except Exception as e:
-            logger.error(f"An error occurred processing {input_path.name}: {e}")
+    tweets_path = RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv"
 
-    # -------------------------------------------------------------
-    # Final processing on the combined dataframe
-    # Ensure text column is string and lightly normalize whitespace
-    combined_df[TEXT_COL] = (
-        combined_df[TEXT_COL]
-        .astype("string")
-        .str.replace(r"\s+", " ", regex=True)
-        .str.strip()
-    )
+    tweets_df = clean_tweets_dataset(tweets_path)
 
-    # Normalize target labels
-    if is_numeric_dtype(combined_df[TARGET_COL]):
-        combined_df[TARGET_COL] = combined_df[TARGET_COL].astype("Int64")
-    else:
-        combined_df[TARGET_COL] = (
-            combined_df[TARGET_COL]
-            .astype("string")
-            .str.lower()
-            .str.strip()
-            .replace(
-                {
-                    "pos": 1,
-                    "positive": 1,
-                    "1": 1,
-                    "true": 1,
-                    True: 1,
-                    "neg": 0,
-                    "negative": 0,
-                    "0": 0,
-                    "false": 0,
-                    False: 0,
-                }
-            )
-            .astype("Int64")
-        )
-    
-    logger.info(f"Combined dataset shape: {combined_df.shape}")
-    try:
-        logger.info(
-            f"Combined label distribution:\n{combined_df[TARGET_COL].value_counts(dropna=False).to_string()}"
-        )
-    except Exception:
-        pass
+    tweets_out = PROCESSED_DATA_DIR / "tweets_clean.csv"
+    tweets_df.to_csv(tweets_out, index=False)
 
-    # Save the processed data to the specified output path
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Saving combined processed data to {output_path}...")
-    combined_df.to_csv(output_path, index=False)
+    logger.success(f"Saved cleaned tweets → {tweets_out}")
 
-    logger.success("Dataset processing complete.")
-    # -------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Load + clean emoji reference
+    # -----------------------------------------------------------------
 
+    emoji_path = RAW_DATA_DIR / "15_emoticon_data.csv"
+
+    emoji_df = clean_emoji_reference(emoji_path)
+
+    emoji_out = PROCESSED_DATA_DIR / "emoji_reference_clean.csv"
+    emoji_df.to_csv(emoji_out, index=False)
+
+    logger.success(f"Saved emoji reference → {emoji_out}")
+
+    # -----------------------------------------------------------------
+
+    logger.success("Dataset ingestion pipeline complete.")
+
+
+# ---------------------------------------------------------------------
 
 if __name__ == "__main__":
     app()

@@ -1,0 +1,27 @@
+<!-- templates/components/audit_table.html -->
+<div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/50">
+    <table class="w-full text-left text-[10px] font-mono">
+        <thead class="bg-slate-800/50 text-slate-400 uppercase tracking-widest">
+            <tr>
+                <th class="px-4 py-2">Timestamp</th>
+                <th class="px-4 py-2">Input</th>
+                <th class="px-4 py-2">Verdict</th>
+                <th class="px-4 py-2 text-right">Confidence</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+            {% for row in logs %}
+            <tr class="hover:bg-white/5 transition-colors">
+                <td class="px-4 py-2 text-slate-500">{{ row.timestamp.split(' ')[1] }}</td>
+                <td class="px-4 py-2 text-slate-300 truncate max-w-[150px]">{{ row.raw_text }}</td>
+                <td class="px-4 py-2">
+                    <span class="{{ 'text-emerald-400' if row.prediction == 'Positive' else 'text-rose-400' }}">
+                        {{ row.prediction }}
+                    </span>
+                </td>
+                <td class="px-4 py-2 text-right font-bold text-slate-400">{{ (row.confidence * 100)|round(1) }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

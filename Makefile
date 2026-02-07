@@ -18,6 +18,11 @@ requirements:
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 	
 
+## Update requirements.txt with top-level dependencies only
+.PHONY: freeze
+freeze:
+	$(PYTHON_INTERPRETER) -m pip list --format=freeze --not-required > requirements.txt
+
 
 
 ## Delete all compiled Python files

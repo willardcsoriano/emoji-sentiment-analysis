@@ -1,0 +1,17 @@
+<!-- templates/components/result.html -->
+<div class="{{ color }} w-full p-8 rounded-3xl border-2 animate-in fade-in zoom-in duration-500">
+    <div class="flex flex-col items-center gap-3 text-center">
+        <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-50">{{ audit.entropy_flag }}</span>
+        <span class="text-5xl font-black tracking-tighter">{{ icon }} {{ audit.prediction }}</span>
+        <p class="text-xs font-bold opacity-70">Confidence: {{ (audit.confidence * 100)|round(1) }}%</p>
+        
+        <div class="mt-4 px-4 py-2 bg-white/30 rounded-full border border-current/5 text-[9px] font-mono italic opacity-80">
+            Primary Drivers: 
+            {% for d in audit.top_drivers %}
+                <span class='bg-white/50 px-2 py-0.5 rounded border border-current/10 mx-0.5'>{{ d.token }}</span>
+            {% else %}
+                None
+            {% endfor %}
+        </div>
+    </div>
+</div>

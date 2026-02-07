@@ -1,93 +1,119 @@
+# emoji_sentiment_analysis/modeling/predict.py
+
 """
-📑 Script: predict.py
----------------------
-Updated with deep decision logging and emoji-aware inference.
+Production Inference Pipeline
+-----------------------------
+
+This module operationalizes the trained sentiment classification model.
+
+Responsibilities:
+    - Load serialized modeling artifacts
+    - Reconstruct feature transformation pipeline
+    - Generate predictions for text inputs
+    - Surface emoji polarity attribution
+    - Provide batch and single inference interfaces
+
+Artifacts Consumed:
+    data/processed/features_final.csv (optional reference)
+    models/sentiment_model.pkl
+    models/tfidf_vectorizer.pkl
+
+This script is deployment-ready and notebook-independent.
 """
 
 from pathlib import Path
-import pandas as pd
-import joblib
 import numpy as np
-import json
-from loguru import logger
-import typer
+import joblib
+from scipy.sparse import hstack
 
-from emoji_sentiment_analysis.config import MODELS_DIR
-from emoji_sentiment_analysis.features import extract_emojis
+from emoji_sentiment_analysis.features import (
+    extract_emoji_polarity_features,
+)
 
-# Initialize Typer
-app = typer.Typer()
+# -------------------------------------------------------------------
+# Artifact Paths
+# -------------------------------------------------------------------
 
-def generate_inference_log(text, model, vectorizer):
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+MODEL_PATH = PROJECT_ROOT / "models" / "sentiment_model.pkl"
+VECTORIZER_PATH = PROJECT_ROOT / "models" / "tfidf_vectorizer.pkl"
+
+# -------------------------------------------------------------------
+# Artifact Loading
+# -------------------------------------------------------------------
+
+model = joblib.load(MODEL_PATH)
+tfidf = joblib.load(VECTORIZER_PATH)
+
+# -------------------------------------------------------------------
+# Core Prediction Function
+# -------------------------------------------------------------------
+
+
+def predict_sentiment(text: str) -> dict:
     """
-    Core logging logic extracted from Notebook 7.0.
-    Identifies decision drivers using model.feature_log_prob_.
+    Generate sentiment prediction for a single text input.
+
+    Returns:
+        dict containing:
+            - text
+            - predicted_label
+            - prediction_proba
+            - emoji_pos_count
+            - emoji_neg_count
     """
-    # 1. Pipeline Execution: Emoji Signal Amplification
-    emojis = extract_emojis(text)
-    engine_input = f"{text} {emojis * 5}"
-    vec = vectorizer.transform([engine_input])
-    
-    # 2. Probability & Prediction (Ref: Notebook 5.0)
-    probs = model.predict_proba(vec)[0]
-    prediction = int(model.predict(vec)[0])
-    
-    # 3. Feature Importance Extraction (Ref: Notebook 4.0/5.0 Artifacts)
-    feature_names = vectorizer.get_feature_names_out()
-    nonzero_indices = vec.nonzero()[1]
-    
-    feature_impacts = []
-    for idx in nonzero_indices:
-        token = feature_names[idx]
-        # Weight = LogProb(Pos) - LogProb(Neg)
-        weight = model.feature_log_prob_[1][idx] - model.feature_log_prob_[0][idx]
-        feature_impacts.append({
-            "token": token,
-            "weight": round(weight, 4),
-            "sentiment_lean": "Positive" if weight > 0 else "Negative"
-        })
-    
-    # 4. Construct the Deep Log Entry
-    log_entry = {
-        "raw_text": text,
-        "engine_input": engine_input,
-        "prediction": "Positive" if prediction == 1 else "Negative",
-        "confidence": round(float(np.max(probs)), 4),
-        "entropy_flag": "High Ambiguity" if abs(probs[0] - probs[1]) < 0.15 else "Clear Signal",
-        "top_drivers": sorted(feature_impacts, key=lambda x: abs(x['weight']), reverse=True)[:3],
-        "emoji_detected": len(emojis) > 0
+
+    # Emoji feature extraction
+    pos_count, neg_count = extract_emoji_polarity_features(text)
+
+    # Text vectorization
+    text_vec = tfidf.transform([text])
+
+    # Feature assembly
+    emoji_vec = np.array([[pos_count, neg_count]])
+    features = hstack([text_vec, emoji_vec])
+
+    # Prediction
+    label = model.predict(features)[0]
+    proba = model.predict_proba(features)[0, 1]
+
+    return {
+        "text": text,
+        "predicted_label": int(label),
+        "prediction_proba": float(proba),
+        "emoji_pos_count": pos_count,
+        "emoji_neg_count": neg_count,
     }
-    
-    return log_entry
 
-@app.command()
-def main(
-    text: str = typer.Argument(..., help="The text to predict the sentiment of."),
-    model_path: Path = MODELS_DIR / "sentiment_model.pkl",
-    vectorizer_path: Path = MODELS_DIR / "tfidf_vectorizer.pkl"
-):
+
+# -------------------------------------------------------------------
+# Batch Prediction Interface
+# -------------------------------------------------------------------
+
+
+def predict_batch(texts: list[str]) -> list[dict]:
     """
-    Predicts sentiment and outputs a detailed decision log.
+    Generate predictions for multiple text inputs.
     """
-    logger.info(f"Starting audit-level inference for: '{text}'")
 
-    try:
-        model = joblib.load(model_path)
-        vectorizer = joblib.load(vectorizer_path)
-    except FileNotFoundError:
-        logger.error("Model or vectorizer not found. Please check MODELS_DIR.")
-        return
+    results = [predict_sentiment(text) for text in texts]
+    return results
 
-    # Generate the deep log
-    log_data = generate_inference_log(text, model, vectorizer)
 
-    # Output to CLI
-    logger.success(f"Sentiment: {log_data['prediction']} (Confidence: {log_data['confidence']*100:.2f}%)")
-    logger.info(f"Entropy Status: {log_data['entropy_flag']}")
-    
-    print("\n--- Decision Audit Log ---")
-    print(json.dumps(log_data, indent=2))
-
+# -------------------------------------------------------------------
+# CLI Test Harness (Optional)
+# -------------------------------------------------------------------
 
 if __name__ == "__main__":
-    app()
+
+    sample_texts = [
+        "I love this so much 😊",
+        "This is terrible 😭",
+        "I feel okay about this",
+        "Best day ever 😆😍",
+        "I hate everything",
+    ]
+
+    for result in predict_batch(sample_texts):
+        print(result)
