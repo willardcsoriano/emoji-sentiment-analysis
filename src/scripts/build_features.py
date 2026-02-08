@@ -5,23 +5,13 @@ Feature Engineering Pipeline
 ----------------------------
 
 This script generates the finalized modeling dataset by applying
-emoji polarity feature extraction to the cleaned tweet corpus.
+hybrid feature extraction (Emoji + Word Lexicons) to the cleaned tweet corpus.
 
 Source Input:
     data/processed/tweets_clean.csv
 
 Output:
     data/processed/features_final.csv
-
-Responsibilities:
-
-• Load cleaned tweet dataset
-• Extract emoji polarity features
-• Append feature columns
-• Validate feature integrity
-• Persist modeling-ready dataset
-
-No model training occurs here.
 """
 
 from __future__ import annotations
@@ -59,6 +49,8 @@ def validate_feature_dataset(df: pd.DataFrame) -> None:
         TARGET_COL,
         "emoji_pos_count",
         "emoji_neg_count",
+        "word_pos_count",
+        "word_neg_count",
     }
 
     assert required_columns.issubset(df.columns), \
@@ -67,8 +59,10 @@ def validate_feature_dataset(df: pd.DataFrame) -> None:
     assert df.isna().sum().sum() == 0, \
         "Null values detected in feature dataset."
 
-    assert (df["emoji_pos_count"] >= 0).all()
-    assert (df["emoji_neg_count"] >= 0).all()
+    # Verify all numeric features are non-negative
+    numeric_cols = ["emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"]
+    for col in numeric_cols:
+        assert (df[col] >= 0).all(), f"Negative values found in {col}"
 
 
 # ---------------------------------------------------------------------
@@ -80,19 +74,26 @@ def build_features(
     output_path: Path,
 ) -> None:
     """
-    Executes emoji polarity feature engineering.
+    Executes hybrid polarity feature engineering.
     """
 
     logger.info(f"Loading cleaned dataset → {input_path}")
 
-    df = pd.read_csv(input_path)
+    try:
+        df = pd.read_csv(input_path)
+    except FileNotFoundError:
+        logger.error(f"Input file not found: {input_path}")
+        return
 
-    logger.info("Extracting emoji polarity features...")
+    logger.info("Extracting hybrid polarity features (Emojis + Lexicons)...")
 
+    # The function now returns a 4-item tuple
     features = df[TEXT_COL].apply(extract_emoji_polarity_features)
 
     df["emoji_pos_count"] = [f[0] for f in features]
     df["emoji_neg_count"] = [f[1] for f in features]
+    df["word_pos_count"] = [f[2] for f in features]
+    df["word_neg_count"] = [f[3] for f in features]
 
     logger.info("Validating feature dataset...")
     validate_feature_dataset(df)

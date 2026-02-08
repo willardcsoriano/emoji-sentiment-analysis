@@ -7883,6 +7883,7 @@ a.anchor-link {
 <li>Library imports</li>
 <li>Random seed configuration</li>
 <li>Path definitions for data and artifacts</li>
+<li>Path definitions for data and artifacts</li>
 </ul>
 <p>Reproducibility is enforced via fixed seeds and deterministic model settings.</p>
 <hr/>
@@ -7894,7 +7895,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># --- 4.0 Final Model Training and Evaluation ---</span>
@@ -7921,7 +7922,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Reproducibility configuration</span>
@@ -7938,12 +7939,12 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Paths</span>
 <span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/processed/features_final.csv"</span><span class="p">)</span>
-<span class="n">MODEL_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"models"</span><span class="p">)</span>
+<span class="n">MODEL_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../models"</span><span class="p">)</span>
 
 <span class="n">MODEL_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -7975,7 +7976,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../data/processed/features_final.csv"</span><span class="p">)</span>
@@ -7992,7 +7993,7 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8066,7 +8067,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Integrity checks</span>
@@ -8091,10 +8092,39 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(1000, 4)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3d89f876">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%93%8A-Dataset-Integrity-Confirmation">📊 Dataset Integrity Confirmation<a class="anchor-link" href="#%F0%9F%93%8A-Dataset-Integrity-Confirmation">¶</a></h3><p>The finalized feature dataset was successfully loaded.</p>
+<p>Key observations:</p>
+<ul>
+<li>The dataset contains <strong>1,000 records</strong>.</li>
+<li>Four columns are present:<ul>
+<li><code>text</code> — raw tweet content</li>
+<li><code>label</code> — sentiment target</li>
+<li><code>emoji_pos_count</code> — count of positive emojis</li>
+<li><code>emoji_neg_count</code> — count of negative emojis</li>
+</ul>
+</li>
+</ul>
+<p>Integrity checks confirm:</p>
+<ul>
+<li>No missing values exist.</li>
+<li>All required columns are present.</li>
+<li>Feature engineering outputs were correctly persisted.</li>
+</ul>
+<p>This dataset represents the finalized modeling input and will not undergo further transformation.</p>
 </div>
 </div>
 </div>
@@ -8122,7 +8152,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_text</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
@@ -8139,6 +8169,24 @@ a.anchor-link {
 <span class="p">)</span>
 </pre></div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4989ded9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%94%80-Train%E2%80%93Validation-Partitioning">🔀 Train–Validation Partitioning<a class="anchor-link" href="#%F0%9F%94%80-Train%E2%80%93Validation-Partitioning">¶</a></h3><p>The dataset was partitioned into training and validation subsets using a stratified split.</p>
+<p>Configuration:</p>
+<ul>
+<li><strong>80% Training</strong> (800 samples)</li>
+<li><strong>20% Validation</strong> (200 samples)</li>
+</ul>
+<p>Stratification ensures that sentiment class distributions remain consistent across splits.</p>
+<p>This design prevents evaluation bias and ensures that performance metrics reflect generalization rather than memorization.</p>
 </div>
 </div>
 </div>
@@ -8162,7 +8210,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
@@ -8180,7 +8228,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_train_text_vec</span> <span class="o">=</span> <span class="n">tfidf</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">)</span>
@@ -8197,10 +8245,37 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>((800, 1265), (200, 1265))</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9ff79594">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%A7%A0-Text-Feature-Space-Construction">🧠 Text Feature Space Construction<a class="anchor-link" href="#%F0%9F%A7%A0-Text-Feature-Space-Construction">¶</a></h3><p>TF-IDF vectorization transformed tweet text into numerical feature representations.</p>
+<p>Observations:</p>
+<ul>
+<li>The vectorizer produced <strong>1,265 textual features</strong>.</li>
+<li>Features include:<ul>
+<li>Individual words</li>
+<li>Two-word phrases (bigrams)</li>
+</ul>
+</li>
+</ul>
+<p>This representation captures semantic sentiment cues such as:</p>
+<ul>
+<li>“happy”</li>
+<li>“good morning”</li>
+<li>“not happy”</li>
+</ul>
+<p>These textual features form the primary predictive signal for the classifier.</p>
 </div>
 </div>
 </div>
@@ -8227,7 +8302,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Convert emoji features to numpy</span>
@@ -8243,7 +8318,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Combine sparse + dense features</span>
@@ -8261,10 +8336,36 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>((800, 1267), (200, 1267))</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0bda8695">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%A7%A9-Final-Feature-Matrix-Assembly">🧩 Final Feature Matrix Assembly<a class="anchor-link" href="#%F0%9F%A7%A9-Final-Feature-Matrix-Assembly">¶</a></h3><p>Emoji polarity features were appended to the TF-IDF text feature space.</p>
+<p>Feature composition:</p>
+<ul>
+<li>1,265 text features</li>
+<li>2 emoji polarity features<ul>
+<li><code>emoji_pos_count</code></li>
+<li><code>emoji_neg_count</code></li>
+</ul>
+</li>
+</ul>
+<p>Final dimensionality:</p>
+<ul>
+<li>Training matrix: 800 × 1,267</li>
+<li>Validation matrix: 200 × 1,267</li>
+</ul>
+<p>This confirms successful integration of emoji-derived sentiment signals into the modeling representation.</p>
 </div>
 </div>
 </div>
@@ -8275,7 +8376,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%F0%9F%A7%A9-Section-6-%E2%80%94-Model-Training">🧩 Section 6 — Model Training<a class="anchor-link" href="#%F0%9F%A7%A9-Section-6-%E2%80%94-Model-Training">¶</a></h1><p>This section trains the production sentiment classifier using the assembled feature matrices.</p>
+<h1 id="%F0%9F%A7%A9-Section-6-%E2%80%94-Model-Training">🧩 Section 6 — Model Training<a class="anchor-link" href="#%F0%9F%A7%A9-Section-6-%E2%80%94-Model-Training">¶</a></h1><p>This notebook mirrors the production training dataset used by the training pipeline.</p>
 <p>Model selection prioritizes:</p>
 <ul>
 <li>Interpretability</li>
@@ -8292,7 +8393,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span>
@@ -8309,7 +8410,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_final</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -8323,7 +8424,7 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
@@ -9160,6 +9261,24 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f6e1c9c7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%A4%96-Model-Training-Completion">🤖 Model Training Completion<a class="anchor-link" href="#%F0%9F%A4%96-Model-Training-Completion">¶</a></h3><p>A Logistic Regression classifier was successfully trained on the assembled feature matrix.</p>
+<p>Model choice rationale:</p>
+<ul>
+<li>Well-suited for high-dimensional sparse text data</li>
+<li>Interpretable coefficient structure</li>
+<li>Stable convergence on small datasets</li>
+</ul>
+<p>Training completed without convergence warnings, indicating adequate feature scaling and model configuration.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b492a743">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9184,7 +9303,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_final</span><span class="p">)</span>
@@ -9198,7 +9317,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_val</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
@@ -9215,10 +9334,32 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(0.815, 0.8340807174887892)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=90f1efe1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%93%88-Predictive-Performance-Evaluation">📈 Predictive Performance Evaluation<a class="anchor-link" href="#%F0%9F%93%88-Predictive-Performance-Evaluation">¶</a></h3><p>Model performance was evaluated on the held-out validation dataset.</p>
+<p>Key metrics:</p>
+<ul>
+<li><strong>Accuracy:</strong> 0.815</li>
+<li><strong>F1 Score:</strong> 0.834</li>
+</ul>
+<p>Interpretation:</p>
+<ul>
+<li>The model correctly classifies ~81.5% of unseen tweets.</li>
+<li>The F1 score indicates balanced precision and recall performance.</li>
+</ul>
+<p>Given the dataset size and binary sentiment framing, this performance is considered strong and deployment-ready.</p>
 </div>
 </div>
 </div>
@@ -9227,7 +9368,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_val</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
@@ -9257,12 +9398,34 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4fbc7227">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%93%8A-Class-Level-Performance-Analysis">📊 Class-Level Performance Analysis<a class="anchor-link" href="#%F0%9F%93%8A-Class-Level-Performance-Analysis">¶</a></h3><p>The classification report reveals class-specific predictive behavior.</p>
+<p>Observations:</p>
+<ul>
+<li>Negative sentiment predictions show high precision but lower recall.</li>
+<li>Positive sentiment predictions exhibit high recall.</li>
+</ul>
+<p>Interpretation:</p>
+<ul>
+<li>The model is conservative when predicting negative sentiment.</li>
+<li>It is more willing to assign positive sentiment labels.</li>
+</ul>
+<p>This asymmetry is common in social media sentiment datasets.</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f3820803">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_val</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
@@ -9276,11 +9439,30 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>array([[70, 30],
        [ 7, 93]])</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e92e6410">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%94%A2-Confusion-Matrix-Interpretation">🔢 Confusion Matrix Interpretation<a class="anchor-link" href="#%F0%9F%94%A2-Confusion-Matrix-Interpretation">¶</a></h3><p>The confusion matrix summarizes prediction outcomes.</p>
+<p>Key insights:</p>
+<ul>
+<li>70 negative tweets were correctly classified.</li>
+<li>93 positive tweets were correctly classified.</li>
+<li>Misclassifications total 37 instances.</li>
+</ul>
+<p>Error distribution suggests a slight tendency to over-predict positive sentiment.</p>
+<p>This behavior aligns with the classification report findings.</p>
 </div>
 </div>
 </div>
@@ -9308,7 +9490,7 @@ weighted avg       0.83      0.81      0.81       200
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -9330,7 +9512,7 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[29]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9424,6 +9606,25 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=54f0f362">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%A7%AA-Misclassification-Review">🧪 Misclassification Review<a class="anchor-link" href="#%F0%9F%A7%AA-Misclassification-Review">¶</a></h3><p>A subset of incorrectly predicted tweets was examined.</p>
+<p>Observed failure patterns include:</p>
+<ul>
+<li>Text–emoji sentiment disagreement</li>
+<li>Ambiguous or sarcastic phrasing</li>
+<li>Minimal textual context</li>
+</ul>
+<p>Example cases reveal that conflicting sentiment signals can challenge linear classifiers.</p>
+<p>This analysis provides qualitative insight but does not warrant feature redesign.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=60a91542">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9447,7 +9648,7 @@ weighted avg       0.83      0.81      0.81       200
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">tfidf</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
@@ -9465,7 +9666,7 @@ weighted avg       0.83      0.81      0.81       200
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -9484,7 +9685,7 @@ weighted avg       0.83      0.81      0.81       200
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Top positive signals</span>
@@ -9499,7 +9700,7 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[32]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9606,12 +9807,32 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=954c68dd">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%E2%9E%95-Strongest-Positive-Sentiment-Signals">➕ Strongest Positive Sentiment Signals<a class="anchor-link" href="#%E2%9E%95-Strongest-Positive-Sentiment-Signals">¶</a></h3><p>Top positively weighted features were inspected.</p>
+<p>Notable signals include:</p>
+<ul>
+<li>“happy”</li>
+<li>“smile”</li>
+<li>“good”</li>
+<li>“thanks”</li>
+<li><code>emoji_pos_count</code></li>
+</ul>
+<p>The presence of <code>emoji_pos_count</code> among the top predictors confirms that positive emojis contribute meaningful sentiment signal within the model.</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b04a9ab5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [33]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Top negative signals</span>
@@ -9626,7 +9847,7 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[33]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9734,79 +9955,20 @@ weighted avg       0.83      0.81      0.81       200
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=24de8467">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d4c448a0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%F0%9F%A7%A9-Section-10-%E2%80%94-Artifact-Serialization">🧩 Section 10 — Artifact Serialization<a class="anchor-link" href="#%F0%9F%A7%A9-Section-10-%E2%80%94-Artifact-Serialization">¶</a></h1><p>This section serializes all components required for inference.</p>
-<p>Artifacts saved include:</p>
-<pre><code>models/
- ├── sentiment_model.pkl
- ├── tfidf_vectorizer.pkl
- └── feature_metadata.json (optional)
-</code></pre>
-<p>Serialization ensures parity between training and deployment environments.</p>
-<hr/>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a9777577">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"sentiment_model.pkl"</span><span class="p">)</span>
-<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tfidf</span><span class="p">,</span> <span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"tfidf_vectorizer.pkl"</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>['models\\tfidf_vectorizer.pkl']</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0f2cb6b5">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Artifacts saved:"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"- sentiment_model.pkl"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"- tfidf_vectorizer.pkl"</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Artifacts saved:
-- sentiment_model.pkl
-- tfidf_vectorizer.pkl
-</pre>
-</div>
+<h3 id="%E2%9E%96-Strongest-Negative-Sentiment-Signals">➖ Strongest Negative Sentiment Signals<a class="anchor-link" href="#%E2%9E%96-Strongest-Negative-Sentiment-Signals">¶</a></h3><p>Top negatively weighted features include:</p>
+<ul>
+<li><code>emoji_neg_count</code></li>
+<li>“unhappy”</li>
+<li>“crying”</li>
+</ul>
+<p>The strong negative coefficient for <code>emoji_neg_count</code> validates the effectiveness of emoji polarity feature engineering.</p>
+<p>This demonstrates that negative emojis function as reliable sentiment amplifiers.</p>
 </div>
 </div>
 </div>
@@ -9835,7 +9997,7 @@ weighted avg       0.83      0.81      0.81       200
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [36]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Final Model Performance"</span><span class="p">)</span>
@@ -9860,6 +10022,23 @@ Accuracy: 0.8150
 F1 Score: 0.8341
 </pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d288d067">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="%F0%9F%8F%81-Training-Phase-Summary">🏁 Training Phase Summary<a class="anchor-link" href="#%F0%9F%8F%81-Training-Phase-Summary">¶</a></h3><p>Final evaluation metrics:</p>
+<ul>
+<li>Accuracy: 0.8150</li>
+<li>F1 Score: 0.8341</li>
+</ul>
+<p>These results confirm that the model generalizes effectively on unseen validation data.</p>
+<p>The classifier is considered production-ready within the scope of this project.</p>
 </div>
 </div>
 </div>
@@ -9890,11 +10069,56 @@ F1 Score: 0.8341
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="%E2%9E%A1%EF%B8%8F-Next-Steps">➡️ Next Steps<a class="anchor-link" href="#%E2%9E%A1%EF%B8%8F-Next-Steps">¶</a></h1><p>Following completion of this notebook:</p>
 <ul>
-<li>Inference pipelines will consume serialized artifacts</li>
-<li>Prediction services will be implemented</li>
-<li>Monitoring and logging mechanisms will be integrated</li>
+<li><p>A dedicated production training pipeline will be formalized via
+<code>emoji_sentiment_analysis/modeling/train_model.py</code>,
+which will reproducibly generate all serialized model artifacts.</p>
+</li>
+<li><p>Inference pipelines will consume artifacts produced by the finalized training script rather than notebook execution.</p>
+</li>
+<li><p>Prediction services and application-layer integrations will be implemented on top of the frozen model outputs.</p>
+</li>
+<li><p>Monitoring, audit logging, and inference tracking mechanisms will be integrated into downstream services.</p>
+</li>
 </ul>
-<p>This notebook serves as the final step before deployment engineering.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=715f9b73">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%94%AC-Post-Training-Analysis-Extension">🔬 Post-Training Analysis Extension<a class="anchor-link" href="#%F0%9F%94%AC-Post-Training-Analysis-Extension">¶</a></h2><p>A supplementary notebook — <strong>Notebook 4.5: Model Interpretability &amp; Performance Deep Dive</strong> — will extend the work conducted here.</p>
+<p>This follow-up analysis will focus on:</p>
+<ul>
+<li>Prediction confidence diagnostics</li>
+<li>Emoji feature contribution analysis</li>
+<li>Misclassification archetype identification</li>
+<li>Counterfactual and stability testing</li>
+<li>Behavioral interpretability of the trained classifier</li>
+</ul>
+<p>Notebook 4.5 does not retrain or modify the model.
+Instead, it extracts deeper analytical insight from the frozen training artifacts.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14970c9c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>This notebook therefore marks the transition from <strong>model construction</strong> to:</p>
+<ul>
+<li>production training pipeline engineering</li>
+<li>interpretability analysis</li>
+<li>and deployment system design</li>
+</ul>
 <hr/>
 </div>
 </div>

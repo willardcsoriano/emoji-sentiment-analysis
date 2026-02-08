@@ -2,9 +2,14 @@
 
 ## Dependencies
 
+### Update requirements.lock 
+```bash
+python -m pip freeze > requirements.lock
+```
+
 ### Update requirements.txt with top-level packages only
 ```bash
-python -m pip list --format=freeze --not-required > requirements.txt
+python -m pip list --format=freeze --not-required | findstr /V "pip setuptools wheel" > requirements.txt 
 ```
 
 ### Install dependencies

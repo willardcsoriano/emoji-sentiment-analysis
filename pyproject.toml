@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "emoji_sentiment_analysis"
@@ -9,20 +9,31 @@ description = "Emoji-based tweet sentiment analysis"
 authors = [
   { name = "Group 7" },
 ]
-
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
-    
 ]
 requires-python = ">=3.10.0"
 
+# This allows you to manage dependencies in requirements.txt only
+dynamic = ["dependencies"]
 
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["emoji_sentiment_analysis*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 99
-src = ["emoji_sentiment_analysis"]
-include = ["pyproject.toml", "emoji_sentiment_analysis/**/*.py"]
+# Updated to point to the new src location
+src = ["src"]
+include = ["pyproject.toml", "src/**/*.py"]
 
 [tool.ruff.lint]
 extend-select = ["I"]  # Add import sorting
@@ -30,4 +41,3 @@ extend-select = ["I"]  # Add import sorting
 [tool.ruff.lint.isort]
 known-first-party = ["emoji_sentiment_analysis"]
 force-sort-within-sections = true
-

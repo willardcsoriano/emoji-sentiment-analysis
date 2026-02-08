@@ -1,28 +1,4 @@
-"""
-Project Configuration Module
-----------------------------
-
-Centralized configuration for:
-
-    - Project root discovery
-    - Data + artifact paths
-    - Environment variable overrides
-    - Global constants
-    - Directory bootstrapping
-    - Logging initialization
-
-This module assumes the repository root is the parent
-directory containing:
-
-    data/
-    models/
-    notebooks/
-    reports/
-    scripts/
-    emoji_sentiment_analysis/
-
-All paths resolve relative to that root.
-"""
+# emoji_sentiment_analysis/config.py
 
 from __future__ import annotations
 
@@ -36,26 +12,18 @@ from loguru import logger
 # ---------------------------------------------------------------------
 # Project Root Resolution
 # ---------------------------------------------------------------------
-# config.py lives in:
-#   emoji_sentiment_analysis/config.py
-#
-# So repo root is TWO levels up.
-# (package → repo root)
+INTERNAL_PACKAGE_DIR: Path = Path(__file__).resolve().parent
+SRC_ROOT: Path = INTERNAL_PACKAGE_DIR.parent
+REPO_ROOT: Path = SRC_ROOT.parent
 
-PROJ_ROOT: Path = Path(__file__).resolve().parents[1]
-
-# ---------------------------------------------------------------------
-# Environment Variables
-# ---------------------------------------------------------------------
-
-load_dotenv(dotenv_path=PROJ_ROOT / ".env")
+# Use REPO_ROOT for the .env file
+load_dotenv(dotenv_path=REPO_ROOT / ".env")
 
 # ---------------------------------------------------------------------
-# Data Directories
+# Data Directories (Now relative to SRC_ROOT)
 # ---------------------------------------------------------------------
-
 DATA_DIR: Path = Path(
-    os.getenv("DATA_DIR", PROJ_ROOT / "data")
+    os.getenv("DATA_DIR", SRC_ROOT / "data")
 ).resolve()
 
 RAW_DATA_DIR: Path = DATA_DIR / "raw"
@@ -67,45 +35,35 @@ LOGS_DIR: Path = DATA_DIR / "logs"
 # ---------------------------------------------------------------------
 # Model & Artifact Directories
 # ---------------------------------------------------------------------
-
 MODELS_DIR: Path = Path(
-    os.getenv("MODELS_DIR", PROJ_ROOT / "models")
+    os.getenv("MODELS_DIR", SRC_ROOT / "models")
 ).resolve()
 
 MODEL_ARTIFACTS_DIR: Path = MODELS_DIR / "artifacts"
 
 # ---------------------------------------------------------------------
-# Reporting Directories
+# Reporting, Notebooks, and Scripts (Inside SRC_ROOT)
 # ---------------------------------------------------------------------
-
-REPORTS_DIR: Path = PROJ_ROOT / "reports"
+REPORTS_DIR: Path = SRC_ROOT / "reports" 
 FIGURES_DIR: Path = REPORTS_DIR / "figures"
+NOTEBOOKS_DIR: Path = SRC_ROOT / "notebooks"
+SCRIPTS_DIR: Path = SRC_ROOT / "scripts"
+
+# Update PROJ_ROOT to maintain compatibility
+PROJ_ROOT = SRC_ROOT
 
 # ---------------------------------------------------------------------
-# Notebook + Script References (optional convenience)
+# Global Constants (The missing pieces!)
 # ---------------------------------------------------------------------
-
-NOTEBOOKS_DIR: Path = PROJ_ROOT / "notebooks"
-SCRIPTS_DIR: Path = PROJ_ROOT / "scripts"
-
-# ---------------------------------------------------------------------
-# Global Constants
-# ---------------------------------------------------------------------
-
 SEED: int = int(os.getenv("SEED", "42"))
-
 TEXT_COL: str = os.getenv("TEXT_COL", "text")
 TARGET_COL: str = os.getenv("TARGET_COL", "label")
 
 # ---------------------------------------------------------------------
 # Directory Bootstrapping
 # ---------------------------------------------------------------------
-
 def ensure_dirs() -> None:
-    """
-    Create the standard project directory structure if missing.
-    """
-
+    """Create the standard project directory structure if missing."""
     dirs = [
         RAW_DATA_DIR,
         INTERIM_DATA_DIR,
@@ -116,23 +74,15 @@ def ensure_dirs() -> None:
         MODEL_ARTIFACTS_DIR,
         FIGURES_DIR,
     ]
-
     for d in dirs:
         d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------
 # Logging Initialization
 # ---------------------------------------------------------------------
-
 def init_logging(use_tqdm: bool = True) -> None:
-    """
-    Configure Loguru logging.
-
-    Supports tqdm-safe logging if progress bars are used.
-    """
-
+    """Configure Loguru logging."""
     logger.remove()
-
     if use_tqdm:
         try:
             from tqdm import tqdm
@@ -145,7 +95,6 @@ def init_logging(use_tqdm: bool = True) -> None:
 # ---------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------
-
 __all__ = [
     "PROJ_ROOT",
     "DATA_DIR",
