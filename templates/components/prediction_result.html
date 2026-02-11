@@ -2,7 +2,6 @@
 
 <div class="p-8 w-full animate-in fade-in zoom-in duration-300">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        
         <div class="text-center md:text-left space-y-1">
             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Classification</p>
             <h2 class="text-5xl font-black tracking-tighter {% if result.prediction == 'Positive' %}text-emerald-500{% else %}text-rose-500{% endif %}">
@@ -24,19 +23,46 @@
     </div>
 
     <div class="mt-8 pt-6 border-t border-slate-100">
-        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Decision Drivers</p>
-        <div class="flex flex-wrap gap-2">
-            {% for driver in result.top_drivers %}
-            <span class="px-3 py-1 bg-slate-900 text-white text-xs font-mono rounded-lg">
-                {{ driver.token }} ({{ driver.weight }})
-            </span>
-            {% endfor %}
-            
+        <div class="flex items-center justify-between mb-4">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Neural Logic Breakdown</p>
             {% if result.entropy_flag == 'High Ambiguity' %}
-            <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-lg animate-pulse">
-                ⚠️ HIGH AMBIGUITY
+            <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded uppercase animate-pulse">
+                ⚠️ Ambiguous Signal
             </span>
             {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {% for driver in result.top_drivers %}
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full {% if driver.weight > 0 %}bg-emerald-400{% else %}bg-rose-400{% endif %}"></div>
+                
+                <div class="flex flex-col h-full">
+                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-tighter">
+                        {% if 'emoji' in driver.token %}Visual Anchor{% elif 'word' in driver.token %}Lexicon Bias{% else %}Text Token{% endif %}
+                    </span>
+                    <span class="text-xs font-bold text-slate-700 truncate mb-2">{{ driver.token }}</span>
+                    
+                    <div class="mt-auto flex items-center justify-between border-t border-slate-200/50 pt-2">
+                        <span class="text-[10px] font-mono font-bold {% if driver.weight > 0 %}text-emerald-600{% else %}text-rose-600{% endif %}">
+                            {{ "%.2f"|format(driver.weight) }}
+                        </span>
+                        <span class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter">
+                            {% if driver.weight|abs >= 4 %}Critical{% elif driver.weight|abs >= 1 %}Strong{% else %}Minor{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-6 flex gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Positive Driver
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-400"></span> Negative Driver
+            </div>
         </div>
     </div>
 </div>
