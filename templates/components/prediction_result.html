@@ -1,0 +1,42 @@
+<!-- templates/components/prediction_result.html -->
+
+<div class="p-8 w-full animate-in fade-in zoom-in duration-300">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        <div class="text-center md:text-left space-y-1">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Classification</p>
+            <h2 class="text-5xl font-black tracking-tighter {% if result.prediction == 'Positive' %}text-emerald-500{% else %}text-rose-500{% endif %}">
+                {{ result.prediction | upper }}
+            </h2>
+        </div>
+
+        <div class="flex-1 max-w-xs w-full space-y-2">
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                <span>Confidence</span>
+                <span>{{ (result.confidence * 100) | round(1) }}%</span>
+            </div>
+            <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full {% if result.prediction == 'Positive' %}bg-emerald-500{% else %}bg-rose-500{% endif %} transition-all duration-1000" 
+                    style="--conf: {{ (result.confidence * 100) | int }}%; width: var(--conf);">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-slate-100">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Decision Drivers</p>
+        <div class="flex flex-wrap gap-2">
+            {% for driver in result.top_drivers %}
+            <span class="px-3 py-1 bg-slate-900 text-white text-xs font-mono rounded-lg">
+                {{ driver.token }} ({{ driver.weight }})
+            </span>
+            {% endfor %}
+            
+            {% if result.entropy_flag == 'High Ambiguity' %}
+            <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-lg animate-pulse">
+                ⚠️ HIGH AMBIGUITY
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
