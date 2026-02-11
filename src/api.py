@@ -31,8 +31,9 @@ async def predict_ui(request: Request, text: str = Form(...)):
     Endpoint for HTMX to call. 
     Processes sentiment and returns the HTML fragment for the results area.
     """
-    # 1. Execute the Hybrid ML Logic
-    result = predict_sentiment(text)
+    # 1. Execute the Hybrid ML Logic WITHOUT saving to CSV
+    # We set run_audit=False here
+    result = predict_sentiment(text, run_audit=False) 
     
     # 2. Return the partial component
     return templates.TemplateResponse(

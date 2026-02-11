@@ -5,21 +5,16 @@ Production Inference Pipeline
 -----------------------------
 Operationalizes the trained sentiment classification model.
 Synchronized with hybrid Lexicon features (Emoji + Text).
+Purely in-memory: No local file logging to prevent repository bloat.
 """
 
 from __future__ import annotations
 
 import joblib
-import numpy as np
-from scipy.sparse import hstack
 from loguru import logger
 
 from emoji_sentiment_analysis.config import MODELS_DIR, init_logging
-from emoji_sentiment_analysis.features import extract_emoji_polarity_features
-from emoji_sentiment_analysis.services.audit_service import (
-    generate_inference_audit, 
-    lean_log_append
-)
+from emoji_sentiment_analysis.services.audit_service import generate_inference_audit
 
 # -------------------------------------------------------------------
 # Artifact Loading
@@ -36,6 +31,7 @@ def load_artifacts():
 
     return joblib.load(model_path), joblib.load(vectorizer_path)
 
+# Global instances for API performance
 try:
     model, tfidf = load_artifacts()
 except Exception:
@@ -45,62 +41,24 @@ except Exception:
 # Prediction Logic
 # -------------------------------------------------------------------
 
-def predict_sentiment(text: str, run_audit: bool = True) -> dict:
+def predict_sentiment(text: str, run_audit: bool = False) -> dict:
+    """
+    Generate sentiment prediction using the Hybrid Audit Service.
+    
+    Note: run_audit is kept as a legacy argument to prevent breaking existing 
+    API calls, but file logging has been decommissioned.
+    """
     global model, tfidf
     
     if model is None or tfidf is None:
         try:
             model, tfidf = load_artifacts()
         except Exception:
-            return {"error": "Model files not found"}
+            return {"error": "Model files not found on disk."}
 
-    if run_audit:
-        # Since we synced the logic into the audit service, 
-        # just calling this will now return the "Negative" result for sarcasm
-        audit_data = generate_inference_audit(text, model, tfidf)
-        lean_log_append(audit_data)
-        return audit_data
-    
-    """
-    Generate sentiment prediction using TF-IDF and Hybrid Lexicons.
-    Synchronized for 4 numeric features.
-    """
-    if model is None or tfidf is None:
-            try:
-                model, tfidf = load_artifacts()
-            except Exception:
-                return {"error": "Model files not found on disk. Please run training first."}
-
-    # 1. Feature Extraction
-    e_pos, e_neg, w_pos, w_neg = extract_emoji_polarity_features(text)
-    
-    # 2. Vectorization
-    text_vec = tfidf.transform([text])
-    numeric_vec = np.array([[e_pos, e_neg, w_pos, w_neg]])
-    features = hstack([text_vec, numeric_vec])
-
-    # 3. Execution with Sarcasm Veto
-    # If the user uses a strong negative emoji, we prioritize that signal 
-    # even if the ML math is confused by 'love'.
-    if e_neg > e_pos and e_neg >= 10:  # 10 is our EMOJI_BOOST
-        label = 0
-        proba = 0.2  # Forced low confidence for positive
-    else:
-        label = model.predict(features)[0]
-        proba = model.predict_proba(features)[0, 1]
-
-    # 4. Automated Audit & Logging
-    if run_audit:
-        # Pass control to audit service for rich data
-        audit_data = generate_inference_audit(text, model, tfidf)
-        lean_log_append(audit_data)
-        return audit_data
-
-    return {
-        "text": text,
-        "predicted_label": int(label),
-        "prediction_proba": round(float(proba), 4),
-    }
+    # Generate full audit (Math, Sarcasm Veto, and Decision Drivers)
+    # This is calculated entirely in-memory.
+    return generate_inference_audit(text, model, tfidf)
 
 # -------------------------------------------------------------------
 # CLI Interface
@@ -111,16 +69,16 @@ if __name__ == "__main__":
     
     sample_texts = [
         "I love this project 😊",
-        "I hate you baby",
-        "The bugs are terrible 😭",
+        "i love having bugs 😭", # Sarcasm Test
+        "i love hate you baby",   # Lexicon Bias Test
     ]
 
-    logger.info("Running inference with Hybrid Audit Service...")
+    logger.info("Running Stateless Inference Test...")
     
     for text in sample_texts:
         res = predict_sentiment(text)
         
-        # Displaying the "Why" (including the new Word Lexicon drivers)
+        # Format drivers for CLI display
         drivers = ", ".join([f"{d['token']} ({d['weight']})" for d in res['top_drivers']])
         
         print(f"\nText: {res['raw_text']}")

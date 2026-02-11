@@ -1,27 +1,21 @@
 # emoji_sentiment_analysis/services/audit_service.py
 
 """
-Inference Audit Service
------------------------
-Calculates probabilities, identifies decision drivers (explainability),
-and maintains a circular log of model performance.
+Inference Audit Service (Lean Version)
+--------------------------------------
+Calculates probabilities and identifies decision drivers (explainability).
+File I/O logging has been removed to prevent repository bloat.
 """
 
 from __future__ import annotations
 
-import pandas as pd
 import numpy as np
 from datetime import datetime
-from loguru import logger
 from scipy.sparse import hstack, csr_matrix
 from typing import cast
 
 # Internal imports
 from emoji_sentiment_analysis.features import extract_emoji_polarity_features
-from emoji_sentiment_analysis.config import LOGS_DIR
-
-# Strictly lean configuration
-MAX_LOG_ENTRIES = 500
 
 def generate_inference_audit(text: str, model, tfidf) -> dict:
     """
@@ -35,7 +29,7 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
     text_vec = tfidf.transform([text])
     numeric_vec = np.array([[e_pos, e_neg, w_pos, w_neg]])
     
-    # Combined feature set - Cast to csr_matrix for Pylance/nonzero support
+    # Combined feature set - Cast to csr_matrix for support
     features = cast(csr_matrix, hstack([text_vec, numeric_vec]).tocsr())
     
     # 3. Probability & Prediction with Veto Sync
@@ -72,15 +66,13 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
     # Initial sort by absolute statistical influence
     top_drivers = sorted(feature_impacts, key=lambda x: abs(x['weight']), reverse=True)
 
-    # VETO ADJUSTMENT: If a veto occurred, the veto-ing feature is the primary driver.
-    # We move emoji_neg_count to the front so the Audit/Tests acknowledge the override.
+    # VETO ADJUSTMENT: If a veto occurred, ensure the veto-ing feature is the primary driver.
     if is_veto:
         veto_feature = next((d for d in feature_impacts if d['token'] == "emoji_neg_count"), None)
         if veto_feature:
-            # Remove from current position and insert at index 0
             top_drivers.insert(0, top_drivers.pop(top_drivers.index(veto_feature)))
 
-    # Return only the top 3 drivers
+    # Return only the top 3 drivers for UI efficiency
     final_drivers = top_drivers[:3]
 
     return {
@@ -93,29 +85,10 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
         "top_drivers": final_drivers
     }
 
-def lean_log_append(log_data: dict, filename: str = "inference_history.csv"):
-    """
-    Maintains a strictly circular CSV log file in the configured LOGS_DIR.
-    """
-    log_path = LOGS_DIR / filename
-    
-    csv_row = log_data.copy()
-    csv_row['top_drivers'] = "|".join([f"{d['token']}({d['weight']})" for d in log_data['top_drivers']])
-    
-    new_entry = pd.DataFrame([csv_row])
-    
-    if log_path.exists():
-        df = pd.read_csv(log_path)
-        df = pd.concat([df, new_entry], ignore_index=True).tail(MAX_LOG_ENTRIES)
-    else:
-        df = new_entry
-        
-    df.to_csv(log_path, index=False)
-    logger.debug(f"Audit log updated at {log_path}")
-
 def get_global_model_signals(model, vectorizer, top_n: int = 5) -> dict:
     """
     Extracts the strongest global signals (coefficients) from the model.
+    Useful for 'Health Check' reports.
     """
     feature_names = vectorizer.get_feature_names_out()
     hybrid_feature_names = ["emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"]
