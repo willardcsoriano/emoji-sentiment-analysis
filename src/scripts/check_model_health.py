@@ -18,20 +18,27 @@ def run_health_check():
     report_path = REPORTS_DIR / "model_health_report.json"
     logger.info("Running Model Health Certification...")
 
-    # Define the test file to run
-    test_file = "src/tests/test_model_behavior.py"
+    # --- DYNAMIC PATH DISCOVERY ---
+    # Path(__file__) is C:/.../src/scripts/check_model_health.py
+    # .parent.parent is C:/.../src/
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    test_file = BASE_DIR / "tests" / "test_model_behavior.py"
     
-    # Run pytest programmatically
-    # -q: quiet, --json-report would require a plugin, so we'll capture results simply
-    exit_code = pytest.main([test_file, "-q"])
+    # Check if the file actually exists
+    if not test_file.exists():
+        logger.error(f"Test suite missing at: {test_file}")
+        return
 
-    # Map exit codes to status
+    # Run pytest programmatically (passing absolute path as string)
+    exit_code = pytest.main([str(test_file), "-q"])
+
+    # Map exit codes to status (0 is success)
     passed = (exit_code == 0)
     
     report = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "status": "PASSED" if passed else "FAILED",
-        "test_suite": test_file,
+        "test_suite": test_file.name,
         "checks": {
             "lexicon_integrity": "OK" if passed else "CHECK REQUIRED",
             "emoji_veto_power": "OK" if passed else "CHECK REQUIRED",
@@ -39,6 +46,9 @@ def run_health_check():
         },
         "recommendation": "Ready for Deployment" if passed else "Do Not Deploy - Logic Regressed"
     }
+
+    # Ensure reports directory exists
+    report_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Save the report
     with open(report_path, "w") as f:
