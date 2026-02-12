@@ -1,11 +1,57 @@
-<!-- data_access_why.html -->
+<!-- templates/components/data_access/data_access_why.html -->
+
+<!--
+Data Access — Methodological Justification Panel
+
+Purpose:
+- Explains the engineering necessity of dataset unification.
+- Serves as the conceptual bridge between ingestion and feature engineering.
+
+Pipeline position:
+- Final block within the Data Access layer.
+- Precedes feature construction and representation modeling.
+
+Objectives:
+- Justify schema normalization work.
+- Highlight risks of ignoring symbolic sentiment.
+- Reinforce interpretability + signal preservation goals.
+
+Design note:
+- Dark container visually distinguishes rationale from data artifacts.
+- Functions as an “engineering insight” callout rather than documentation table.
+-->
+
 <div class="p-5 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl">
+
     <div class="flex items-start gap-4">
-        <span class="p-2 bg-blue-500/10 rounded-lg text-blue-400 text-xs">🛠️</span>
+
+        <!--
+        Callout icon
+
+        Metaphor:
+        - Tooling / systems engineering
+        - Signals infrastructure-level processing
+        -->
+        <span class="p-2 bg-blue-500/10 rounded-lg text-blue-400 text-xs">
+            🛠️
+        </span>
+
         <div>
+
+            <!-- Panel micro-heading -->
             <h6 class="text-[10px] font-black uppercase tracking-widest text-slate-100 mb-1">
                 Why This Engineering Step Matters
             </h6>
+
+            <!--
+            Unification rationale narrative
+
+            Key concepts:
+            - Schema alignment
+            - Symbolic normalization
+            - Feature space projection
+            - Classifier stability preservation
+            -->
             <p class="text-[11px] text-slate-300 leading-relaxed italic">
                 Without schema unification, emoji-driven sentiment would be
                 underrepresented or discarded entirely. The ingestion pipeline
@@ -13,6 +59,7 @@
                 projects both datasets into a shared feature space — preserving
                 affect signal while maintaining classifier stability.
             </p>
+
         </div>
     </div>
 </div>

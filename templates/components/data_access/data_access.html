@@ -1,17 +1,86 @@
 <!-- templates/components/data_access/data_access.html -->
+
+<!--
+Data Access Page Component
+Centralized entry point for dataset transparency, inspection, and retrieval.
+
+Pipeline position:
+- Maps to "Data Sources" + "Data Ingestion & Exploration" stages.
+- Provides visibility into raw and processed corpora used in modeling.
+
+Objectives:
+- Support reproducibility and auditability.
+- Allow users to inspect training inputs.
+- Surface schema + structural context before feature engineering.
+
+Design principles:
+- Modular subcomponents separate narrative, downloads, and previews.
+- Read-only presentation (no mutation of source data).
+- Optimized for exploratory browsing, not bulk data tooling.
+-->
+
 <div class="space-y-14">
 
+    <!--
+    Framing narrative
+
+    Introduces:
+    - Dataset origin
+    - Sentiment labeling context
+    - Emoji inclusion rationale
+    -->
     {% include "components/data_access/data_access_framing.html" %}
 
+    <!--
+    Download access panel
+
+    Provides:
+    - Direct dataset retrieval
+    - Versioned artifacts
+    - Reproducibility support for external reviewers
+    -->
     {% include "components/data_access/data_access_downloads.html" %}
 
+    <!--
+    Dataset schema documentation
+
+    Details:
+    - Column structures
+    - Label encoding
+    - Emoji/token fields
+    - Validation guarantees
+    -->
     {% include "components/data_access/data_access_schema.html" %}
 
+    <!--
+    Dataset preview grid
+
+    Purpose:
+    - Provide tangible inspection of source records.
+    - Bridge abstract schema → real examples.
+    - Highlight emoji + text co-occurrence patterns.
+
+    Layout:
+    - Single column stack (mobile + desktop for readability).
+    -->
     <div class="grid grid-cols-1 gap-12">
-        {% include "components/data_access/data_access_preview_text.html" %}
-        {% include "components/data_access/data_access_preview_emoji.html" %}
+
+        <!-- Text corpus preview -->
+        {% include "components/data_access/previews/preview_text.html" %}
+
+        <!-- Emoji corpus preview -->
+        {% include "components/data_access/previews/preview_emoji.html" %}
+
     </div>
 
+    <!--
+    Methodological justification
+
+    Explains:
+    - Why these datasets were selected
+    - Representational strengths / limitations
+    - Downstream modeling implications
+    -->
     {% include "components/data_access/data_access_why.html" %}
 
 </div>

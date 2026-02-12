@@ -1,0 +1,100 @@
+<!-- templates/components/logic_legend.html -->
+
+<!--
+Logic Legend Component
+Explains how sentiment inference signals are engineered and weighted.
+
+Purpose:
+- Provide interpretability for model outputs.
+- Translate internal feature engineering into human-readable concepts.
+- Reduce “black box” perception for users.
+
+Design rules:
+- Fully presentational (no interaction expected).
+- Icons function as visual metaphors, not semantic indicators.
+- Must remain concise to avoid cognitive overload near results UI.
+-->
+
+<div class="bg-slate-900/5 rounded-[2.5rem] p-8 md:p-10 border border-white/50 shadow-inner">
+
+    <!-- Section label (micro-eyebrow heading for grouping context) -->
+    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 text-center">
+        Sentiment Engineering Logic
+    </h3>
+    
+    <!-- Three-column explanatory grid (collapses to single column on mobile) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <!-- Emoji feature weighting explanation -->
+        <div class="space-y-3">
+
+            <!-- Icon + title row -->
+            <div class="flex items-center gap-3">
+
+                <!-- Emoji icon container (visual anchor metaphor) -->
+                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
+                    ✨
+                </div>
+
+                <!-- Signal category label -->
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Visual Anchors
+                </h4>
+            </div>
+
+            <!-- Description: emoji lexicon priority behavior -->
+            <p class="text-[11px] leading-relaxed text-slate-500">
+                High-priority signals from the <strong>Emoji Lexicon</strong>.
+                These can override text to catch sarcasm.
+            </p>
+        </div>
+
+        <!-- Word-list biasing explanation -->
+        <div class="space-y-3">
+
+            <div class="flex items-center gap-3">
+
+                <!-- Lexicon metaphor icon -->
+                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
+                    📚
+                </div>
+
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Lexicon Bias
+                </h4>
+            </div>
+
+            <!-- Description: curated vocabulary stabilization -->
+            <p class="text-[11px] leading-relaxed text-slate-500">
+                Hand-curated word lists that stabilize sentiment
+                against "noisy" or messy training data.
+            </p>
+        </div>
+
+        <!-- Model weighting explanation -->
+        <div class="space-y-3">
+
+            <div class="flex items-center gap-3">
+
+                <!-- Statistical weighting metaphor icon -->
+                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
+                    ⚖️
+                </div>
+
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Neural Weight
+                </h4>
+            </div>
+
+            <!-- Description: polarity influence direction -->
+            <p class="text-[11px] leading-relaxed text-slate-500">
+                Statistical influence:
+                <span class="text-emerald-600 font-bold">+</span>
+                pulls toward Positive,
+                <span class="text-rose-600 font-bold">-</span>
+                pulls toward Negative.
+            </p>
+        </div>
+
+    </div>
+</div>

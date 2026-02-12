@@ -1,0 +1,75 @@
+<!-- templates\components\main_sidebar\specs\statistical_foundation.html -->
+
+<!--
+Statistical Foundation Panel
+
+Documents the mathematical assumptions underlying the sentiment model.
+
+Coverage:
+- Text vectorization strategy
+- Probabilistic classification framework
+
+Interpretability role:
+- Makes feature weighting transparent.
+- Explains inference probability formation.
+-->
+<section
+    id="math-foundation"
+    class="p-8 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-6"
+>
+
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+        Statistical Foundation
+    </h3>
+
+    <div class="space-y-6">
+
+        <!-- TF-IDF vectorization block -->
+        <div class="space-y-3">
+
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter">
+                Vectorization Strategy
+            </p>
+
+            <!-- MathJax-rendered formula -->
+            <div class="bg-slate-50 p-4 rounded-xl text-center shadow-inner overflow-x-auto">
+                <div class="text-sm font-serif italic text-slate-800">
+                    $$
+                    \mathrm{tf\mbox{-}idf}_{t,d}
+                    = \mathrm{tf}_{t,d}\cdot \log\frac{N}{\mathrm{df}_t}
+                    $$
+                </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 leading-tight">
+                TF-IDF emphasizes high-entropy emotional markers while
+                down-weighting frequent grammatical structures.
+            </p>
+
+        </div>
+
+        <!-- Naive Bayes inference block -->
+        <div class="space-y-3 border-t border-slate-100 pt-6">
+
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter">
+                Classification Model
+            </p>
+
+            <div class="bg-slate-50 p-4 rounded-xl text-center shadow-inner overflow-x-auto">
+                <div class="text-sm font-serif italic text-slate-800">
+                    $$ P(c \mid x)
+                    \propto P(c)
+                    \prod_{i=1}^{n} P(x_i \mid c) $$
+                </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 leading-tight">
+                Multinomial Naive Bayes models conditional independence,
+                prioritizing interpretability and probabilistic stability.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>

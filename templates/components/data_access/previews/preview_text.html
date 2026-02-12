@@ -1,7 +1,44 @@
 <!-- templates/components/data_access/previews/preview_text.html -->
+
+{#
+Dataset Preview — Text Corpus Sample
+
+Component type:
+- Configured instance of the reusable collapsible table shell.
+- Provides qualitative inspection of linguistic training data.
+
+Pipeline position:
+- Sits after schema documentation.
+- Allows users to observe raw text before feature projection.
+
+Objectives:
+- Surface sentiment-labeled tweet examples.
+- Highlight emoji usage within linguistic context.
+- Provide interpretability into training distributions.
+
+Sampling notes:
+- Records are representative, not exhaustive.
+- Intended for inspection, not statistical inference.
+#}
+
+{# Table title displayed in collapsible header #}
 {% set title = "Dataset 01 · Text Corpus (Sample)" %}
+
+{# Short descriptor explaining preview focus #}
 {% set description = "Representative examples highlighting sentiment polarity and emoji presence" %}
+
+{# Accent color token for dataset visual identity #}
 {% set accent = "bg-blue-500" %}
+
+{#
+Table implementation reference
+
+Points to:
+- Structured HTML table markup
+- Column definitions
+- Row sampling logic
+#}
 {% set table = "components/data_access/tables/table_text_corpus.html" %}
 
+{# Render collapsible container wrapper #}
 {% include "components/data_access/tables/collapsible_table.html" %}

@@ -1,0 +1,59 @@
+<!-- templates/components/rnd_pipeline/rnd_steps.html -->
+
+{#
+R&D Pipeline — Step Registry
+
+Defines ordered ML lifecycle stages rendered in the accordion UI.
+
+Design principles:
+- Data-driven configuration.
+- Eliminates repetitive template declarations.
+- Enables easy stage insertion, removal, or reordering.
+
+Each step maps to a discrete pipeline artifact group.
+#}
+
+{% set steps = [
+
+    {
+        "id": "01",
+        "title": "Data Ingestion & ETL",
+        "content": "components/step_01_ingestion.html",
+        "open": true
+    },
+
+    {
+        "id": "02",
+        "title": "Linguistic Exploration",
+        "content": "components/step_02_eda.html",
+        "open": false
+    },
+
+    {
+        "id": "03",
+        "title": "The Weighting Logic",
+        "content": "components/step_03_logic.html",
+        "open": false
+    },
+
+    {
+        "id": "04",
+        "title": "Validation & Accuracy",
+        "content": "components/step_04_validation.html",
+        "open": false
+    }
+
+] %}
+
+
+{# Render pipeline steps #}
+{% for s in steps %}
+
+    {% set step = s.id %}
+    {% set title = s.title %}
+    {% set content = s.content %}
+    {% set open = s.open %}
+
+    {% include "components/rnd_pipeline/rnd_step.html" %}
+
+{% endfor %}

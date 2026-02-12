@@ -1,9 +1,39 @@
-<!-- data_access_framing.html -->
+<!-- templates/components/data_access/data_access_framing.html -->
+
+<!--
+Data Access — Framing Panel
+Introduces dataset scope, constraints, and engineering implications.
+
+Pipeline position:
+- Precedes schema + download artifacts.
+- Provides methodological context before raw data inspection.
+
+Objectives:
+- Explain why the dataset is intentionally small.
+- Justify modeling strategy choices.
+- Frame emoji + text fusion as a core engineering problem.
+
+Design principles:
+- Narrative-first (research tone vs UI instruction).
+- Compact container to maintain readability.
+- Glassmorphism styling distinguishes it from tabular data blocks.
+-->
+
 <div class="max-w-3xl space-y-4 bg-white/70 backdrop-blur rounded-2xl p-6 border border-slate-200">
+
+    <!-- Section micro-heading -->
     <h3 class="text-sm font-black uppercase tracking-widest text-slate-900">
         Data Access & Engineering Constraints
     </h3>
 
+    <!--
+    Dataset size constraint explanation
+
+    Communicates:
+    - ~1k sample limitation
+    - Interpretability > scale tradeoff
+    - Suitability of linear vs deep models
+    -->
     <p class="text-[11px] text-slate-500 leading-relaxed italic mt-3">
         The dataset is intentionally limited to approximately 1,000 labeled samples.
         This constraint prioritizes interpretability and rapid iteration over raw
@@ -11,6 +41,14 @@
         more reliable than high-capacity neural architectures in this context.
     </p>
 
+    <!--
+    Multi-source ingestion framing
+
+    Highlights:
+    - Linguistic vs symbolic sentiment channels
+    - Structural incompatibility of datasets
+    - Fusion as a feature engineering challenge
+    -->
     <p class="text-sm text-slate-600 leading-relaxed">
         Sentiment is not expressed through language alone. This system ingests
         two structurally incompatible datasets to capture both linguistic
@@ -18,4 +56,5 @@
         challenge lies in unifying these sources without introducing bias or
         information loss.
     </p>
+
 </div>

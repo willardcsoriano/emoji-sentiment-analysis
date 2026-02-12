@@ -3,68 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- App title / SEO -->
     <title>VibeCheck AI | Sentiment Engineering Pipeline</title>
     
+    <!-- Core runtime libraries -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Math + ES6 support -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
+        /* HTMX request loader visibility */
         .htmx-indicator { display: none; }
         .htmx-request .htmx-indicator { display: flex; }
-        /* Smooth transition for accordion arrows */
+
+        /* Accordion chevron rotation */
         details[open] .chevron { transform: rotate(180deg); }
     </style>
 </head>
+
 <body class="bg-gradient-to-b from-slate-100 to-slate-200 text-slate-900 font-sans antialiased selection:bg-blue-100">
 
-    <!-- Layout container: purely structural, no semantic meaning -->
+    <!-- Page container -->
     <div class="max-w-6xl mx-auto px-4 py-8 sm:py-16 space-y-16">
 
-        <!-- Page introduction and primary entry point -->
+        <!-- Intro + live inference entry -->
         <header class="space-y-10">
-            {% include "components/hero.html" %}
-            
-            <!-- Interactive tool is a distinct, navigable section -->
-            <section id="live-tool" class="max-w-3xl mx-auto">
-                {% include "components/inference_form.html" %}
+
+            <!-- Hero / product framing -->
+            <section id="hero">
+                {% include "components/header/hero.html" %}
             </section>
+
+            <!-- Interactive inference tool -->
+            <section id="live-tool" class="max-w-3xl mx-auto">
+                {% include "components/header/inference_form.html" %}
+            </section>
+
+            <!-- Output interpretation legend -->
+            <section id="logic-guide" class="max-w-3xl mx-auto pt-4">
+                {% include "components/header/logic_legend.html" %}
+            </section>
+
         </header>
 
-        <section id="logic-guide" class="max-w-3xl mx-auto pt-4">
-            {% include "components/logic_legend.html" %}
-        </section>
-
-        <!-- Project overview: establishes purpose, scope, and narrative before technical deep dive -->
+        <!-- Research narrative overview -->
         <section id="project-overview" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6 pt-12">
-            {% include "components/project_overview.html" %}
+            {% include "components/project_overview/project_overview.html" %}
         </section>
 
-        <!-- Core data access content, part of the primary page narrative -->
+        <!-- Dataset transparency + access -->
         <section id="data-vault" class="col-span-1 md:col-span-12 pt-12 border-t border-slate-200">
             <div class="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-200 shadow-sm">
-                {% include "components/data_access.html" %}
+                {% include "components/data_access/data_access.html" %}
             </div>
         </section>
 
+        <!-- Pipeline explorer + system sidebar -->
         <main class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16 pt-12 border-t border-slate-200">
-            {% include "components/rnd_pipeline.html" %}
-            {% include "components/main_sidebar.html" %}
+            {% include "components/rnd_pipeline/rnd_pipeline.html" %}
+            {% include "components/main_sidebar/main_sidebar.html" %}
         </main>
 
-        <!-- Call to Adventure -->
+        <!-- Conversion → return to inference -->
         <section id="cta" class="pt-20 pb-12">
             <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+
+                <!-- Ambient glow frame -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600
+                            rounded-[3rem] blur opacity-25
+                            group-hover:opacity-40 transition duration-1000">
+                </div>
                 
+                <!-- CTA panel -->
                 <div class="relative">
                     {% include "components/cta.html" %}
                 </div>
+
             </div>
         </section>
         
-        <!-- Global site footer, not part of main content -->
+        <!-- System footer / provenance -->
         <footer class="pt-12 border-t border-slate-200">
             {% include "components/footer.html" %}
         </footer>
@@ -72,5 +94,4 @@
     </div>
 
 </body>
-
 </html>

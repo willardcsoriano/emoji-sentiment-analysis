@@ -1,0 +1,45 @@
+<!-- templates/components/main_sidebar/main_sidebar.html -->
+
+<!--
+Main Sidebar Container
+
+Layout role:
+- Secondary column within the primary workspace grid.
+- Sits adjacent to the R&D pipeline visualization.
+
+Pipeline relationship:
+- Provides contextual artifacts that complement the active pipeline stages.
+- Surfaces system metadata rather than step-by-step narrative.
+
+Typical contents:
+- Model specifications
+- Dataset summaries
+- Evaluation metrics
+- Artifact references
+- System diagnostics
+
+Layout behavior:
+- Sticky on large screens for persistent visibility.
+- Scroll-independent from the main pipeline column.
+- Collapses into full-width flow on mobile.
+
+Design principles:
+- Informational, not interactive-heavy.
+- Quick-reference surfaces vs deep exploration panels.
+-->
+<aside
+    class="col-span-1 md:col-span-12 lg:col-span-5
+           space-y-8 lg:sticky lg:top-8 h-fit"
+>
+
+    <!--
+    Sidebar specifications panel
+
+    Houses:
+    - Model metadata
+    - Feature configuration summaries
+    - Training artifacts
+    -->
+    {% include "components/sidebar_specs.html" %}
+
+</aside>

@@ -1,0 +1,78 @@
+<!-- templates\components\main_sidebar\specs\execution_environment.html -->
+
+<!--
+Execution Environment Panel
+
+Documents implementation and deployment infrastructure.
+
+Covers:
+- ML libraries
+- Inference framework
+- Containerization + cloud deployment
+
+Purpose:
+- Establish reproducibility guarantees.
+- Surface runtime architecture.
+-->
+<section id="tech-stack" class="space-y-4">
+
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 pl-2">
+        Execution Environment
+    </h3>
+
+    <div class="grid grid-cols-1 gap-2">
+
+        <!-- Scikit-learn -->
+        <div class="flex items-center justify-between p-4 bg-white rounded-2xl
+                    border border-slate-200 group hover:border-blue-500 transition-all">
+            <div class="flex items-center gap-3">
+                <span class="text-xl">📊</span>
+                <div>
+                    <p class="text-sm font-bold text-slate-800 leading-none mb-1">
+                        Scikit-Learn
+                    </p>
+                    <p class="text-[9px] text-slate-400 uppercase font-black">
+                        Model Pipeline · Interpretability-first
+                    </p>
+                </div>
+            </div>
+            <span class="h-1.5 w-1.5 rounded-full bg-slate-200 group-hover:bg-blue-500"></span>
+        </div>
+
+        <!-- FastAPI -->
+        <div class="flex items-center justify-between p-4 bg-white rounded-2xl
+                    border border-slate-200 group hover:border-emerald-500 transition-all">
+            <div class="flex items-center gap-3">
+                <span class="text-xl">⚡</span>
+                <div>
+                    <p class="text-sm font-bold text-slate-800 leading-none mb-1">
+                        FastAPI
+                    </p>
+                    <p class="text-[9px] text-slate-400 uppercase font-black">
+                        Async Inference · Low-latency API
+                    </p>
+                </div>
+            </div>
+            <span class="h-1.5 w-1.5 rounded-full bg-slate-200 group-hover:bg-emerald-500"></span>
+        </div>
+
+        <!-- Docker / GCP -->
+        <div class="flex items-center justify-between p-4 bg-white rounded-2xl
+                    border border-slate-200 group hover:border-blue-600 transition-all">
+            <div class="flex items-center gap-3">
+                <span class="text-xl">🐳</span>
+                <div>
+                    <p class="text-sm font-bold text-slate-800 leading-none mb-1">
+                        Docker & GCP
+                    </p>
+                    <p class="text-[9px] text-slate-400 uppercase font-black">
+                        Reproducible Deployment
+                    </p>
+                </div>
+            </div>
+            <span class="h-1.5 w-1.5 rounded-full bg-slate-200 group-hover:bg-blue-600"></span>
+        </div>
+
+    </div>
+
+</section>

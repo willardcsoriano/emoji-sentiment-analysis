@@ -1,0 +1,81 @@
+<!-- templates/components/footer/footer.html -->
+
+<!--
+Application Footer — System Provenance & Runtime Context
+
+Purpose:
+- Provides authorship attribution.
+- Surfaces deployment environment.
+- Signals core technology stack.
+
+Position in system narrative:
+- Concludes the exploratory + inference workflow.
+- Reinforces transparency around build and hosting infrastructure.
+
+Design principles:
+- Minimal visual weight to avoid competing with CTA/inference UI.
+- Monospaced + uppercase micro-typography mirrors system console aesthetics.
+- Horizontal grouping reflects infrastructure layering.
+-->
+
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 text-slate-400">
+
+    <!--
+    Authorship + ownership attribution
+
+    Contents:
+    - Copyright
+    - Project identity
+    - Builder attribution
+
+    Functions as project provenance marker.
+    -->
+    <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest">
+
+        <!-- Copyright -->
+        <span>&copy; 2026 VibeCheck AI</span>
+
+        <!-- Divider -->
+        <span class="text-slate-400">|</span>
+
+        <!-- Builder credit -->
+        <span class="font-medium text-slate-500">
+            Built by willardcsoriano
+        </span>
+
+    </div>
+    
+    <!--
+    Runtime environment + stack disclosure
+
+    Surfaces:
+    - Deployment infrastructure
+    - Hosting runtime
+    - Core backend + interface technologies
+    -->
+    <div class="flex items-center gap-6">
+
+        <!-- Deployment environment indicator -->
+        <div class="flex items-center gap-2">
+
+            <!-- Live environment status dot -->
+            <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+
+            <!-- Hosting platform label -->
+            <span class="text-[10px] font-black uppercase tracking-widest">
+                Environment: GCP Cloud Run
+            </span>
+
+        </div>
+
+        <!-- Vertical divider -->
+        <span class="h-4 w-px bg-slate-200"></span>
+
+        <!-- Technology stack summary -->
+        <span class="text-[10px] font-medium text-slate-500">
+            Built with Python & HTMX
+        </span>
+
+    </div>
+
+</div>

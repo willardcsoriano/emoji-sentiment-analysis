@@ -1,0 +1,68 @@
+<!-- templates\components\main_sidebar\specs\development_status.html --> 
+
+<!--
+Development Status Panel
+
+Tracks model and system evolution.
+
+States:
+- Completed capabilities
+- Active experiments
+- Future research directions
+
+Functions as a lightweight ML roadmap.
+-->
+<section
+    id="iteration-roadmap"
+    class="p-8 bg-[#0f172a] rounded-[2.5rem] text-slate-400 
+           space-y-6 shadow-2xl shadow-indigo-900/20 border border-slate-800"
+>
+
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">
+        Development Status
+    </h3>
+
+    <ul class="space-y-5 text-xs">
+
+        <!-- Completed -->
+        <li class="flex gap-3">
+            <span class="text-emerald-500 font-bold">✓</span>
+            <div>
+                <p class="text-slate-100 font-semibold leading-none mb-1">
+                    Emoji Signal Amplification
+                </p>
+                <p class="opacity-60 text-[10px]">
+                    Implemented custom w=5 weighting logic
+                </p>
+            </div>
+        </li>
+
+        <!-- In progress -->
+        <li class="flex gap-3">
+            <span class="text-blue-400 animate-pulse">●</span>
+            <div>
+                <p class="text-slate-100 font-semibold italic leading-none mb-1">
+                    Model Fine-Tuning
+                </p>
+                <p class="opacity-60 text-[10px]">
+                    Testing Naive Bayes vs. Logistic Regression
+                </p>
+            </div>
+        </li>
+
+        <!-- Future -->
+        <li class="flex gap-3 opacity-40">
+            <span class="font-bold">○</span>
+            <div>
+                <p class="leading-none mb-1 text-slate-300">
+                    Deep Learning Integration
+                </p>
+                <p class="text-[10px]">
+                    Future exploration into LSTM / Transformers
+                </p>
+            </div>
+        </li>
+
+    </ul>
+
+</section>

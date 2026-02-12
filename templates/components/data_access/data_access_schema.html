@@ -1,28 +1,92 @@
-<!-- data_access_schema.html -->
+<!-- templates/components/data_access/data_access_schema.html -->
+
+<!--
+Data Access — Schema Overview
+Documents structural differences between ingested datasets.
+
+Pipeline position:
+- Sits between raw downloads and dataset previews.
+- Defines how source columns are transformed into model features.
+
+Objectives:
+- Clarify column-level data contracts.
+- Explain representation divergence (text vs emoji).
+- Prepare users for downstream feature engineering steps.
+
+Schema philosophy:
+- Dataset A → linguistic feature space.
+- Dataset B → symbolic polarity feature space.
+- Both converge during feature fusion.
+-->
+
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs font-mono">
 
+    <!--
+    Dataset A — Tweet Corpus Schema
+
+    Source column:
+    - post (string)
+
+    Transformation stages:
+    1. Text normalization
+    2. Tokenization
+    3. Vectorization (TF-IDF)
+    4. Sparse weighting
+
+    Output:
+    - High-dimensional linguistic feature matrix
+    -->
     <div class="p-5 rounded-2xl bg-white border border-slate-300 shadow-sm space-y-2">
+
+        <!-- Dataset label -->
         <span class="text-slate-400 uppercase tracking-widest text-[10px]">
             Dataset A
         </span>
+
+        <!-- Column → feature projection summary -->
         <p class="text-green-600">
             post: string → tokenized → weighted (TF-IDF)
         </p>
+
+        <!-- Interpretive description -->
         <p class="text-slate-500 italic text-[11px]">
             Linguistic sentiment expressed through syntax, vocabulary, and emoji context.
         </p>
+
     </div>
 
+    <!--
+    Dataset B — Emoticon / Emoji Lexicon Schema
+
+    Source column:
+    - emoji (symbol)
+
+    Transformation stages:
+    1. Symbol normalization
+    2. Polarity lookup
+    3. Scalar encoding
+    4. Feature weighting
+
+    Output:
+    - Dense symbolic sentiment features
+    -->
     <div class="p-5 rounded-2xl bg-white border border-slate-300 shadow-sm space-y-2">
+
+        <!-- Dataset label -->
         <span class="text-slate-400 uppercase tracking-widest text-[10px]">
             Dataset B
         </span>
+
+        <!-- Column → feature projection summary -->
         <p class="text-indigo-600">
             emoji: symbol → polarity → scalar weight
         </p>
+
+        <!-- Interpretive description -->
         <p class="text-slate-500 italic text-[11px]">
             Symbolic sentiment requiring semantic normalization and lookup mapping.
         </p>
+
     </div>
 
 </div>

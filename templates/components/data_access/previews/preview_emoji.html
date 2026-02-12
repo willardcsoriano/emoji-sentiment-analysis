@@ -1,7 +1,44 @@
 <!-- templates/components/data_access/previews/preview_emoji.html -->
+
+{#
+Dataset Preview — Emoji Lexicon Sample
+
+Component type:
+- Configured instance of the reusable collapsible table shell.
+- Displays symbolic sentiment reference data.
+
+Pipeline position:
+- Complements the text corpus preview.
+- Represents the symbolic feature source used in fusion modeling.
+
+Objectives:
+- Surface emoji → sentiment mappings.
+- Expose polarity priors used in feature engineering.
+- Provide transparency into affect normalization logic.
+
+Interpretability role:
+- Explains how emojis are translated into scalar sentiment signals.
+- Bridges raw symbols → weighted model features.
+#}
+
+{# Table title displayed in collapsible header #}
 {% set title = "Dataset 02 · Emoji Lexicon (Sample)" %}
+
+{# Descriptor explaining semantic function of the dataset #}
 {% set description = "Symbol-to-semantic mapping used for affect normalization" %}
+
+{# Accent color token distinguishing symbolic dataset from text corpus #}
 {% set accent = "bg-indigo-500" %}
+
+{#
+Table implementation reference
+
+Points to:
+- Emoji symbol column
+- Polarity labels / scores
+- Lookup-ready normalization schema
+#}
 {% set table = "components/data_access/tables/table_emoji_lexicon.html" %}
 
+{# Render collapsible container wrapper #}
 {% include "components/data_access/tables/collapsible_table.html" %}

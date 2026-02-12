@@ -1,0 +1,79 @@
+<!-- templates/components/rnd_pipeline/rnd_step.html -->
+
+<!--
+R&D Step Component
+
+Reusable disclosure block representing a single pipeline stage.
+
+Inputs:
+- step: ordinal identifier
+- title: stage name
+- content: template include path
+- open: default expansion state
+
+Accessibility:
+- Native <details> disclosure.
+- Summary linked via ARIA labeling.
+-->
+<details
+    class="group bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+    aria-labelledby="step-{{ step }}"
+    {% if open %}open{% endif %}
+>
+
+    <!-- Step summary trigger -->
+    <summary
+        id="step-{{ step }}"
+        class="flex items-center justify-between p-6 cursor-pointer list-none
+               hover:bg-slate-50 transition-colors"
+    >
+
+        <!-- Step identifier + title -->
+        <div class="flex items-center gap-4">
+
+            <!-- Ordinal step badge -->
+            <span class="bg-slate-900 text-white font-mono text-xs p-2 rounded-lg">
+                {{ step }}
+            </span>
+
+            <!-- Stage label -->
+            <span class="font-bold text-lg tracking-tight">
+                {{ title }}
+            </span>
+
+        </div>
+
+        <!-- Chevron indicator (rotates on open via CSS if desired) -->
+        <svg
+            class="chevron w-5 h-5 text-slate-300 transition-transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+            />
+        </svg>
+
+    </summary>
+
+    <!-- Step content injection -->
+    <div class="p-6 pt-2 border-t border-slate-50">
+
+        {#
+        Dynamically includes the stage artifact template.
+
+        Examples:
+        - Data tables
+        - Charts
+        - Feature diagrams
+        - Evaluation reports
+        #}
+        {% include content %}
+
+    </div>
+
+</details>

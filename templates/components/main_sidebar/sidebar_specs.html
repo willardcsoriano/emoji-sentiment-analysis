@@ -1,0 +1,32 @@
+<!-- templates/components/main_sidebar/sidebar_specs.html -->
+
+<!--
+Sidebar Specifications — Container
+
+Aggregates system metadata panels:
+
+1. Statistical foundation
+2. Execution environment
+3. Development roadmap
+
+Acts as a model + infrastructure summary surface.
+-->
+
+<div class="space-y-10">
+
+    {% include "components/main_sidebar/specs/statistical_foundation.html" %}
+
+    {% include "components/main_sidebar/specs/execution_environment.html" %}
+
+    {% include "components/main_sidebar/specs/development_status.html" %}
+
+</div>
+
+<!-- Math rendering lifecycle hook -->
+<script>
+document.body.addEventListener('htmx:afterSwap', function () {
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+</script>

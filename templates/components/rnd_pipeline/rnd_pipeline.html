@@ -1,0 +1,25 @@
+<!-- templates/components/rnd_pipeline/rnd_pipeline.html -->
+
+<!--
+R&D Pipeline Container
+
+High-level accordion visualization of the ML lifecycle.
+
+Pipeline coverage:
+- Data ingestion
+- Exploration
+- Feature weighting
+- Validation
+
+Acts as the narrative backbone of the system interface.
+-->
+<section
+    aria-labelledby="rnd-heading"
+    class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6"
+>
+
+    {% include "components/rnd_pipeline/rnd_header.html" %}
+
+    {% include "components/rnd_pipeline/rnd_steps.html" %}
+
+</section>
