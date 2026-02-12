@@ -36,7 +36,7 @@ NEGATIVE_EMOJIS = {
 POSITIVE_WORDS = {"happy", "good", "great", "love", "nice", "awesome"}
 NEGATIVE_WORDS = {"sad", "bad", "terrible", "hate", "awful", "unhappy"}
 
-EMOJI_BOOST = 10 # Give emojis 5x the weight of a single word
+EMOJI_BOOST = 10 # Give emojis 10x the weight of a single word
 
 def extract_emoji_polarity_features(text: str):
     """

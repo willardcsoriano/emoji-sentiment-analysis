@@ -1,11 +1,11 @@
 {
-    "timestamp": "2026-02-08 23:54:24",
-    "status": "PASSED",
+    "timestamp": "2026-02-12 19:27:12",
+    "status": "FAILED",
     "test_suite": "src/tests/test_model_behavior.py",
     "checks": {
-        "lexicon_integrity": "OK",
-        "emoji_veto_power": "OK",
-        "sarcasm_detection": "OK"
+        "lexicon_integrity": "CHECK REQUIRED",
+        "emoji_veto_power": "CHECK REQUIRED",
+        "sarcasm_detection": "CHECK REQUIRED"
     },
-    "recommendation": "Ready for Deployment"
+    "recommendation": "Do Not Deploy - Logic Regressed"
 }
