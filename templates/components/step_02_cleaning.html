@@ -1,0 +1,42 @@
+<!-- templates/components/step_02_cleaning.html -->
+
+<div class="space-y-6 text-slate-600">
+
+    <p class="text-sm leading-relaxed">
+        Raw social media text introduces structural noise, inconsistent encoding,
+        and labeling irregularities. This stage standardizes the corpus to ensure
+        downstream modeling stability and reproducibility.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+                Text Normalization
+            </h4>
+            <ul class="text-xs space-y-1 text-slate-700">
+                <li>• Lowercasing & trimming</li>
+                <li>• Null record removal</li>
+                <li>• Encoding corrections</li>
+            </ul>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+                Integrity Validation
+            </h4>
+            <ul class="text-xs space-y-1 text-slate-700">
+                <li>• Label consistency checks</li>
+                <li>• Duplicate filtering</li>
+                <li>• Emoji extraction validation</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <p class="text-xs italic text-slate-400">
+        Cleaned datasets become the canonical inputs for feature construction
+        and model training.
+    </p>
+
+</div>

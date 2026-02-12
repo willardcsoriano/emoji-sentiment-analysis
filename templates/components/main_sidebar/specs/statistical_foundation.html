@@ -48,7 +48,7 @@ Interpretability role:
 
         </div>
 
-        <!-- Naive Bayes inference block -->
+        <!-- Logistic Regression inference block -->
         <div class="space-y-3 border-t border-slate-100 pt-6">
 
             <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter">
@@ -57,15 +57,18 @@ Interpretability role:
 
             <div class="bg-slate-50 p-4 rounded-xl text-center shadow-inner overflow-x-auto">
                 <div class="text-sm font-serif italic text-slate-800">
-                    $$ P(c \mid x)
-                    \propto P(c)
-                    \prod_{i=1}^{n} P(x_i \mid c) $$
+                    $$
+                    P(y=1 \mid x)
+                    =
+                    \frac{1}{1 + e^{-\beta \cdot x}}
+                    $$
                 </div>
             </div>
 
             <p class="text-[11px] text-slate-500 leading-tight">
-                Multinomial Naive Bayes models conditional independence,
-                prioritizing interpretability and probabilistic stability.
+                Logistic Regression models sentiment as a linear decision boundary
+                over weighted linguistic and emoji-derived features, preserving
+                coefficient interpretability while supporting probabilistic inference.
             </p>
 
         </div>

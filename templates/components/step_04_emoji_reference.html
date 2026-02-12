@@ -1,0 +1,39 @@
+<!-- templates/components/step_04_emoji_reference.html -->
+
+<div class="space-y-6">
+
+    <p class="text-sm text-slate-600 leading-relaxed">
+        Emojis embedded within tweet text are detected and interpreted using a
+        polarity reference lexicon. Rather than treating emojis as noise or
+        abstract tokens, the pipeline derives auxiliary sentiment signals based
+        on their annotated emotional orientation.
+    </p>
+
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner">
+
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <span class="text-slate-500 tracking-widest uppercase">
+                Referencing Protocol
+            </span>
+            <span class="text-blue-500">v2.emoji.lexicon</span>
+        </div>
+
+        <div class="space-y-2 text-slate-300">
+            <p><span class="text-slate-500"># Detect emoji in tweet</span></p>
+            <p>emoji_detected = "😂"</p>
+
+            <p><span class="text-slate-500"># Reference polarity lexicon</span></p>
+            <p>polarity = lookup("😂") → Positive</p>
+
+            <p><span class="text-slate-500"># Derive feature signal</span></p>
+            <p>emoji_sentiment_feature = +1</p>
+        </div>
+
+    </div>
+
+    <p class="text-xs text-slate-400 italic text-center">
+        Lexicon referencing preserves symbolic sentiment without altering the
+        original linguistic structure.
+    </p>
+
+</div>

@@ -1,185 +1,137 @@
 <!-- templates/components/header/inference_form.html -->
 
-<!--
-Inference Form Component
-Primary interaction surface for sentiment classification.
+<!-- Root wrapper controls overlay positioning -->
+<div class="relative">
 
-Responsibilities:
-- Capture short-form natural language input.
-- Trigger inference via HTMX POST request.
-- Stream results into the result display region.
-- Provide lightweight emoji augmentation tools.
+    <!-- ================= CARD ================= -->
+    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-200 overflow-hidden">
+        <div class="p-6 sm:p-10 space-y-8">
 
-Interaction + accessibility rules:
-- Textarea is the sole primary input focus target.
-- Emoji picker is optional enhancement (must not block typing).
-- Enter submits, Shift+Enter creates newline.
-- Loader visibility is controlled by HTMX request state.
--->
+            <form
+                hx-post="/predict-ui"
+                hx-target="#result-area"
+                hx-indicator="#inference-loader"
+                class="space-y-6"
+            >
 
-<div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-200 overflow-hidden">
-    <div class="p-6 sm:p-10 space-y-8">
+                <!-- Label -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center px-1">
+                        <label for="text" class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            Natural Language Stream
+                        </label>
+                    </div>
 
-        <!--
-        HTMX inference form
+                    <!-- Textarea wrapper -->
+                    <div class="relative">
 
-        hx-post: server inference endpoint
-        hx-target: DOM swap region for results
-        hx-indicator: loader bound to request lifecycle
-        -->
-        <form
-            hx-post="/predict-ui"
-            hx-target="#result-area"
-            hx-indicator="#inference-loader"
-            class="space-y-6"
-        >
+                        <textarea
+                            name="text"
+                            id="text"
+                            rows="3"
+                            class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl
+                                   focus:border-blue-500 focus:bg-white outline-none transition-all
+                                   text-xl sm:text-2xl placeholder-slate-300 resize-none font-medium shadow-inner pr-16"
+                            placeholder="Analyze the vibe... ✨"
+                            required
+                        ></textarea>
 
-            <!-- Input label + field grouping -->
-            <div class="space-y-3">
+                        <!-- Trigger button -->
+                        <button
+                            type="button"
+                            onclick="toggleEmojiPicker()"
+                            class="absolute bottom-4 right-4 w-10 h-10
+                                   flex items-center justify-center
+                                   rounded-xl bg-white border border-slate-200
+                                   hover:border-blue-400 hover:text-blue-500
+                                   transition-all shadow-sm z-10"
+                        >
+                            ✨
+                        </button>
 
-                <!-- Micro label (conceptual framing vs literal instruction) -->
-                <div class="flex justify-between items-center px-1">
-                    <label for="text" class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                        Natural Language Stream
-                    </label>
-                </div>
-
-                <!-- Textarea + emoji augmentation wrapper -->
-                <div class="relative group">
-
-                    <!--
-                    Primary inference input
-
-                    Constraints:
-                    - Short-form text optimized (3 rows).
-                    - Large typography for emotional readability.
-                    - No resize to preserve layout integrity.
-                    -->
-                    <textarea
-                        name="text"
-                        id="text"
-                        rows="3"
-                        class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl
-                               focus:border-blue-500 focus:bg-white outline-none transition-all
-                               text-xl sm:text-2xl placeholder-slate-300 resize-none font-medium shadow-inner pr-16"
-                        placeholder="Analyze the vibe... ✨"
-                        required
-                    ></textarea>
-
-                    <!-- Emoji picker trigger + popover -->
-                    <div class="absolute bottom-4 right-4 flex items-center">
-                        <div class="relative">
-
-                            <!--
-                            Picker toggle button
-
-                            Notes:
-                            - type="button" prevents form submission.
-                            - Decorative sparkle mirrors emoji lexicon theme.
-                            -->
-                            <button 
-                                type="button"
-                                onclick="toggleEmojiPicker()"
-                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 
-                                       hover:border-blue-400 hover:text-blue-500 transition-all shadow-sm"
-                            >
-                                ✨
-                            </button>
-
-                            <!--
-                            Emoji picker popover
-
-                            Behavior:
-                            - Absolute positioned overlay.
-                            - Auto-closes on selection or outside click.
-                            - Limited curated set (signal-weighted emojis only).
-                            -->
-                            <div id="emoji-picker" 
-                                 class="hidden absolute bottom-12 right-0 bg-white border border-slate-200 shadow-xl 
-                                        rounded-2xl p-3 grid grid-cols-3 gap-2 w-40 z-50 animate-in fade-in slide-in-from-bottom-2"
-                            >
-                                {% for emoji in ["✨", "🔥", "😍", "😭", "💀", "💯", "✅", "❌", "🤔"] %}
-
-                                <!-- Individual emoji insertion button -->
-                                <button 
-                                    type="button"
-                                    onclick="insertEmoji('{{ emoji }}')"
-                                    class="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-lg text-lg transition-colors"
-                                >
-                                    {{ emoji }}
-                                </button>
-
-                                {% endfor %}
-                            </div>
-                        </div>
                     </div>
                 </div>
+
+                <!-- Submit -->
+                <button
+                    type="submit"
+                    class="w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-5
+                           rounded-2xl transition-all shadow-lg active:scale-[0.98]
+                           flex items-center justify-center gap-3"
+                >
+                    <span class="tracking-wide text-sm uppercase">
+                        Execute Classification
+                    </span>
+                </button>
+
+            </form>
+
+            <!-- Results -->
+            <div id="result-area" class="relative min-h-[140px] border-t border-slate-50 flex">
+
+                <div class="flex flex-col items-center justify-center w-full text-center group-[.htmx-request]:hidden">
+                    <div class="space-y-4 opacity-40">
+                        <div class="flex justify-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_0ms]"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_200ms]"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_400ms]"></span>
+                        </div>
+                        
+                        <p class="text-[10px] font-mono uppercase tracking-[0.3em] animate-pulse">
+                            Ready for Stream
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center text-blue-600">
+                    <div class="animate-spin h-10 w-10 border-[4px] border-blue-600 border-t-transparent rounded-full"></div>
+                </div>
             </div>
 
-            <!-- Submit / inference execution trigger -->
-            <button
-                type="submit"
-                class="w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-5
-                       rounded-2xl transition-all shadow-lg active:scale-[0.98]
-                       flex items-center justify-center gap-3"
-            >
-                <span class="tracking-wide text-sm uppercase">
-                    Execute Classification
-                </span>
-            </button>
-        </form>
-
-        <!--
-        Result display region
-
-        States:
-        1. Idle → "Awaiting Input"
-        2. Loading → Spinner visible
-        3. Complete → Server HTML swap
-        -->
-        <div id="result-area" class="relative min-h-[140px] border-t border-slate-50 flex">
-
-            <!-- Idle placeholder state -->
-            <div class="flex flex-col items-center justify-center w-full text-center opacity-40 group-[.htmx-request]:hidden">
-                <p class="text-xs font-mono uppercase tracking-widest">
-                    Awaiting Input
-                </p>
-            </div>
-            
-            <!-- HTMX loader (auto-toggles via hx-indicator binding) -->
-            <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center text-blue-600">
-                <div class="animate-spin h-10 w-10 border-[4px] border-blue-600 border-t-transparent rounded-full"></div>
-            </div>
         </div>
     </div>
+    <!-- =============== END CARD =============== -->
+
+
+    <!-- ============ EMOJI PICKER (OUTSIDE CARD) ============ -->
+    <div
+        id="emoji-picker"
+        class="hidden absolute bottom-[110px] right-6
+               bg-white border border-slate-200 shadow-xl
+               rounded-2xl p-4 grid grid-cols-4 gap-3 w-56
+               z-[100] animate-in fade-in slide-in-from-bottom-2"
+    >
+        {% for emoji in [
+            "😍","😭","😘","😊","😁","😉","😄",
+            "😒","😔","😢","😆","😀","😐","😛","😲","😧"
+        ] %}
+
+        <button
+            type="button"
+            onclick="insertEmoji('{{ emoji }}')"
+            class="w-12 h-12 flex items-center justify-center
+                   rounded-xl hover:bg-slate-50 transition-colors
+                   text-2xl leading-none"
+        >
+            <span class="select-none">{{ emoji }}</span>
+        </button>
+
+        {% endfor %}
+    </div>
+    <!-- ===================================================== -->
+
 </div>
 
+
 <script>
-
-/*
-Emoji Picker Controller
-Handles picker visibility + insertion behavior.
-Lightweight DOM manipulation (no external dependency).
-*/
-
 function toggleEmojiPicker() {
-    const picker = document.getElementById('emoji-picker');
-    picker.classList.toggle('hidden');
+    document.getElementById("emoji-picker").classList.toggle("hidden");
 }
 
-/*
-Emoji insertion logic
-
-Behavior:
-- Inserts at cursor position.
-- Preserves existing text selection.
-- Refocuses textarea after insertion.
-- Auto-closes picker post-selection.
-*/
 function insertEmoji(emoji) {
     const textarea = document.getElementById("text");
-    const picker = document.getElementById('emoji-picker');
-    
+    const picker = document.getElementById("emoji-picker");
+
     const start = textarea.selectionStart;
     const text = textarea.value;
 
@@ -187,49 +139,28 @@ function insertEmoji(emoji) {
         text.substring(0, start) +
         emoji +
         text.substring(textarea.selectionEnd);
-    
+
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-    
-    // Auto-close picker after selection
-    picker.classList.add('hidden');
+
+    picker.classList.add("hidden");
 }
 
-/*
-Outside-click dismissal handler
+/* Outside click close */
+document.addEventListener("click", function (e) {
+    const picker = document.getElementById("emoji-picker");
 
-Closes picker when clicking anywhere outside:
-- Picker container
-- Toggle trigger button
-*/
-document.addEventListener('click', function(event) {
-    const picker = document.getElementById('emoji-picker');
-    const trigger = event.target.closest('button');
-
-    if (
-        !picker.contains(event.target) &&
-        (!trigger || !trigger.onclick.toString().includes('toggleEmojiPicker'))
-    ) {
-        picker.classList.add('hidden');
+    if (!picker.contains(e.target) &&
+        !e.target.closest("button[onclick='toggleEmojiPicker()']")) {
+        picker.classList.add("hidden");
     }
 });
 
-/*
-Keyboard submission handler
-
-Rules:
-- Enter → submit inference request.
-- Shift + Enter → newline.
-- Only triggers when textarea is focused.
-*/
+/* Enter submit */
 document.addEventListener("keydown", function (e) {
     const textarea = document.getElementById("text");
 
-    if (
-        e.key === "Enter" &&
-        !e.shiftKey &&
-        textarea === document.activeElement
-    ) {
+    if (e.key === "Enter" && !e.shiftKey && textarea === document.activeElement) {
         e.preventDefault();
         textarea.closest("form").requestSubmit();
     }

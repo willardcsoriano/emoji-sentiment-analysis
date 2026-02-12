@@ -1,0 +1,31 @@
+<!-- templates/components/system_overview.html -->
+
+<div class="space-y-6 text-slate-600">
+
+    <p class="text-sm leading-relaxed">
+        The finalized model is deployed within a reproducible inference pipeline.
+        Incoming text undergoes identical preprocessing, emoji referencing, and
+        vectorization before sentiment prediction is generated.
+    </p>
+
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner">
+
+        <div class="space-y-2 text-slate-300">
+            <p><span class="text-slate-500"># Load artifacts</span></p>
+            <p>vectorizer.pkl → loaded</p>
+            <p>sentiment_model.pkl → loaded</p>
+
+            <p><span class="text-slate-500"># Apply feature pipeline</span></p>
+            <p>text → tfidf → emoji features</p>
+
+            <p><span class="text-slate-500"># Generate prediction</span></p>
+            <p>output → Positive / Negative</p>
+        </div>
+
+    </div>
+
+    <p class="text-xs italic text-slate-400 text-center">
+        Inference parity ensures training and production feature logic remain aligned.
+    </p>
+
+</div>

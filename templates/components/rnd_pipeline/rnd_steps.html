@@ -17,34 +17,54 @@ Each step maps to a discrete pipeline artifact group.
 
     {
         "id": "01",
-        "title": "Data Ingestion & ETL",
+        "title": "Data Ingestion",
         "content": "components/step_01_ingestion.html",
         "open": true
     },
 
     {
         "id": "02",
-        "title": "Linguistic Exploration",
-        "content": "components/step_02_eda.html",
+        "title": "Data Cleaning & Validation",
+        "content": "components/step_02_cleaning.html",
         "open": false
     },
 
     {
         "id": "03",
-        "title": "The Weighting Logic",
-        "content": "components/step_03_logic.html",
+        "title": "Exploratory Analysis",
+        "content": "components/step_03_eda.html",
         "open": false
     },
 
     {
         "id": "04",
-        "title": "Validation & Accuracy",
-        "content": "components/step_04_validation.html",
+        "title": "Emoji Sentiment Referencing",
+        "content": "components/step_04_emoji_reference.html",
+        "open": false
+    },
+
+    {
+        "id": "05",
+        "title": "Feature Engineering",
+        "content": "components/step_05_features.html",
+        "open": false
+    },
+
+    {
+        "id": "06",
+        "title": "Model Training & Evaluation",
+        "content": "components/step_06_modeling.html",
+        "open": false
+    },
+
+    {
+        "id": "07",
+        "title": "Inference Pipeline",
+        "content": "components/step_07_inference.html",
         "open": false
     }
 
 ] %}
-
 
 {# Render pipeline steps #}
 {% for s in steps %}

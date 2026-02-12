@@ -40,7 +40,7 @@ Design note:
 
             <!-- Panel micro-heading -->
             <h6 class="text-[10px] font-black uppercase tracking-widest text-slate-100 mb-1">
-                Why This Engineering Step Matters
+                Why Emoji Sentiment Referencing Matters
             </h6>
 
             <!--
@@ -53,11 +53,11 @@ Design note:
             - Classifier stability preservation
             -->
             <p class="text-[11px] text-slate-300 leading-relaxed italic">
-                Without schema unification, emoji-driven sentiment would be
-                underrepresented or discarded entirely. The ingestion pipeline
-                removes redundant indices, normalizes symbolic inputs, and
-                projects both datasets into a shared feature space — preserving
-                affect signal while maintaining classifier stability.
+                Emoji sentiment is frequently embedded within tweet text but can be diluted or lost during conventional 
+                text vectorization. This engineering step preserves symbolic affect (emotional expression) by detecting emojis and referencing 
+                a polarity lexicon to derive auxiliary sentiment signals. By augmenting textual features with 
+                emoji-informed context, the pipeline retains emotional nuance while maintaining model interpretability 
+                and stability.
             </p>
 
         </div>

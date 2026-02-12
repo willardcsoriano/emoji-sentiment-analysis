@@ -26,35 +26,21 @@ Design principles:
         Data Access & Engineering Constraints
     </h3>
 
-    <!--
-    Dataset size constraint explanation
-
-    Communicates:
-    - ~1k sample limitation
-    - Interpretability > scale tradeoff
-    - Suitability of linear vs deep models
-    -->
-    <p class="text-[11px] text-slate-500 leading-relaxed italic mt-3">
-        The dataset is intentionally limited to approximately 1,000 labeled samples.
-        This constraint prioritizes interpretability and rapid iteration over raw
-        performance, making classical linear models and feature-weighted approaches
-        more reliable than high-capacity neural architectures in this context.
-    </p>
-
-    <!--
-    Multi-source ingestion framing
-
-    Highlights:
-    - Linguistic vs symbolic sentiment channels
-    - Structural incompatibility of datasets
-    - Fusion as a feature engineering challenge
-    -->
-    <p class="text-sm text-slate-600 leading-relaxed">
-        Sentiment is not expressed through language alone. This system ingests
-        two structurally incompatible datasets to capture both linguistic
-        sentiment and symbolic emotional signals. The primary engineering
-        challenge lies in unifying these sources without introducing bias or
-        information loss.
-    </p>
-
+    <!-- Dataset scale + modeling implications --> 
+        <p class="text-[11px] text-slate-500 leading-relaxed italic mt-3"> 
+            The supervised training corpus consists of a compact set of labeled emoji-bearing tweets, 
+            complemented by a structured emoticon reference dataset. While modest in scale, this 
+            composition supports rapid iteration, transparent evaluation, and feature-level 
+            interpretability—making classical linear modeling approaches well-suited to the signal
+             density and sparsity characteristics of the data. 
+        </p> 
+        
+        <!-- Multi-source fusion framing -->
+        <p class="text-sm text-slate-600 leading-relaxed"> 
+            Sentiment in short-form social media text is expressed through both linguistic content 
+            and symbolic cues. To capture this dual channel, the pipeline ingests structurally 
+            distinct datasets: free-text tweets and normalized emoji/emoticon sentiment references. 
+            A central engineering challenge lies in reconciling these modalities into a unified 
+            feature space without distorting their respective semantic contributions. 
+        </p>
 </div>

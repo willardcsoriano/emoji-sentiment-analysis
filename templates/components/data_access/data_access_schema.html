@@ -50,7 +50,8 @@ Schema philosophy:
 
         <!-- Interpretive description -->
         <p class="text-slate-500 italic text-[11px]">
-            Linguistic sentiment expressed through syntax, vocabulary, and emoji context.
+            Linguistic sentiment expressed through syntax, vocabulary, 
+            and embedded emoji context within the textual signal.
         </p>
 
     </div>
@@ -79,14 +80,14 @@ Schema philosophy:
 
         <!-- Column → feature projection summary -->
         <p class="text-indigo-600">
-            emoji: symbol → polarity → scalar weight
+            emoji: symbol → normalized → polarity referenced → derived feature signal
         </p>
 
         <!-- Interpretive description -->
         <p class="text-slate-500 italic text-[11px]">
-            Symbolic sentiment requiring semantic normalization and lookup mapping.
+            Symbolic sentiment signals sourced from a reference lexicon and used to annotate 
+            or derive polarity features when emojis are encountered within tweet text.
         </p>
 
     </div>
-
 </div>
