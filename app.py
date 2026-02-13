@@ -1,4 +1,4 @@
-# app.py - Main FastAPI application for VibeCheck AI
+# app.py - Main FastAPI application for Emoji-Aware Sentiment Analysis Engine
 
 import joblib
 import uvicorn
@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
         print(f"❌ Startup Error: {e}")
     yield
 
-app = FastAPI(title="VibeCheck AI", lifespan=lifespan)
+app = FastAPI(title="Emoji-Aware Sentiment Analysis Engine", lifespan=lifespan)
 
 # Templates look in the root /templates folder
 templates = Jinja2Templates(directory="templates")
