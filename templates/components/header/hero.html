@@ -10,15 +10,16 @@ Accessibility + Interaction rules:
 - All elements are decorative or informational only.
 - Interactive controls live in downstream input components.
 -->
+<!-- templates/components/header/hero.html -->
+
 <div class="text-center space-y-6 pt-4 sm:pt-8 pointer-events-none">
 
-    <!-- Live status badge (decorative system indicator, aria-hidden to avoid SR noise) -->
+    <!-- Live status badge -->
     <div
         class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100
-               text-blue-700 text-[10px] font-black uppercase tracking-[0.2em] mx-auto shadow-sm"
+            text-blue-700 text-[10px] font-black uppercase tracking-[0.2em] mx-auto shadow-sm"
         aria-hidden="true"
     >
-        <!-- Animated pulse dot (purely visual activity cue) -->
         <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
@@ -26,23 +27,29 @@ Accessibility + Interaction rules:
         Stateless Inference Active
     </div>
 
-    <!-- Hero title / product name -->
-    <h1 class="text-5xl sm:text-7xl font-black tracking-tighter text-slate-900 leading-none">
-        Vibe<span class="text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-700">Check</span> AI
+    <!-- Product title -->
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-slate-900 leading-none max-w-4xl mx-auto">
+        Emoji-Aware
+        <span class="text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-700">
+            Sentiment Analysis Engine
+        </span>
     </h1>
 
-    <!-- One-sentence project description (value proposition + technical framing) -->
+    <!-- System description -->
     <p class="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium">
-        A production-aligned
+        A production-aligned NLP system that models sentiment through
+        high-dimensional linguistic features augmented by
         <span class="text-slate-900 underline decoration-blue-500/30 decoration-2 underline-offset-4">
-            hybrid sentiment engine
-        </span>
-        that synthesizes high-dimensional word vectors with deterministic emoji polarity signals to resolve complex emotional intent.
+            emoji polarity referencing
+        </span>,
+        enabling interpretable emotional inference in short-form social text.
     </p>
 
-    <!-- Usage hint (keyboard affordances for downstream input box) -->
+    <!-- Usage hint -->
     <p class="text-sm text-slate-400 max-w-xl mx-auto">
-        Input short-form text below to trigger the <span class="text-slate-500 font-semibold">Dual-Signal Pipeline</span>. Observe real-time decision drivers and interpretability weights.
+        Input short-form text below to trigger the
+        <span class="text-slate-500 font-semibold">Emoji-Aware Inference Pipeline</span>.
+        Observe decision drivers and feature contributions in real time.
         Press <span class="font-mono text-slate-500">Enter</span> to run inference, or
         <span class="font-mono text-slate-500">Shift + Enter</span> for a new line.
     </p>
