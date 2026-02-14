@@ -1,4 +1,4 @@
-# app.py - Main FastAPI application for Emoji-Aware Sentiment Analysis Engine
+# app.py - Main FastAPI application for Hybrid Sentiment Engine
 
 import joblib
 import uvicorn
@@ -23,7 +23,12 @@ async def lifespan(app: FastAPI):
         print(f"❌ Startup Error: {e}")
     yield
 
-app = FastAPI(title="Emoji-Aware Sentiment Analysis Engine", lifespan=lifespan)
+app = FastAPI(
+    title="Hybrid Sentiment Engine",
+    description="A production-aligned pipeline synthesizing text vectors and deterministic emoji signals.",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 # Templates look in the root /templates folder
 templates = Jinja2Templates(directory="templates")

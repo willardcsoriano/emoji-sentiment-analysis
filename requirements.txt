@@ -1,4 +1,3 @@
-emoji_sentiment_analysis==0.0.1
 fastapi==0.128.0
 fqdn==1.5.1
 ipywidgets==8.1.8
