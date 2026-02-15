@@ -71,8 +71,8 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
         if veto_feature:
             top_drivers.insert(0, top_drivers.pop(top_drivers.index(veto_feature)))
 
-    # Return only the top 5 drivers for UI efficiency
-    final_drivers = top_drivers[:5]
+    # Return only the top 6 drivers for UI efficiency
+    final_drivers = top_drivers[:6]
 
     return {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
