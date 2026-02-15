@@ -1,23 +1,32 @@
 # Use a slim image to keep cold starts fast
 FROM python:3.12-slim
 
+# Build-time argument for the port (defaults to 8080)
+ARG APP_PORT=8080
+
+# Set the working directory
 WORKDIR /app
 
-ENV PORT=8080
-ENV PYTHONUNBUFFERED=1
+# Environment variables
+ENV PORT=${APP_PORT} \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# 1. Copy dependencies first
+# 1. Copy dependency files first to leverage Docker layer caching
 COPY requirements.txt pyproject.toml ./
 
-# 2. Install external libraries ONLY (this layer stays cached)
-RUN pip install --no-cache-dir -r requirements.txt
+# 2. Install dependencies (Cached unless requirements change)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# 3. NOW copy the rest of the application code (including src/ and README.md)
+# 3. Copy the entire project into the container
+# This includes src/, README.md, and any config files
 COPY . .
 
-# 4. Install your own package now that the files exist
+# 4. Install the local project as an editable package
+# This resolves all internal pathing issues automatically
 RUN pip install --no-cache-dir .
 
-# 5. Execute the application
-# Note: Ensure this matches where your 'app' object is defined (e.g., src.main:app)
-CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT}
+# 5. Execute the application using 'exec' form for better signal handling
+# We use the variable ${PORT} so it respects the Cloud Run environment
+CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT}"]
