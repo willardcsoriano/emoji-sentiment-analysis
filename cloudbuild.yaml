@@ -1,10 +1,10 @@
 steps:
-  # Step 1: Build the Docker image using your Dockerfile
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build Image'
     args: [
       'build', 
-      '-t', 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA', 
+      '-t', 'gcr.io/$PROJECT_ID/emoji-app:$SHORT_SHA', 
       '.'
     ]
 
@@ -13,7 +13,7 @@ steps:
     id: 'Push Image'
     args: [
       'push', 
-      'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
+      'gcr.io/$PROJECT_ID/emoji-app:$SHORT_SHA'
     ]
 
   # Step 3: Deploy to Cloud Run
@@ -25,17 +25,15 @@ steps:
       - 'deploy'
       - 'emoji-sentiment-app'
       - '--image'
-      - 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/emoji-app:$SHORT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
 
-# This section fixes your specific logging error
 options:
   logging: CLOUD_LOGGING_ONLY
 
-# Record the image version in GCR for rollback capability
 images:
-  - 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/emoji-app:$SHORT_SHA'
