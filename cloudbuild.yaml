@@ -1,0 +1,41 @@
+steps:
+  # Step 1: Build the Docker image using your Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Image'
+    args: [
+      'build', 
+      '-t', 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA', 
+      '.'
+    ]
+
+  # Step 2: Push the image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Image'
+    args: [
+      'push', 
+      'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
+    ]
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy to Cloud Run'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'emoji-sentiment-app'
+      - '--image'
+      - 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+# This section fixes your specific logging error
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# Record the image version in GCR for rollback capability
+images:
+  - 'gcr.io/hybrid-sentiment-analysis-99/emoji-app:$COMMIT_SHA'
