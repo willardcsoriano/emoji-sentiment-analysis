@@ -15,85 +15,73 @@ Design rules:
 - Must remain concise to avoid cognitive overload near results UI.
 -->
 
-<div class="bg-slate-900/5 rounded-[2.5rem] p-8 md:p-10 border border-white/50 shadow-inner">
+<div class="bg-slate-900/[0.03] rounded-[2.5rem] p-8 md:p-12 border border-white/60 shadow-inner">
 
-    <!-- Section label (micro-eyebrow heading for grouping context) -->
-    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 text-center">
-        Sentiment Engineering Logic
-    </h3>
+    <div class="flex flex-col items-center mb-10 text-center space-y-2">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">
+            Signal Interpretation Key
+        </h3>
+        <p class="text-[11px] text-slate-500 max-w-sm">
+            How the Hybrid Engine synthesizes linguistic patterns with deterministic markers.
+        </p>
+    </div>
     
-    <!-- Three-column explanatory grid (collapses to single column on mobile) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
 
-        <!-- Emoji feature weighting explanation -->
-        <div class="space-y-3">
-
-            <!-- Icon + title row -->
-            <div class="flex items-center gap-3">
-
-                <!-- Emoji icon container (visual anchor metaphor) -->
-                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
-                    ✨
-                </div>
-
-                <!-- Signal category label -->
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Visual Anchors
-                </h4>
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                ✨
             </div>
-
-            <!-- Description: emoji lexicon priority behavior -->
-            <p class="text-[11px] leading-relaxed text-slate-500">
-                High-priority signals from the <strong>Emoji Lexicon</strong>.
-                These can override text to catch sarcasm.
-            </p>
+            <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Deterministic Anchors</h4>
+                    <span class="px-1.5 py-0.5 rounded bg-blue-100 text-[8px] font-black text-blue-700 uppercase">Weight: 10x</span>
+                </div>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    High-priority signals from the <strong>Emoji & Emoticon Lexicons</strong>. These act as "veto" markers that can override text to detect sarcasm or intent.
+                </p>
+            </div>
         </div>
 
-        <!-- Word-list biasing explanation -->
-        <div class="space-y-3">
-
-            <div class="flex items-center gap-3">
-
-                <!-- Lexicon metaphor icon -->
-                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
-                    📚
-                </div>
-
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Lexicon Bias
-                </h4>
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                📚
             </div>
-
-            <!-- Description: curated vocabulary stabilization -->
-            <p class="text-[11px] leading-relaxed text-slate-500">
-                Hand-curated word lists that stabilize sentiment
-                against "noisy" or messy training data.
-            </p>
+            <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Lexicon Stabilization</h4>
+                    <span class="px-1.5 py-0.5 rounded bg-slate-200 text-[8px] font-black text-slate-600 uppercase">Weight: 1x</span>
+                </div>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    Hand-curated vocabulary lists that stabilize the model against noise in the training data, ensuring "cleaner" logic for standard sentiment words.
+                </p>
+            </div>
         </div>
 
-        <!-- Model weighting explanation -->
-        <div class="space-y-3">
-
-            <div class="flex items-center gap-3">
-
-                <!-- Statistical weighting metaphor icon -->
-                <div class="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-lg">
-                    ⚖️
-                </div>
-
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Neural Weight
-                </h4>
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                ⚖️
             </div>
+            <div class="space-y-1.5">
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Statistical Drivers</h4>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    Linguistic features extracted via <strong>TF-IDF vectorization</strong>. These drivers shift the probability toward 
+                    <span class="text-emerald-600 font-bold">Positive (+)</span> or 
+                    <span class="text-rose-600 font-bold">Negative (-)</span>.
+                </p>
+            </div>
+        </div>
 
-            <!-- Description: polarity influence direction -->
-            <p class="text-[11px] leading-relaxed text-slate-500">
-                Statistical influence:
-                <span class="text-emerald-600 font-bold">+</span>
-                pulls toward Positive,
-                <span class="text-rose-600 font-bold">-</span>
-                pulls toward Negative.
-            </p>
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                🚩
+            </div>
+            <div class="space-y-1.5">
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Ambiguity Threshold</h4>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    Predictions with a probability spread of <span class="font-mono">&lt;20%</span> are flagged as <strong>High Ambiguity</strong>, signaling low model certainty.
+                </p>
+            </div>
         </div>
 
     </div>

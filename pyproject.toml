@@ -5,17 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "emoji_sentiment_analysis"
 version = "0.0.1"
-description = "Emoji-based tweet sentiment analysis"
+description = "Hybrid Emoji-based Sentiment Engineering Pipeline"
 authors = [
-  { name = "Group 7" },
+  { name = "Willard Soriano" },
 ]
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
 ]
 requires-python = ">=3.10.0"
-
-# This allows you to manage dependencies in requirements.txt only
 dynamic = ["dependencies"]
 
 [tool.setuptools.dynamic]
@@ -26,18 +25,19 @@ where = ["src"]
 include = ["emoji_sentiment_analysis*"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+# FIX: Pointed to the correct directory inside src
+testpaths = ["src/tests"]
 pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 99
-# Updated to point to the new src location
 src = ["src"]
-include = ["pyproject.toml", "src/**/*.py"]
 
 [tool.ruff.lint]
-extend-select = ["I"]  # Add import sorting
+select = ["E", "F", "I"] # Error, Flake8, Isort (import sorting)
+# E: Syntax errors and standard conventions
+# F: Logic errors (undefined names, etc.)
+# I: Keeps your imports perfectly sorted for readability
 
 [tool.ruff.lint.isort]
 known-first-party = ["emoji_sentiment_analysis"]
-force-sort-within-sections = true

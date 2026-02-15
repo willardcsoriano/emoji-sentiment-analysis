@@ -4,7 +4,6 @@
 Inference Audit Service (Lean Version)
 --------------------------------------
 Calculates probabilities and identifies decision drivers (explainability).
-File I/O logging has been removed to prevent repository bloat.
 """
 
 from __future__ import annotations
@@ -37,9 +36,9 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
     is_veto = False
     
     # Apply Sarcasm Veto: If negative emojis outweigh positive and meet boost threshold
-    if e_neg > e_pos and e_neg >= 10:
-        prediction = 0
-        probs = np.array([0.8, 0.2]) # Manual override of probabilities
+    if e_neg >= 10 and (e_neg >= e_pos):
+        prediction = 0 # Force Negative
+        probs = np.array([0.85, 0.15]) # High confidence in the Veto
         is_veto = True
     else:
         prediction = int(model.predict(features)[0])
@@ -72,8 +71,8 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
         if veto_feature:
             top_drivers.insert(0, top_drivers.pop(top_drivers.index(veto_feature)))
 
-    # Return only the top 3 drivers for UI efficiency
-    final_drivers = top_drivers[:3]
+    # Return only the top 5 drivers for UI efficiency
+    final_drivers = top_drivers[:5]
 
     return {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -81,7 +80,7 @@ def generate_inference_audit(text: str, model, tfidf) -> dict:
         "prediction": "Positive" if prediction == 1 else "Negative",
         "prediction_int": prediction, 
         "confidence": round(float(np.max(probs)), 4),
-        "entropy_flag": "High Ambiguity" if abs(probs[0] - probs[1]) < 0.15 else "Clear Signal",
+        "entropy_flag": "High Ambiguity" if abs(probs[0] - probs[1]) < 0.20 else "Clear Signal",
         "top_drivers": final_drivers
     }
 

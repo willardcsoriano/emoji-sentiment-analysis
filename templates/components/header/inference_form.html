@@ -3,8 +3,7 @@
 <!-- Root wrapper controls overlay positioning -->
 <div class="relative">
 
-    <!-- ================= CARD ================= -->
-    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-200">
         <div class="p-6 sm:p-10 space-y-8">
 
             <form
@@ -14,7 +13,6 @@
                 class="space-y-6"
             >
 
-                <!-- Label -->
                 <div class="space-y-3">
                     <div class="flex justify-between items-center px-1">
                         <label for="text" class="text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -22,10 +20,31 @@
                         </label>
                     </div>
 
-                    <!-- Textarea wrapper -->
-                    <div class="relative">
+<div class="space-y-3 mb-4">
+    <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 px-1">
+        Rapid Inference Presets
+    </p>
+    <div class="flex flex-wrap gap-2">
+        {% for preset in [
+            {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
+            {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
+            {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
+            {"label": "Nuance Check", "text": "It was good but could be better. 😐"}
+        ] %}
+        <button 
+            type="button"
+            onclick="document.getElementById('text').value = '{{ preset.text }}'; document.getElementById('text').focus();"
+            class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 
+                   text-[11px] font-bold text-slate-600 hover:bg-blue-500 
+                   hover:text-white hover:border-blue-500 transition-all active:scale-95"
+        >
+            {{ preset.label }}
+        </button>
+        {% endfor %}
+    </div>
+</div>
 
-                        <textarea
+                    <div class="relative z-20"> <textarea
                             name="text"
                             id="text"
                             rows="3"
@@ -36,7 +55,6 @@
                             required
                         ></textarea>
 
-                        <!-- Trigger button -->
                         <button
                             type="button"
                             onclick="toggleEmojiPicker()"
@@ -49,10 +67,69 @@
                             ✨
                         </button>
 
-                    </div>
+                        <div
+                            id="emoji-picker"
+                            class="hidden absolute top-full right-0 mt-2
+                                bg-white border border-slate-200 shadow-2xl
+                                rounded-3xl p-5 w-72 sm:w-80
+                                z-50 animate-in fade-in slide-in-from-top-2"
+                        >
+                            <div class="flex items-center justify-between mb-4 px-1">
+                                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                    Signal Library
+                                </h3>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[9px] font-bold uppercase">Hybrid Set</span>
+                                </div>
+                            </div>
+
+                            <div class="max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                                
+                                <div class="mb-4">
+                                    <p class="text-[9px] font-bold text-slate-300 uppercase mb-2 px-1">Positive Signals</p>
+                                    <div class="grid grid-cols-5 gap-2">
+                                        {% for emoji in [
+                                            "😂","🤣","😊","😍","🥰","😘","😁","😉","😄","😆",
+                                            "😀","😛","🥳","😇","😋","😏","😌","👍","🙌","👏",
+                                            "👌","💪","🔥","✨","🌟","💯","✅","❤️","💖","🚀"
+                                        ] %}
+                                        <button type="button" onclick="insertEmoji('{{ emoji }}')"
+                                                class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-blue-50 hover:scale-110 transition-all text-xl">
+                                            {{ emoji }}
+                                        </button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-[9px] font-bold text-slate-300 uppercase mb-2 px-1">Negative Signals</p>
+                                    <div class="grid grid-cols-5 gap-2">
+                                        {% for emoji in [
+                                            "😭","😒","😔","😢","😞","😟","😠","😡","🤬","🤯",
+                                            "😩","😫","😤","😰","😨","😱","😧","😲","🙄","🤨",
+                                            "💔","👎","❌","🛑","⚠️","💀","🤡","🤮","💩","📉"
+                                        ] %}
+                                        <button type="button" onclick="insertEmoji('{{ emoji }}')"
+                                                class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-50 hover:scale-110 transition-all text-xl">
+                                            {{ emoji }}
+                                        </button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <style>
+                            /* Custom scrollbar for a cleaner look */
+                            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+                            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+                        </style>
+                        </div>
                 </div>
 
-                <!-- Submit -->
                 <button
                     type="submit"
                     class="w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-5
@@ -66,7 +143,6 @@
 
             </form>
 
-            <!-- Results -->
             <div id="result-area" class="relative min-h-[140px] border-t border-slate-50 flex">
 
                 <div class="flex flex-col items-center justify-center w-full text-center group-[.htmx-request]:hidden">
@@ -90,79 +166,4 @@
 
         </div>
     </div>
-    <!-- =============== END CARD =============== -->
-
-
-    <!-- ============ EMOJI PICKER (OUTSIDE CARD) ============ -->
-    <div
-        id="emoji-picker"
-        class="hidden absolute bottom-[110px] right-6
-               bg-white border border-slate-200 shadow-xl
-               rounded-2xl p-4 grid grid-cols-4 gap-3 w-56
-               z-[100] animate-in fade-in slide-in-from-bottom-2"
-    >
-        {% for emoji in [
-            "😍","😭","😘","😊","😁","😉","😄",
-            "😒","😔","😢","😆","😀","😐","😛","😲","😧"
-        ] %}
-
-        <button
-            type="button"
-            onclick="insertEmoji('{{ emoji }}')"
-            class="w-12 h-12 flex items-center justify-center
-                   rounded-xl hover:bg-slate-50 transition-colors
-                   text-2xl leading-none"
-        >
-            <span class="select-none">{{ emoji }}</span>
-        </button>
-
-        {% endfor %}
-    </div>
-    <!-- ===================================================== -->
-
 </div>
-
-
-<script>
-function toggleEmojiPicker() {
-    document.getElementById("emoji-picker").classList.toggle("hidden");
-}
-
-function insertEmoji(emoji) {
-    const textarea = document.getElementById("text");
-    const picker = document.getElementById("emoji-picker");
-
-    const start = textarea.selectionStart;
-    const text = textarea.value;
-
-    textarea.value =
-        text.substring(0, start) +
-        emoji +
-        text.substring(textarea.selectionEnd);
-
-    textarea.focus();
-    textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-
-    picker.classList.add("hidden");
-}
-
-/* Outside click close */
-document.addEventListener("click", function (e) {
-    const picker = document.getElementById("emoji-picker");
-
-    if (!picker.contains(e.target) &&
-        !e.target.closest("button[onclick='toggleEmojiPicker()']")) {
-        picker.classList.add("hidden");
-    }
-});
-
-/* Enter submit */
-document.addEventListener("keydown", function (e) {
-    const textarea = document.getElementById("text");
-
-    if (e.key === "Enter" && !e.shiftKey && textarea === document.activeElement) {
-        e.preventDefault();
-        textarea.closest("form").requestSubmit();
-    }
-});
-</script>

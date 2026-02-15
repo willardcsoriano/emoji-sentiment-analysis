@@ -50,8 +50,8 @@
 
         </header>
 
-        <!-- Research narrative overview -->
-        <section id="system-overview" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6 pt-12">
+        <!-- System overview -->
+        <section id="system-overview" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6 pt-12 border-t border-slate-200">
             {% include "components/system_overview/system_overview.html" %}
         </section>
 
@@ -68,17 +68,13 @@
             {% include "components/main_sidebar/main_sidebar.html" %}
         </main>
 
-        <!-- Conversion → return to inference -->
-        <section id="cta" class="pt-20 pb-12">
-            <div class="relative group">
+        <!-- CTA -->
+        <section id="cta" class="pt-20 pb-12 border-t border-slate-200">
 
-                <!-- Ambient glow frame -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600
-                            rounded-[3rem] blur opacity-25
-                            group-hover:opacity-40 transition duration-1000">
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000">
                 </div>
                 
-                <!-- CTA panel -->
                 <div class="relative">
                     {% include "components/cta/cta.html" %}
                 </div>
@@ -94,4 +90,53 @@
     </div>
 
 </body>
+
+<script>
+    // 1. Use robust toggle
+    function toggleEmojiPicker() {
+        const picker = document.getElementById("emoji-picker");
+        if (picker) {
+            picker.classList.toggle("hidden");
+        }
+    }
+
+    // 2. Use a defensive insert that re-fetches elements
+    function insertEmoji(emoji) {
+        const textarea = document.getElementById("text");
+        const picker = document.getElementById("emoji-picker");
+
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+
+        textarea.value = text.substring(0, start) + emoji + text.substring(end);
+
+        textarea.focus();
+        // Move cursor to after the emoji
+        const newPos = start + emoji.length;
+        textarea.setSelectionRange(newPos, newPos);
+
+        if (picker) picker.classList.add("hidden");
+    }
+
+    // 3. Global click listener for the picker
+    document.addEventListener("click", function (e) {
+        const picker = document.getElementById("emoji-picker");
+        // If picker doesn't exist in DOM, do nothing
+        if (!picker) return;
+
+        // Logic: If clicking the trigger button, let toggleEmojiPicker handle it
+        // If clicking inside the picker, let insertEmoji handle it
+        // If clicking anywhere else, hide it
+        const isClickInsidePicker = picker.contains(e.target);
+        const isClickOnTrigger = e.target.closest("button[onclick*='toggleEmojiPicker']");
+
+        if (!isClickInsidePicker && !isClickOnTrigger) {
+            picker.classList.add("hidden");
+        }
+    });
+</script>
+
 </html>
