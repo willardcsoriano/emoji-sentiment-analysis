@@ -92,39 +92,37 @@ Inference Pipeline Deployment
 ```
 emoji_sentiment_analysis/
 │
-├── app.py                      # Application entrypoint
-├── Dockerfile                 # Container build spec
-├── requirements.txt           # Python dependencies
+├── app.py                  # FastAPI web entrypoint
+├── Dockerfile              # Container spec for Cloud Run
+├── cloudbuild.yaml         # CI/CD pipeline configuration
+├── requirements.txt        # Production dependencies
+├── Makefile                # Task automation (build, test, etc.)
 │
-├── templates/                 # Web UI templates
+├── templates/              # HTMX/Frontend UI templates
 │
-├── src/
-│   ├── main.py                # Runtime orchestration
-│   │
-│   ├── data/
-│   │   ├── raw/               # Original datasets
-│   │   ├── processed/         # Cleaned + engineered data
-│   │   └── logs/              # Inference history
-│   │
-│   ├── emoji_sentiment_analysis/
-│   │   ├── dataset.py         # Data handling
-│   │   ├── features.py        # Feature engineering
-│   │   ├── config.py          # Configuration
-│   │   │
-│   │   ├── modeling/
-│   │   │   ├── train_model.py
-│   │   │   └── predict.py
-│   │   │
-│   │   └── services/
-│   │       └── audit_service.py
-│   │
-│   ├── models/
-│   │   ├── sentiment_model.pkl
-│   │   └── tfidf_vectorizer.pkl
-│   │
-│   ├── notebooks/             # Full ML lifecycle notebooks
-│   ├── scripts/               # Feature + health utilities
-│   └── tests/                 # Pipeline validation tests
+└── src/
+    ├── main.py             # Runtime orchestration & API logic
+    ├── .dockerignore       # Docker build optimization
+    │
+    ├── emoji_sentiment_analysis/   # Core Package
+    │   ├── dataset.py      # Data loading logic
+    │   ├── features.py     # Feature engineering (Emoji-to-Sentiment)
+    │   ├── config.py       # Project-wide constants
+    │   ├── services/       # Business logic (Audit/Logging)
+    │   └── modeling/       # Training & Inference pipelines
+    │
+    ├── data/               # Versioned data layers
+    │   ├── raw/            # Original Kaggle/Scraped datasets
+    │   ├── processed/      # Cleaned tweets and features
+    │   └── logs/           # Application runtime logs
+    │
+    ├── models/             # Serialized artifacts
+    │   ├── sentiment_model.pkl
+    │   └── tfidf_vectorizer.pkl
+    │
+    ├── notebooks/          # Complete ML lifecycle (Exploration to Validation)
+    ├── scripts/            # Model health & feature building utilities
+    └── tests/              # Pytest suite for model behavior & features
 ```
 
 ---
@@ -215,15 +213,13 @@ Lifecycle notebooks document the full experimentation process:
 
 ## Tech Stack
 
-* Python
-* Scikit-learn
-* FastAPI
-* HTMX
-* TailwindCSS
-* Docker
-* Google Cloud Run  
-* Google Cloud Build (CI/CD)  
-* Artifact Registry
+* **Language:** Python 3.11+
+* **ML Library:** Scikit-learn (Sentiment Analysis)
+* **Web Framework:** FastAPI + HTMX + TailwindCSS
+* **Containerization:** Docker
+* **Cloud Infrastructure:** Google Cloud Run (Serverless Hosting)
+* **CI/CD Pipeline:** Google Cloud Build (Automated Triggers on Push)
+* **Artifact Management:** Google Artifact Registry
 
 ---
 
