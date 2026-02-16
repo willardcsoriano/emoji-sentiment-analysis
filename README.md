@@ -3,7 +3,7 @@
 A lexicon-augmented NLP pipeline for sentiment inference on emoji-enriched social media text.
 
 **Live Deployment:**
-https://hybrid-sentiment-service-232900046311.us-central1.run.app/
+[https://hybrid-sentiment-service-232900046311.us-central1.run.app/](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)
 
 ---
 
@@ -34,7 +34,7 @@ The system is fully reproducible — spanning data ingestion, feature engineerin
 
 Try the deployed inference interface:
 
-**https://hybrid-sentiment-service-232900046311.us-central1.run.app/**
+**[https://hybrid-sentiment-service-232900046311.us-central1.run.app/](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)**
 
 Features:
 
