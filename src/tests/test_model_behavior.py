@@ -5,7 +5,7 @@ from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 from emoji_sentiment_analysis.services.audit_service import generate_inference_audit
 
 # --- EXTENDED TEST DATA ---
-# We add "Reasoning" to the test cases to ensure the right feature is winning
+# Add "Reasoning" to the test cases to ensure the right feature is winning
 GOLDEN_BEHAVIOR_CASES = [
     # 1. Lexicon Heavy (Word List Power)
     ("i love you baby", "Positive", "word_pos_count"),
@@ -45,7 +45,7 @@ def test_sentiment_and_drivers(text, expected_sentiment, expected_driver):
     # 2. Check Driver (Ensures the 'Smart Lexicon' is actually doing the work)
     driver_names = [d['token'] for d in result['top_drivers']]
     # Note: For Sarcasm veto, the driver might be 'word_pos' but the result is Negative.
-    # We check if our key signals are at least being considered.
+    # Check if our key signals are at least being considered.
     assert any(expected_driver in d for d in driver_names), \
         f"Driver Mismatch for '{text}': Expected {expected_driver} to be a top driver. Found: {driver_names}"
 

@@ -25,5 +25,5 @@ COPY . .
 RUN pip install --no-cache-dir .
 
 # 5. Execute the application
-# We point to app:app because app.py is in your root directory
+# Point to app:app because app.py is in your root directory
 CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT}"]

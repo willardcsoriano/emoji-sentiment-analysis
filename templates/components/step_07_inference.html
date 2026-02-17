@@ -1,31 +1,40 @@
-<!-- templates/components/system_overview.html -->
+<!-- templates\components\step_07_inference.html -->
 
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        The finalized model is deployed within a reproducible inference pipeline.
-        Incoming text undergoes identical preprocessing, emoji referencing, and
-        vectorization before sentiment prediction is generated.
+        The finalized system is encapsulated into a <strong>production inference pipeline</strong>. 
+        By loading "frozen" artifacts, it is guaranteed that live tweets undergo the exact same 
+        transformation sequence—text vectorization and emoji extraction—validated during 
+        model training.
     </p>
 
-    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner">
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner border border-slate-800/50">
+
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <span class="text-slate-500 tracking-widest uppercase text-[10px]">
+                Deployment Blueprint
+            </span>
+            <span class="text-green-500">predict.py</span>
+        </div>
 
         <div class="space-y-2 text-slate-300">
-            <p><span class="text-slate-500"># Load artifacts</span></p>
-            <p>vectorizer.pkl → loaded</p>
-            <p>sentiment_model.pkl → loaded</p>
+            <p><span class="text-slate-500"># 1. Reconstruct prediction environment</span></p>
+            <p>model = load("sentiment_model.pkl")</p>
+            <p>tfidf = load("tfidf_vectorizer.pkl")</p>
 
-            <p><span class="text-slate-500"># Apply feature pipeline</span></p>
-            <p>text → tfidf → emoji features</p>
+            <p class="pt-2"><span class="text-slate-500"># 2. Transform input (1,267 features)</span></p>
+            <p>X = hstack([tfidf.transform(raw_text), emoji_vec])</p>
 
-            <p><span class="text-slate-500"># Generate prediction</span></p>
-            <p>output → Positive / Negative</p>
+            <p class="pt-2"><span class="text-slate-500"># 3. Generate Confidence & Prediction</span></p>
+            <p>result = model.predict_proba(X) <span class="text-slate-500">→ [0.07, 0.93]</span></p>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400 text-center">
-        Inference parity ensures training and production feature logic remain aligned.
+    <p class="text-xs italic text-slate-400 border-l-2 border-slate-200 pl-4 py-1">
+        Validation confirms stability across edge cases (empty strings, emoji-only inputs, 
+        and multilingual text) with full audit logging for every inference call.
     </p>
 
 </div>

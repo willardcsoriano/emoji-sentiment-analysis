@@ -30,7 +30,7 @@ def run_pipeline():
         run_data_cleaning()
         run_feature_engineering()
         train_pipeline()
-        run_health_check() # Uses the dynamic path fix we created
+        run_health_check() 
 
         logger.success("✅ Full Pipeline Completed Successfully!")
         print("="*60)

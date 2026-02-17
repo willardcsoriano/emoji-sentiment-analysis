@@ -7,7 +7,7 @@ from emoji_sentiment_analysis.features import (
     build_final_features,
 )
 
-# Note: We now expect EMOJI_BOOST = 10
+# Note: Expect EMOJI_BOOST = 10
 BOOST = 10
 
 # --- Unit tests for hybrid signal extraction ---

@@ -2,31 +2,46 @@
 
 <div class="space-y-8 text-slate-600">
 
-<div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-1 gap-4">
+        <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-2">
+                Classification Logic
+            </h4>
 
-    <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
-        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">
-            Model Selection
-        </h4>
-
-        <p class="text-xs leading-relaxed">
-            Multiple classical classifiers were benchmarked on the engineered
-            feature space, evaluating performance across accuracy, precision,
-            recall, and F1-score.
-        </p>
+            <p class="text-xs leading-relaxed">
+                The pipeline utilizes <strong>Logistic Regression</strong> as the primary classifier. 
+                This decision prioritizes <strong>interpretability over complexity</strong>, 
+                ensuring that every sentiment prediction can be mathematically traced back 
+                to specific textual tokens and emoji signals.
+            </p>
+        </div>
     </div>
 
-</div>
+    <div class="space-y-3">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            Learned Sentiment Drivers
+        </p>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="px-4 py-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                <span class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Pos. Magnitude</span>
+                <span class="text-sm font-mono text-blue-700">+1.53 (😊)</span>
+            </div>
+            <div class="px-4 py-3 bg-rose-50/50 rounded-xl border border-rose-100">
+                <span class="block text-[10px] text-rose-400 uppercase font-bold mb-1">Neg. Magnitude</span>
+                <span class="text-sm font-mono text-rose-700">-2.57 (😭)</span>
+            </div>
+        </div>
+    </div>
 
-<div class="bg-slate-50 p-4 rounded-xl space-y-2">
-    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-        Evaluation Insight
-    </p>
-
-    <p class="text-xs italic leading-relaxed">
-        “Sparse linguistic features combined with emoji polarity signals
-        produced stable generalization across validation splits.”
-    </p>
-</div>
+    <div class="bg-slate-900 p-5 rounded-2xl space-y-3 shadow-lg">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+            Stability & Robustness
+        </p>
+        <p class="text-xs text-slate-300 italic leading-relaxed">
+            "By selecting a linear model, I achieved 88.2% accuracy while maintaining 
+            the ability to perform counterfactual testing—proving that emoji features 
+            shift 9.6% of predictions that would have been missed by text alone."
+        </p>
+    </div>
 
 </div>

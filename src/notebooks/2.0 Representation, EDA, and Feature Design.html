@@ -7572,7 +7572,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">📥 Section 2: Load Cleaned Datasets<a class="anchor-link" href="#%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">¶</a></h2><p>In this section, we load the cleaned datasets produced in Notebook 1.5.</p>
+<h2 id="%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">📥 Section 2: Load Cleaned Datasets<a class="anchor-link" href="#%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">¶</a></h2><p>Load the cleaned datasets produced in Notebook 1.5.</p>
 <p>These datasets are treated as <strong>read-only inputs</strong>.
 No transformations applied here modify the canonical data stored on disk.</p>
 <hr/>
@@ -7676,7 +7676,7 @@ INFO:__main__:Emoji reference shape: (16, 3)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">🏷️ Section 3: Sentiment Label Distribution<a class="anchor-link" href="#%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">¶</a></h2><p>Before evaluating emoji behavior, we inspect the distribution of sentiment labels.</p>
+<h2 id="%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">🏷️ Section 3: Sentiment Label Distribution<a class="anchor-link" href="#%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">¶</a></h2><p>Before evaluating emoji behavior, inspect the distribution of sentiment labels.</p>
 <p>This check helps identify:</p>
 <ul>
 <li>potential class imbalance</li>
@@ -7730,6 +7730,26 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4aa535d7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%8F%B7%EF%B8%8F-Post-Section-3:-Interpretation-%E2%80%94-Sentiment-Label-Distribution">🏷️ Post-Section 3: Interpretation — Sentiment Label Distribution<a class="anchor-link" href="#%F0%9F%8F%B7%EF%B8%8F-Post-Section-3:-Interpretation-%E2%80%94-Sentiment-Label-Distribution">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>The sentiment labels are approximately balanced between positive and negative classes.
+This indicates that downstream analyses of emoji usage are unlikely to be biased by class imbalance.</p>
+<p>As a result:</p>
+<ul>
+<li>differences observed in emoji usage across labels can be interpreted meaningfully</li>
+<li>no resampling or correction is required at this stage</li>
+</ul>
+<p>This confirms that emoji–label relationships observed later are not artifacts of skewed data.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=54beb063">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7772,7 +7792,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">📊 Section 5: Emoji Presence and Density<a class="anchor-link" href="#%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">¶</a></h2><p>Here we quantify how often emojis appear in tweets and how many emojis are used per tweet.</p>
+<h2 id="%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">📊 Section 5: Emoji Presence and Density<a class="anchor-link" href="#%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">¶</a></h2><p>Quantify how often emojis appear in tweets and how many emojis are used per tweet.</p>
 <p>This analysis answers a key feasibility question:</p>
 <blockquote>
 <p><em>Do emojis appear frequently enough to justify feature engineering?</em></p>
@@ -7814,6 +7834,26 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5a4c97e2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%93%8A-Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">📊 Post-Section 5: Interpretation — Emoji Presence and Density<a class="anchor-link" href="#%F0%9F%93%8A-Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>Approximately half of the tweets (~49%) contain at least one emoji.
+Emoji usage is therefore <strong>common</strong>, not incidental.</p>
+<p>This finding establishes that:</p>
+<ul>
+<li>emojis are a frequent component of the textual signal</li>
+<li>ignoring or removing emojis would discard information for a substantial portion of the dataset</li>
+</ul>
+<p>Emoji presence alone is a plausible candidate feature.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d9e439f1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7829,6 +7869,16 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </ul>
 <p>This informs whether emoji features are likely to be informative or noisy.</p>
 <hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3b55c486">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 </div>
 </div>
 </div>
@@ -7922,6 +7972,27 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7593ce62">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%94%8D-Post-Section-7:-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">🔍 Post-Section 7: Interpretation — Emoji Presence vs Sentiment Label<a class="anchor-link" href="#%F0%9F%94%8D-Post-Section-7:-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>Emoji presence differs between positive and negative sentiment labels.
+This indicates that emoji usage is <strong>not independent</strong> of sentiment.</p>
+<p>Implications:</p>
+<ul>
+<li>emoji presence carries sentiment-related signal</li>
+<li>a simple binary feature capturing emoji presence may be informative</li>
+<li>emojis are not merely decorative noise in this dataset</li>
+</ul>
+<p>This supports further exploration of emoji-aware features.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=83d14e7a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7973,6 +8044,25 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 <div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
 <img alt="No description has been provided for this image" class="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjcAAAHHCAYAAABDUnkqAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjgsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvwVt1zgAAAAlwSFlzAAAPYQAAD2EBqD+naQAAQkxJREFUeJzt3QucTeX+x/HfGGaGZJC71OROQhGh6KIUUR2dpAvJkS5KSJEiKkI0XZRy0oUuuujyT+l0HKUiTqP7cUlyzbUwbmdorP/r+7xee5+9Z/aMmTEze2bN5/16LWatvfZaz1577b1++3l+z7NiPM/zDAAAwCdKRbsAAAAA+YngBgAA+ArBDQAA8BWCGwAA4CsENwAAwFcIbgAAgK8Q3AAAAF8huAEAAL5CcAMAAHyF4AYoAdatW2cxMTH24osvBpc98MADbllJpWOh1//1119bSZSUlGQ33HBDtItRZH366afu/Hjrrbfy/ZzT5xEFi+AGefb000+7D2rbtm05ihEuHDo2kaaLL7642H7Z/+Uvf7EaNWpYXFycVatWzbp3725z5861ouDAgQMuYFM5i5r/+7//s06dOrljVq5cOatbt65dddVVNn/+/ALd7+LFi90x2b17txVH//nPf1z5cxoMBAL2nTt3FnjZULSVjnYBUHy98sor7iK+bNkyW7NmjdWvXz/aRSpSWrZsacOGDcu0vFatWoVelpNPPtkOHjxoZcqUCS677777bMSIETl6/pgxY2zcuHHWoEEDGzhwoNve77//bh9++KH17NnTnQvXXHONRTu4GTt2rPv73HPPtaLi0UcfteHDh7vgZuTIkS640efln//8p73++usFGuwquNExUQ1NxYoVwx5btWqVlSpVqsgHNyq/3k991wA5RXCDPPn111/dF6d+tetip4ubLoCF6ciRI3bo0CFLSEiwoqh27dp23XXXWVGgX7MZj1Pp0qXddDSqlldgc+WVV9qrr74aFiDpov3xxx/b4cOHC6Tcxd2ff/5pDz74oF144YX2j3/8I9Pj27dvt2iJj4+P2r6Bgla0w3YUWQpmKlWqZN26dXMXPc0H6EJXuXJl69evX6bnpaamuovsXXfdFVyWlpbmAiPV/OgLt06dOnb33Xe75Rkv0IMGDXL7OvXUU926gWp9/Tpu3769nXDCCVa2bFlr1apVxLZy1V7ccccdVqVKFTv++OOtR48etnnzZrdtVWmH0vIbb7zRqlev7valfc6cOdPyk35Rly9f3jZs2GCXXnqp+1tB0bRp09zjP/zwg51//vl23HHHudoSBRcZrV271v7617+6Y65agbPOOsvmzZuXbzk3999/v9u2XntoYBPQpUsXV/bQC3b//v3dcdN73aJFC3vppZci5jNkbEKKVM7AMdL7cfnll7u/q1at6s6h9PT04PO0TPRLP9AEmPE9zarGRwG6zp0KFSpYnz59bNeuXcHH+/bt686XSAHcRRddZI0aNcpy22oe0TnfoUOHiI+rmSpUbj8L7777rjVr1ix4foY2c+m1K/iUU045JXhMAk08GXNuAvkgX3zxhfuM6HiqtkfHRj8i1LSlY6PPvSaVy/O8TD84kpOTXVn03usc0PNDj2dg3zpntK82bdq4ddVU9/LLL4eVR+e1nHfeecHyH2uz4x9//OHOndNOO82dS3rPL7nkEvvuu+8irq9z7N5773XNsfoc6jtj48aNmdZbunSpq4VLTEx0n0PV1H355ZfHVFYcAw/Ig8aNG3v9+/d3fy9atEjfcN6yZcuCj994441exYoVvbS0tLDnvfTSS27df//7324+PT3du+iii7xy5cp5d955p/fss896gwYN8kqXLu1ddtllYc/V85o0aeJVrVrVGzt2rDdt2jTvm2++cY+deOKJ3q233uo99dRT3tSpU702bdq49T/44IOwbVx11VVu+fXXX++er/kWLVq4ZWPGjAmut3XrVrfNOnXqeOPGjfOeeeYZr0ePHm69xx577KjH5+STT3ava8eOHZmmAwcOBNfr27evl5CQ4DVt2tS7+eabXZnat2/v9vPCCy94tWrV8oYPH+49+eST3qmnnurFxsZ6a9euDStn9erVveOPP94bNWqUe+16PaVKlfLmzp0bXO/XX38NbjNAr/doXwGrV6926+j9zAm9Nr1HZcqU8YYMGeI98cQT3jnnnOO2kZycHFxv4cKFbpn+DxWpnIFjpNevcui96Nmzp1vv6aefduvs27fPLdeyK664wps1a5abvvvuuyzLqn1o/dNOO82VUWW97bbb3LHr2LGjd+TIEbfeJ5984tb7v//7v7Dnb9myxb0fOj+yovO7bNmyXqtWrbzff/8922OX28+C3ueaNWt6Dz74oDu2devWdc/duXOnW0evvXfv3sFzNnBM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LFmS5fP27dtnJ598stWpU8cuu+wy++mnnwqpxAAAoKiLanCzc+dOS09Pz1TzovmtW7dGfE6jRo1crc57771ns2fPtiNHjlj79u1t06ZNEddPS0uz1NTUsAkAAPhX1Julcqtdu3bWp08fa9mypXXq1Mnmzp1rVatWtWeffTbi+hMmTLDExMTgpNoeAADgX1ENbqpUqWKxsbG2bdu2sOWaVy5NTpQpU8ZOP/10W7NmTcTHR44caXv27AlOGzduzJeyAwCAoimqwU1cXJy1atXKFixYEFymZibNq4YmJ9Ss9cMPP1jNmjUjPh4fH+96V4VOAADAv0pHuwDqBt63b19r3bq1tWnTxpKTk23//v2u95SoCap27dqueUnGjRtnZ511ltWvX992795tkydPdl3B//a3v0X5lQAAgKIg6sFNr169bMeOHTZ69GiXRKxcmvnz5weTjDds2OB6UAXs2rXLdR3XupUqVXI1P4sXL3bdyAEAAGI8z/NK0mFQbyklFiv/piCbqFoNf7nAtg0UVymT+0S7CABKwPW72PWWAgAAyA7BDQAA8BWCGwAA4CsENwAAwFcIbgAAgK8Q3AAAAF8huAEAAL5CcAMAAHyF4AYAAPgKwQ0AAPAVghsAAOArBDcAAMBXCG4AAICvENwAAABfIbgBAAC+QnADAAB8heAGAAD4CsENAADwFYIbAABQsoObcePG2YEDBzItP3jwoHsMAACgWAU3Y8eOtX379mVaroBHjwEAABSr4MbzPIuJicm0/LvvvrPKlSvnV7kAAADypHROV6xUqZILajQ1bNgwLMBJT093tTk333xz3koBAABQ2MFNcnKyq7W58cYbXfNTYmJi8LG4uDhLSkqydu3a5Ve5AAAACja46du3r/v/lFNOsfbt21uZMmXytkcAAICiENwEdOrUyY4cOWKrV6+27du3u79DdezYMT/LBwAAULDBzVdffWXXXHONrV+/3jVThVIejvJvAAAAik1wo6Th1q1b27x586xmzZoRe04BAAAUm+Dm559/trfeesvq169fMCUCAAAozHFu2rZta2vWrDmWfQIAABSdmpvbb7/dhg0bZlu3brXTTjstU6+p5s2b52f5AAAACja46dmzp/tf490EKO8mMHIxCcUAAKBYBTe//vprwZQEAAAgGsHNySefnB/7BYBiq9Xwl6NdBKDISZncx4pt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HLELLrjADhw44Jqo4uPjXXBz++23560UAAAA0QpuVFszatQoGz58uGue2rdvnzVt2tTKly+fX2UCAAAovGap2bNnuxqbuLg4F9S0adOGwAYAABTf4GbIkCFWrVo1u+aaa+zDDz/kXlIAAKB4Bze6E/jrr7/umqeuuuoqq1mzpt122222ePHigikhAABAQQY3pUuXtksvvdT1kNq+fbs99thjtm7dOjvvvPOsXr16ud0cAABAdBOKQ5UrV87dimHXrl22fv16W7FiRf6VDAAAoLBunKmEYtXcdO3a1WrXrm3Jycl2xRVX2E8//ZSXzQEAAESv5ubqq6+2Dz74wNXaKOfm/vvvt3bt2uVfiQAAAAozuImNjbU33njDNUfp71A//vijNWvW7FjKAwAAULjBjZqjQu3du9dee+01+/vf/24pKSl0DQcAAMUv50YWLVpkffv2dV3BH330UTv//PPtq6++yt/SAQAAFGTNzdatW+3FF1+0559/3lJTU13OTVpamr377rtutGIAAIBiU3PTvXt3a9SokX3//feud5TuBv7kk0/mSyGmTZtmSUlJlpCQYG3btrVly5Zlue6MGTPsnHPOsUqVKrmpc+fO2a4PAABKlhwHNx999JH179/fxo4da926dcuUTJxXc+bMsaFDh9qYMWNs+fLl1qJFC5esrAECI/n000+td+/etnDhQluyZInVqVPHLrroItu8eXO+lAcAAJSQ4OaLL75wycOtWrVytStPPfWU7dy585gLMHXqVBswYID169fPNW1Nnz7ddTOfOXNmlgnNt956q7Vs2dIaN27sEpmPHDliCxYsOOayAACAEhTcnHXWWa5JSPeWGjhwoLu/VK1atVxg8cknn7jAJ7cOHTrkelipaSlYoFKl3LxqZXI6oODhw4etcuXKER9XTpDyg0InAADgX7nuLXXcccfZjTfe6GpyfvjhBxs2bJg98sgj7k7hPXr0yNW2VPOTnp5u1atXD1uueSUv58Q999zjgqzQACnUhAkTLDExMTipGQsAAPhXnruCixKMJ02aZJs2bXJj3RQ2BVWqQXrnnXdcMnIkI0eOtD179gSnjRs3Fno5AQBAMblxZoCSiy+//HI35UaVKlXcc7dt2xa2XPM1atTI9rkaW0fBzT//+U9r3rx5luvFx8e7CQAAlAzHVHNzrOLi4lyCcmgycCA5OLv7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V6PRpUsX27hxY9jj7733np1xxhnu8bp169rYsWNzVcPy4YcfWnx8vJ111lnBZf/4xz/sP//5j82ePdvdN+uSSy5xv56nTZvmAp6CNGjQILffH3/8Mct1dBf2CRMm2CmnnGJly5a1Fi1a2FtvvRW2zvvvvx88brpXkAK00JoBNcX17t3bateu7Wqn9F689tprweerpuizzz6zxx9/PFh7oQt8aA1Damqq2/9HH30Utu933nnHXZAVOIres6uuuso1M+pirVqy3DYBXn/99S7o69y5sxUmBR8KQk488UTr1auXXXvtte7YSlpamt1xxx2uZk/HWcHXv//97+Bzd+3a5davWrWqO056P1544YVMzVL6O3A/p0qVKrnlgZq60Nqze++9N+L92/T+jxs3Ljj/97//3Zo0aeLK1LhxY3v66aczBWy1atVy7xOQWwQ3QHYfkFKl3M02f/rpJ3fh/de//mV333132Dq6OKrJ6OWXX7Yvv/zSXVCvvvrq4OOff/65q2IfPHiwC0aeffZZV8Oi5+SUttGqVauwZUuWLHEX++rVqweXKbDSxVzlzYouGuXLl89yUpB0NB06dLBLL73URowYkeU6Cmx0TKZPn+7Ko6aS6667zgUjgTs5X3nlla4567vvvrOBAwfaqFGjwrbx3//+173uefPmuUDqpptucgHEsmXL3OMKatq1a2cDBgxwNReaFISGqlChgivrq6++GrZctQLat4Kmw4cPu2OnYEfHWu+jjsXFF19c4IGiypHd+6FJZcoNBSmBcut8ffvtt935u3z5cqtfv757rYEakfvvv9+dlwr+VqxYYc8884xrFspIx1XbkVWrVrljreOfkQIlvT+//PJLcJne/++//96uueaa4GtWEKjPgPY5fvx4Vw6VMVSbNm1y/doBxwNKsL59+3qXXXZZjtd/8803vRNOOCE4/8ILL3j6GH311VfBZStWrHDLli5d6uYvuOACb/z48WHbmTVrllezZs3gvNZ/5513styvynjjjTeGLRswYIB30UUXhS3bv3+/29aHH36Y5bbWrVvn/fzzz1lOmzZtyvYYBMr6008/ebGxsd6iRYuCZdTxlP/+979euXLlvMWLF4c9t3///l7v3r3d3/fcc4/XrFmzsMdHjRrltr9r164s99+tWzdv2LBhwflOnTp5gwcPDltn4cKFYdtRecuXL++Oj+zZs8dLSEjwPvroo+D70ahRI+/IkSPBbaSlpXlly5b1Pv74Yy+3fv31V7f/b7755qjrpqamZvt+aDpw4ECWzx8zZozXokWL4PzXX3/tValSxbvyyiu9ffv2eWXKlPFeeeWV4OOHDh3yatWq5U2aNMnNd+/e3evXr1+OXkfG45rVe6DyjBs3Ljg/cuRIr23btsH5evXqea+++mrYNh588EGvXbt2YcuGDBninXvuudkcPSCy7BtSgRLun//8p6uBWLlypasRUVOSahNUW6Nf/IEmgTPPPDP4HFWxq2lDv0j1y1O1EqoJCK2pUb5Mxu1k5+DBg676Pj+cfPLJ+bKdpk2buhop1d7o9YVas2aNe20XXnhh2HLVJpx++unBX/+hx010vELpOOlX/RtvvGGbN292z1czS06OWaiuXbtamTJlXFONatVUA6EanUDzkd4jlTlj3ojeo9AaiIKgfR5rvsoPP/zganh0vHSMlIv11FNPubKrVko1bQE6DjrOOj/llltusZ49e7paHSVDqzZLCdnHQrU3M2fOdLUxiofVlDh06NBgXpLKpfwx1bgF6LOVMQFcNVCBZkMgNwhugCwox0DNGfryV2CiPIwvvvjCfSnrApLTC6xydJRj85e//CXTYzkNWNRMoNyIUMqxCDTPBGzbti34WHbNUhl7OoU655xzMuWnZEWvq2HDhpm6sQfyktScpHyZUModyqnJkye7po/k5ORg7pNyO3LbVKQEYzWBqWlKwY3+V25KIFFW5VXzl5pLMlIuSkHSPtUklx29H3pfstKoUSMXuOn1KE9Frzf0fMiOmiF1Piiv65NPPrELLrjAbrvtNnv00Uctr5Qndc8997iASYG58pl0vEPPjRkzZmTKzVECcyg1nRX08Yc/EdwAWUhJSXFJsVOmTHG5N6IahIz0i/Prr78O1jqoRkJ5N0qWFCUSa5lyHfJKtR1K4A2lXBMFXdu3b3fJoqKLk2okVKuSFV3E9Gs+K/q1nFPKw1BysZJI69WrF1yu/SuIUVf1Tp06ZXlBVllChSa6imqElNirXB3R+7F69eqw16cLuWosclKboJok5X8od+qhhx4KPqb3aM6cOe446vgVph49ekRMwA2VMUDMSMcg0vml90SP6TgGauz03us4h3afVwDRt29fNymI0pACkYKbQNB0tOOtxGa97wrcFNzouAfOUeWIKQBbu3ate0+yozwrJSsDuUVwgxJvz549mcYj0TgluljoQvDkk09a9+7d3QVCybEZqZr/9ttvd4nH+uWsi716NQWCHSVOqgbopJNOcrUHCpTUDKIv7tALbHaUADpy5EhXe6OeKqImBF3klWA7adIk27p1q913333uV3d2tSP51SwVoHLpV7gShAO/ztXMctddd7kkYgUk6qGj46xjqOBBF1HVVqg3mn7hqzZM74ESrSXQhVs9d9TDSl3d9bq1vmojQoMbjeuydOlSV9OmphnVsEXSsWNHV6OlC6p6cIUGFFqmWiIFUurRo4uzajM0fosScjWfE6ppUED322+/uXkFtaL9ZlWblh/NUllRTZdqHhWs6LjoHNS5oqaewLACOj9Va6UaPTX5ffDBB8HAPNK5o/dG66ipT4GwjnkkOqYap0a1bI899limGj/14FIzlJK2tV/9QND5HWi+Uhn1A0PNkkCuZZGLA5QISoDVxyDjpMRXmTp1qkv8VWJply5dvJdffjksoVIJxYmJid7bb7/t1a1b14uPj/c6d+7srV+/Pmw/8+fP99q3b++2U6FCBa9Nmzbec889l+OEYtFzpk+fnik5+JJLLnHbVRKpEm0PHz7sFaRIZVXCtJYHEopFybnJyckuUVdJrVWrVnXH8LPPPguu895773n169d3x02Jo88884zbzsGDB93jv//+u0tUVjJwtWrVvPvuu8/r06dPWBL4qlWrvLPOOssdAz1XSbBZJb7efffdbvno0aMzva4tW7a4bes4qjx6P5W0reRjCWxT289KIME846Sk34KSMaE4Ix3L22+/Pfi6OnTo4C1btiwskbdJkybu+FWuXNkd27Vr12aZGK1E4Ro1angxMTHB9ztSUreOvfanxPK9e/dmKpeSnFu2bOnFxcV5lSpV8jp27OjNnTs3+LgSjnXuAHkRo39yHxIBKGzKX9EvcNX4BJrJ/EbNbKodyzhOUFGgsV9Ui6Bu06qtQ8FS7adqdwLdx4HcoFkKKCbUA+bnn392vYYyjuVSXGngNvWYUjOgmqzUNKRmvaJI+UEKbghsCp7uLaUEfCUmA3lBzQ2AqFFOjhJ5lauifBDlDymH52jD/QNAdghuAACAr/iz4R4AAJRYBDcAAMBXCG4AAICvENwAAABfIbgBAAC+QnADAAB8heAGAAD4CsENAADwFYIbAABgfvL/iP2v5zlFbtMAAAAASUVORK5CYII="/>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fc0dc47d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%98%80%F0%9F%93%8A-Post-Section-8:-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">😀📊 Post-Section 8: Interpretation — Emoji Count vs Sentiment Label<a class="anchor-link" href="#%F0%9F%98%80%F0%9F%93%8A-Post-Section-8:-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>The average number of emojis per tweet is higher for positive sentiment than for negative sentiment.</p>
+<p>While the magnitude of this difference is modest, it is directionally consistent with:</p>
+<ul>
+<li>emojis acting as emotional amplifiers</li>
+<li>positive sentiment being expressed with slightly higher emoji intensity</li>
+</ul>
+<p>Emoji count may provide incremental signal beyond binary presence, but should be treated as a weak feature.</p>
+<hr/>
 </div>
 </div>
 </div>
@@ -8037,13 +8127,34 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=54821fa8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%93%9A-Post-Section-9:-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">📚 Post-Section 9: Interpretation — Emoji Coverage Analysis<a class="anchor-link" href="#%F0%9F%93%9A-Post-Section-9:-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>The emoji reference dataset captures only a subset of the emojis appearing in tweets.
+However, the most frequently occurring emojis in the tweet dataset are largely represented.</p>
+<p>This implies:</p>
+<ul>
+<li>the reference dataset is incomplete but not irrelevant</li>
+<li>it is suitable for <strong>anchoring common emojis</strong></li>
+<li>it should not be assumed to cover the full emoji vocabulary</li>
+</ul>
+<p>Emoji-based features must therefore be conservative and robust to partial coverage.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a5c50d67">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">🔁 Section 10: Emoji Frequency Analysis (Known Emojis)<a class="anchor-link" href="#%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">¶</a></h2><p>Here we examine the frequency distribution of emojis that appear in both:</p>
+<h2 id="%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">🔁 Section 10: Emoji Frequency Analysis (Known Emojis)<a class="anchor-link" href="#%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">¶</a></h2><p>We examine the frequency distribution of emojis that appear in both:</p>
 <ul>
 <li>the tweet dataset</li>
 <li>the emoji reference dataset</li>
@@ -8168,6 +8279,30 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bb1db62b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%94%81-Post-Section-10:-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">🔁 Post-Section 10: Interpretation — Emoji Frequency Analysis<a class="anchor-link" href="#%F0%9F%94%81-Post-Section-10:-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>Emoji usage is highly skewed:</p>
+<ul>
+<li>a small number of emojis account for the majority of occurrences</li>
+<li>many emojis appear only once or twice</li>
+</ul>
+<p>This supports:</p>
+<ul>
+<li>focusing on top-frequency emojis</li>
+<li>avoiding per-emoji sparse features</li>
+<li>grouping emojis by coarse sentiment or category rather than identity</li>
+</ul>
+<p>This validates a low-dimensional approach to emoji feature design.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8387575c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8230,6 +8365,26 @@ dtype: float64</pre>
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9444cbb0">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%A7%A0-Post-Section-11:-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">🧠 Post-Section 11: Interpretation — Emoji Redundancy with Text<a class="anchor-link" href="#%F0%9F%A7%A0-Post-Section-11:-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">¶</a></h2><p><strong>Interpretation</strong></p>
+<p>Many emoji-bearing tweets also contain explicit sentiment words, indicating partial redundancy between text and emojis.
+However, some emojis appear in otherwise neutral text, suggesting that emojis can convey sentiment independently.</p>
+<p>Conclusion:</p>
+<ul>
+<li>emojis are neither fully redundant nor fully independent</li>
+<li>they may provide complementary signal in certain contexts</li>
+<li>emoji features should be additive, not primary</li>
+</ul>
+<hr/>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0060ce7d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8243,6 +8398,32 @@ dtype: float64</pre>
 <li>what form those features might take</li>
 </ul>
 <p>This summary is intended to support an explicit design decision, not optimization.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9bd98455">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%93%8C-Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">📌 Final Interpretation — Feature Feasibility Summary<a class="anchor-link" href="#%F0%9F%93%8C-Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">¶</a></h2><p><strong>Overall Conclusion</strong></p>
+<p>Based on the analyses in this notebook:</p>
+<ul>
+<li>Emoji usage is common and sentiment-correlated</li>
+<li>Emoji signals are sparse, skewed, and low-dimensional</li>
+<li>The emoji reference dataset is useful for anchoring frequent emojis, not for modeling directly</li>
+</ul>
+<p><strong>Design Decision</strong></p>
+<p>Emoji-aware feature engineering is justified under strict constraints:</p>
+<ul>
+<li>simple, interpretable features only</li>
+<li>no dense emoji representations</li>
+<li>no label-derived emoji sentiment learning</li>
+</ul>
+<p>These findings directly inform feature design in the next modeling phase.</p>
 <hr/>
 </div>
 </div>

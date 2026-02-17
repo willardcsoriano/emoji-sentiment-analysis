@@ -74,7 +74,7 @@ def extract_emoji_polarity_features(text: str):
     neg_emoji = sum(EMOJI_BOOST for char in text_str if char in NEGATIVE_EMOJIS)
     
     # 2. Emoticon Signal (Substring-based check)
-    # We use .count() to handle cases like "Happy :) :)"
+    # Use .count() to handle cases like "Happy :) :)"
     pos_emoticon = sum(text_str.count(emo) * EMOJI_BOOST for emo in POSITIVE_EMOTICONS)
     neg_emoticon = sum(text_str.count(emo) * EMOJI_BOOST for emo in NEGATIVE_EMOTICONS)
     

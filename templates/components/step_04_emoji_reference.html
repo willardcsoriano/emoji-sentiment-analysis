@@ -3,37 +3,37 @@
 <div class="space-y-6">
 
     <p class="text-sm text-slate-600 leading-relaxed">
-        Emojis embedded within tweet text are detected and interpreted using a
-        polarity reference lexicon. Rather than treating emojis as noise or
-        abstract tokens, the pipeline derives auxiliary sentiment signals based
-        on their annotated emotional orientation.
+        Embedded emojis are treated as high-signal auxiliary features. Rather than 
+        relying on implicit text embeddings alone, the pipeline extracts these tokens 
+        and references an external <strong>polarity lexicon</strong> to generate 
+        discrete sentiment signals (+1, 0, -1) that augment the primary text-only model.
     </p>
 
-    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner">
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner border border-slate-800/50">
 
         <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-            <span class="text-slate-500 tracking-widest uppercase">
-                Referencing Protocol
+            <span class="text-slate-500 tracking-widest uppercase text-[10px]">
+                Auxiliary Feature Pipeline
             </span>
-            <span class="text-blue-500">v2.emoji.lexicon</span>
+            <span class="text-blue-500">polarity.extraction</span>
         </div>
 
         <div class="space-y-2 text-slate-300">
-            <p><span class="text-slate-500"># Detect emoji in tweet</span></p>
-            <p>emoji_detected = "😂"</p>
+            <p><span class="text-slate-500"># 1. Isolate known tokens from text</span></p>
+            <p>detected = extract_known_emojis(tweet_text) <span class="text-slate-500">→ ["😊"]</span></p>
 
-            <p><span class="text-slate-500"># Reference polarity lexicon</span></p>
-            <p>polarity = lookup("😂") → Positive</p>
+            <p class="pt-2"><span class="text-slate-500"># 2. Reference curated lexicon (emoji_reference_clean.csv)</span></p>
+            <p>val = lexicon.get("😊") <span class="text-slate-500">→ "Positive"</span></p>
 
-            <p><span class="text-slate-500"># Derive feature signal</span></p>
-            <p>emoji_sentiment_feature = +1</p>
+            <p class="pt-2"><span class="text-slate-500"># 3. Append to feature vector (hstack)</span></p>
+            <p>X_combined = hstack([text_tfidf, pos_count_feature])</p>
         </div>
 
     </div>
 
-    <p class="text-xs text-slate-400 italic text-center">
-        Lexicon referencing preserves symbolic sentiment without altering the
-        original linguistic structure.
+    <p class="text-xs text-slate-400 italic text-center px-4">
+        By deriving polarity-weighted counts, the model captures non-verbal sentiment intensity 
+        without introducing the noise of unverified characters.
     </p>
 
 </div>

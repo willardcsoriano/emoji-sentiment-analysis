@@ -3,39 +3,41 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        Linguistic and symbolic signals are transformed into structured model
-        inputs. Text is vectorized using TF-IDF weighting, while emoji-derived
-        polarity signals are encoded as auxiliary sentiment features.
+        The pipeline concludes by consolidating linguistic and symbolic signals into an 
+        immutable feature matrix. Text is transformed via <strong>TF-IDF vectorization</strong>, 
+        while emoji sentiment is injected through discrete <strong>polarity count features</strong> 
+        to capture non-verbal emotional intensity.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
             <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Text Features
+                Textual Signal (Sparse)
             </h4>
             <ul class="text-xs space-y-1 text-slate-700">
-                <li>• Tokenization</li>
-                <li>• N-gram extraction</li>
-                <li>• TF-IDF weighting</li>
+                <li>• 1,265 Word & Bigram Features</li>
+                <li>• N-gram Range (1, 2)</li>
+                <li>• Document Frequency Filtering</li>
             </ul>
         </div>
 
         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
             <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Emoji Features
+                Emoji Signal (Dense)
             </h4>
             <ul class="text-xs space-y-1 text-slate-700">
-                <li>• Polarity indicators</li>
-                <li>• Presence signals</li>
-                <li>• Aggregated sentiment scores</li>
+                <li>• <code>emoji_pos_count</code> feature</li>
+                <li>• <code>emoji_neg_count</code> feature</li>
+                <li>• Heuristic polarity mapping</li>
             </ul>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400">
-        Feature spaces are concatenated to form the final model training matrix.
+    <p class="text-xs italic text-slate-400 border-l-2 border-slate-200 pl-4 py-1">
+        Final dimensionality: 1,267 features. The integration of emoji polarity 
+        achieved a validation F1 score of 0.834, outperforming the text-only baseline.
     </p>
 
 </div>
