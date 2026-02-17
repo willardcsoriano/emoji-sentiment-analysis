@@ -3,42 +3,53 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        The pipeline begins with the ingestion of two complementary data sources:
-        a sentiment-labeled tweet corpus and a curated emoji polarity reference
-        lexicon. Rather than merging these datasets directly, each serves a distinct
-        role within the modeling workflow — tweets as supervised training samples,
-        and emojis as symbolic sentiment references.
+        The pipeline initiates with an <strong>investigative ingestion pass</strong> of two 
+        complementary streams. Rather than a simple bulk load, this stage validates the 
+        structural integrity of the raw corpora—identifying encoding artifacts and 
+        redundant metadata before establishing a definitive data contract.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Primary Corpus
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm transition-hover hover:border-blue-300">
+            <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 mb-3">
+                Supervised Corpus
             </h4>
-            <ul class="text-xs space-y-1 font-mono text-slate-700">
-                <li>• Emoji-bearing tweets</li>
-                <li>• Binary sentiment labels</li>
-                <li>• Short-form social text</li>
-            </ul>
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-slate-800">1k_data_emoji_tweets.csv</p>
+                <ul class="text-[11px] space-y-1 text-slate-500 list-disc list-inside">
+                    <li>1,000 labeled social text samples</li>
+                    <li>Embedded UTF-8 emoji tokens</li>
+                    <li>Binary sentiment targets</li>
+                </ul>
+            </div>
         </div>
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Reference Lexicon
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm transition-hover hover:border-blue-300">
+            <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 mb-3">
+                Knowledge Base
             </h4>
-            <ul class="text-xs space-y-1 font-mono text-slate-700">
-                <li>• Emoji / emoticon symbols</li>
-                <li>• Polarity annotations</li>
-                <li>• Sentiment reference mappings</li>
-            </ul>
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-slate-800">15_emoticon_data.csv</p>
+                <ul class="text-[11px] space-y-1 text-slate-500 list-disc list-inside">
+                    <li>Unicode metadata & annotations</li>
+                    <li>Cross-referenced polarity mapping</li>
+                    <li>Fixed-reference sentiment anchor</li>
+                </ul>
+            </div>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400">
-        Ingestion establishes dataset roles early — preserving training integrity
-        while enabling downstream symbolic sentiment referencing.
-    </p>
+    <div class="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+            Initial Investigation Results
+        </p>
+        <p class="text-xs text-slate-500 leading-relaxed italic">
+            "Ingestion identified redundant <code>Unnamed: 0</code> indices and non-standard 
+            <code>post/sentiment</code> naming conventions. These findings served as the 
+            direct requirements for the <code>dataset.py</code> standardization script."
+        </p>
+    </div>
 
 </div>

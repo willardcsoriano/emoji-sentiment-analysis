@@ -19,28 +19,28 @@ Design principles:
 - Glassmorphism styling distinguishes it from tabular data blocks.
 -->
 
-<div class="max-w-3xl space-y-4 bg-white/70 backdrop-blur rounded-2xl p-6 border border-slate-200">
+<div class="max-w-3xl space-y-4 bg-white/70 backdrop-blur rounded-2xl p-6 border border-slate-200 shadow-sm">
 
-    <!-- Section micro-heading -->
-    <h3 class="text-sm font-black uppercase tracking-widest text-slate-900">
-        Data Access & Engineering Constraints
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+        Data Scale & Engineering Constraints
     </h3>
 
-    <!-- Dataset scale + modeling implications --> 
-        <p class="text-[11px] text-slate-500 leading-relaxed italic mt-3"> 
-            The supervised training corpus consists of a compact set of labeled emoji-bearing tweets, 
-            complemented by a structured emoticon reference dataset. While modest in scale, this 
-            composition supports rapid iteration, transparent evaluation, and feature-level 
-            interpretability—making classical linear modeling approaches well-suited to the signal
-             density and sparsity characteristics of the data. 
+    <div class="bg-amber-50/50 border-l-2 border-amber-200 p-4 rounded-r-xl">
+        <p class="text-[11px] text-amber-700/80 leading-relaxed italic"> 
+            <strong>Note on Scale:</strong> This pipeline operates in a 
+            <em>low-resource environment</em>, utilizing a compact training corpus of 1,000 
+            labeled tweets. While modest in scale, this constraint necessitates a focus on 
+            <strong>feature density</strong> and <strong>model interpretability</strong>—making 
+            linear classification an optimal choice to prevent overfitting while maintaining 
+            high predictive transparency.
         </p> 
+    </div>
         
-        <!-- Multi-source fusion framing -->
-        <p class="text-sm text-slate-600 leading-relaxed"> 
-            Sentiment in short-form social media text is expressed through both linguistic content 
-            and symbolic cues. To capture this dual channel, the pipeline ingests structurally 
-            distinct datasets: free-text tweets and normalized emoji/emoticon sentiment references. 
-            A central engineering challenge lies in reconciling these modalities into a unified 
-            feature space without distorting their respective semantic contributions. 
-        </p>
+    <p class="text-sm text-slate-600 leading-relaxed"> 
+        The core engineering objective is the fusion of dual-channel sentiment signals: 
+        linguistic text and symbolic emojis. By reconciling these distinct modalities 
+        into a unified feature space, the system captures emotional nuance that is 
+        frequently lost in standard tokenization pipelines—proving that even at a 
+        1k-sample scale, targeted feature engineering can drive significant performance gains.
+    </p>
 </div>

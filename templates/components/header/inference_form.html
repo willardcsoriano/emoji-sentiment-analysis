@@ -15,21 +15,21 @@
 
                 <div class="space-y-4">
                     <div class="px-1 space-y-1">
-                        <label for="text" class="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                        <label for="text" class="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 text-center">
                             Natural Language Stream
                         </label>
                         
-                        <p class="text-[9px] font-bold uppercase tracking-wider text-slate-300">
+                        <p class="text-[9px] font-bold uppercase tracking-wider text-slate-300 text-center">
                             Rapid Presets
                         </p>
                     </div>
 
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-2 justify-center">
                         {% for preset in [
                             {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
                             {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
                             {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
-                            {"label": "Nuance Check", "text": "It was good but could be better. 😐"}
+                            
                         ] %}
                         <button 
                             type="button"
@@ -43,13 +43,16 @@
                         {% endfor %}
                     </div>
 
-                    <div class="relative z-20"> <textarea
+                    <div class="relative z-20"> 
+                        
+                        <textarea
                             name="text"
                             id="text"
                             rows="3"
+                            onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
                             class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl
-                                   focus:border-blue-500 focus:bg-white outline-none transition-all
-                                   text-xl sm:text-2xl placeholder-slate-300 resize-none font-medium shadow-inner pr-16"
+                                focus:border-blue-500 focus:bg-white outline-none transition-all
+                                text-xl sm:text-2xl placeholder-slate-300 resize-none font-medium shadow-inner pr-16"
                             placeholder="Analyze the vibe... ✨"
                             required
                         ></textarea>

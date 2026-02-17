@@ -19,75 +19,59 @@ Schema philosophy:
 - Both converge during feature fusion.
 -->
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs font-mono">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 font-mono">
 
-    <!--
-    Dataset A — Tweet Corpus Schema
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-full -mr-12 -mt-12 opacity-50"></div>
+        
+        <div class="relative">
+            <span class="text-slate-400 uppercase tracking-widest text-[9px] font-black">
+                Primary Stream / Sparse Matrix
+            </span>
 
-    Source column:
-    - post (string)
+            <p class="text-xs font-bold text-green-700 mt-2">
+                text: string → 1,265 dimensions (TF-IDF)
+            </p>
 
-    Transformation stages:
-    1. Text normalization
-    2. Tokenization
-    3. Vectorization (TF-IDF)
-    4. Sparse weighting
+            <div class="py-2 space-y-1">
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Captures <strong>linguistic intent</strong> through n-gram tokenization. 
+                    Standardized via UTF-8 to preserve symbolic characters within the 
+                    textual context.
+                </p>
+            </div>
 
-    Output:
-    - High-dimensional linguistic feature matrix
-    -->
-    <div class="p-5 rounded-2xl bg-white border border-slate-300 shadow-sm space-y-2">
-
-        <!-- Dataset label -->
-        <span class="text-slate-400 uppercase tracking-widest text-[10px]">
-            Dataset A
-        </span>
-
-        <!-- Column → feature projection summary -->
-        <p class="text-green-600">
-            post: string → tokenized → weighted (TF-IDF)
-        </p>
-
-        <!-- Interpretive description -->
-        <p class="text-slate-500 italic text-[11px]">
-            Linguistic sentiment expressed through syntax, vocabulary, 
-            and embedded emoji context within the textual signal.
-        </p>
-
+            <div class="flex gap-2 pt-1">
+                <span class="px-2 py-0.5 bg-green-50 text-green-600 text-[9px] rounded-md border border-green-100">UNIGRAMS</span>
+                <span class="px-2 py-0.5 bg-green-50 text-green-600 text-[9px] rounded-md border border-green-100">BIGRAMS</span>
+            </div>
+        </div>
     </div>
 
-    <!--
-    Dataset B — Emoticon / Emoji Lexicon Schema
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full -mr-12 -mt-12 opacity-50"></div>
 
-    Source column:
-    - emoji (symbol)
+        <div class="relative">
+            <span class="text-slate-400 uppercase tracking-widest text-[9px] font-black">
+                Reference Lexicon / Dense Vector
+            </span>
 
-    Transformation stages:
-    1. Symbol normalization
-    2. Polarity lookup
-    3. Scalar encoding
-    4. Feature weighting
+            <p class="text-xs font-bold text-indigo-700 mt-2">
+                emoji: symbol → 2 dimensions (Polarity Counts)
+            </p>
 
-    Output:
-    - Dense symbolic sentiment features
-    -->
-    <div class="p-5 rounded-2xl bg-white border border-slate-300 shadow-sm space-y-2">
+            <div class="py-2 space-y-1">
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Captures <strong>symbolic intent</strong> by mapping tokens to 
+                    <code>pos_count</code> and <code>neg_count</code> scalars. 
+                    Acts as a high-signal sentiment anchor.
+                </p>
+            </div>
 
-        <!-- Dataset label -->
-        <span class="text-slate-400 uppercase tracking-widest text-[10px]">
-            Dataset B
-        </span>
-
-        <!-- Column → feature projection summary -->
-        <p class="text-indigo-600">
-            emoji: symbol → normalized → polarity referenced → derived feature signal
-        </p>
-
-        <!-- Interpretive description -->
-        <p class="text-slate-500 italic text-[11px]">
-            Symbolic sentiment signals sourced from a reference lexicon and used to annotate 
-            or derive polarity features when emojis are encountered within tweet text.
-        </p>
-
+            <div class="flex gap-2 pt-1">
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-md border border-indigo-100">SCALAR</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-md border border-indigo-100">DENSE</span>
+            </div>
+        </div>
     </div>
 </div>

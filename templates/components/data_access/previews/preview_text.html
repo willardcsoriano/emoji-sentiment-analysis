@@ -1,38 +1,33 @@
 <!-- templates/components/data_access/previews/preview_text.html -->
 
-<!-- templates/components/data_access/previews/preview_text.html -->
-
 {#
-Dataset Preview — Text Corpus Sample
+Dataset Preview — Text Corpus Validated Records
 
 Component type:
-
 * Configured instance of the reusable collapsible table shell.
-* Provides qualitative inspection of linguistic training data.
+* Provides qualitative audit of linguistic training observations.
 
 Pipeline position:
-
 * Sits after schema documentation.
-* Allows users to observe raw text prior to feature projection.
+* Allows for verification of UTF-8 encoding and label alignment.
 
 Objectives:
-
-* Surface sentiment-labeled tweet examples.
-* Highlight emoji usage within linguistic context.
-* Provide qualitative interpretability into the training signal.
+* Surface sentiment-labeled tweet records.
+* Highlight emoji usage within raw linguistic context.
+* Validate null-constraint compliance and record integrity.
 
 Sampling notes:
+* Observations represent specific rows from 'tweets_clean.csv'.
+* Focuses on high-signal density for interpretability.
+#}
 
-* Records are representative, not exhaustive.
-* Intended for inspection, not statistical inference.
-  #}
+{% set title = "Dataset 01 · Text Corpus (Validated Records)" %}
 
-{% set title = "Dataset 01 · Text Corpus (Sample)" %}
-
-{% set description = "Representative examples highlighting sentiment polarity and emoji presence" %}
+{% set description = "Representative record excerpts demonstrating the alignment between textual signal and sentiment labels." %}
 
 {% set accent = "bg-blue-500" %}
 
+{# Ensure this path correctly points to the table row logic #}
 {% set table = "components/data_access/tables/table_text_corpus.html" %}
 
 {% include "components/data_access/tables/collapsible_table.html" %}

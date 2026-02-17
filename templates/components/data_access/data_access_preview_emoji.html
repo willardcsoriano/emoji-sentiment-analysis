@@ -1,39 +1,59 @@
 <!-- templates/components/data_access/data_access_preview_emoji.html -->
+
 <details class="group space-y-4">
 
     <summary class="flex items-center justify-between cursor-pointer list-none select-none">
         <div class="flex items-center gap-2">
             <span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
             <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Dataset 02 · Emoji Lexicon (Sample)
+                Dataset 02 · Reference Lexicon (Validated)
             </h5>
         </div>
 
-        <span class="text-[10px] text-slate-400 group-open:hidden">
-            Show table
-        </span>
-        <span class="text-[10px] text-slate-400 hidden group-open:inline">
-            Hide table
-        </span>
+        <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-400 group-open:hidden uppercase tracking-widest">
+                View Lexicon
+            </span>
+            <span class="text-[10px] text-slate-400 hidden group-open:inline uppercase tracking-widest">
+                Collapse Table
+            </span>
+            <svg class="w-3 h-3 text-slate-300 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
     </summary>
 
-    <p class="text-xs text-slate-500 italic">
-        Symbol-to-semantic mapping used for affect normalization
+    <p class="text-xs text-slate-500 italic px-4 border-l border-slate-200 ml-0.5">
+        Symbol-to-semantic mapping utilized for deterministic affect normalization 
+        and polarity feature derivation.
     </p>
 
     <div class="overflow-x-auto rounded-2xl border border-slate-300 shadow-md bg-slate-50">
         <table class="w-full text-left text-[11px] font-mono leading-tight">
             <thead class="bg-slate-200 border-b border-slate-300 text-slate-600 uppercase">
                 <tr>
-                    <th class="px-4 py-3 font-black">Index</th>
                     <th class="px-4 py-3 font-black">Emoji</th>
                     <th class="px-4 py-3 font-black">Unicode Name</th>
+                    <th class="px-4 py-3 font-black">Codepoint</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-50">
-                <!-- rows unchanged -->
+            <tbody class="divide-y divide-slate-200 [&>tr:nth-child(even)]:bg-white text-slate-700">
+                <tr>
+                    <td class="px-4 py-3 text-base">😊</td>
+                    <td class="px-4 py-3">SMILING FACE WITH SMILING EYES</td>
+                    <td class="px-4 py-3 text-slate-400">0x1f60a</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 text-base">😭</td>
+                    <td class="px-4 py-3">LOUDLY CRYING FACE</td>
+                    <td class="px-4 py-3 text-slate-400">0x1f62d</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 text-base">😍</td>
+                    <td class="px-4 py-3">SMILING FACE WITH HEART-SHAPED EYES</td>
+                    <td class="px-4 py-3 text-slate-400">0x1f60d</td>
+                </tr>
             </tbody>
         </table>
     </div>
-
 </details>

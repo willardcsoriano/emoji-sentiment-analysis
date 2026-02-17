@@ -1,43 +1,33 @@
 <!-- templates/components/data_access/previews/preview_emoji.html -->
 
 {#
-Dataset Preview — Emoji Lexicon Sample
+Dataset Preview — Emoji Reference Lexicon
 
 Component type:
-- Configured instance of the reusable collapsible table shell.
-- Displays symbolic sentiment reference data.
+* Configured instance of the reusable collapsible table shell.
+* Surfaces symbolic sentiment anchor data.
 
 Pipeline position:
-- Complements the text corpus preview.
-- Represents the symbolic feature source used in fusion modeling.
+* Complements the primary text corpus.
+* Serves as the static knowledge base for auxiliary feature engineering.
 
 Objectives:
-- Surface emoji → sentiment mappings.
-- Expose polarity priors used in feature engineering.
-- Provide transparency into affect normalization logic.
+* Expose symbol → codepoint mappings.
+* Provide transparency into the lexicon used for affect normalization.
+* Confirm successful cleaning of Unicode metadata from raw sources.
 
 Interpretability role:
-- Explains how emojis are translated into scalar sentiment signals.
-- Bridges raw symbols → weighted model features.
+* Explains the deterministic "lookup" phase of the pipeline.
+* Bridges raw Unicode symbols to weighted feature scalars.
 #}
 
-{# Table title displayed in collapsible header #}
-{% set title = "Dataset 02 · Emoji Lexicon (Sample)" %}
+{% set title = "Dataset 02 · Reference Lexicon (Validated)" %}
 
-{# Descriptor explaining semantic function of the dataset #}
-{% set description = "Symbol-to-semantic mapping used for affect normalization" %}
+{% set description = "Deterministic symbol-to-semantic mapping used for affect normalization and polarity anchoring." %}
 
-{# Accent color token distinguishing symbolic dataset from text corpus #}
 {% set accent = "bg-indigo-500" %}
 
-{#
-Table implementation reference
-
-Points to:
-- Emoji symbol column
-- Polarity labels / scores
-- Lookup-ready normalization schema
-#}
+{# Table implementation reference #}
 {% set table = "components/data_access/tables/table_emoji_lexicon.html" %}
 
 {# Render collapsible container wrapper #}

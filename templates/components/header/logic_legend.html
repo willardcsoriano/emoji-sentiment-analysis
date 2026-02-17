@@ -22,7 +22,7 @@ Design rules:
             Signal Interpretation Key
         </h3>
         <p class="text-[11px] text-slate-500 max-w-sm">
-            How the Hybrid Engine synthesizes linguistic patterns with deterministic markers.
+            How the Hybrid Engine synthesizes linguistic patterns with auxiliary symbolic markers.
         </p>
     </div>
     
@@ -30,30 +30,30 @@ Design rules:
 
         <div class="flex gap-5">
             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                ✨
+                🎭
             </div>
             <div class="space-y-1.5">
                 <div class="flex items-center gap-2">
-                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Deterministic Anchors</h4>
-                    <span class="px-1.5 py-0.5 rounded bg-blue-100 text-[8px] font-black text-blue-700 uppercase">Weight: 10x</span>
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Symbolic Anchors</h4>
+                    <span class="px-1.5 py-0.5 rounded bg-blue-100 text-[8px] font-black text-blue-700 uppercase">High Reliability</span>
                 </div>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    High-priority signals from the <strong>Emoji & Emoticon Lexicons</strong>. These act as "veto" markers that can override text to detect sarcasm or intent.
+                    Signals derived from the <strong>Emoji Polarity Lexicon</strong>. These act as deterministic anchors, providing non-verbal context that stabilizes sentiment in short-form text.
                 </p>
             </div>
         </div>
 
         <div class="flex gap-5">
             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                📚
+                📖
             </div>
             <div class="space-y-1.5">
                 <div class="flex items-center gap-2">
-                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Lexicon Stabilization</h4>
-                    <span class="px-1.5 py-0.5 rounded bg-slate-200 text-[8px] font-black text-slate-600 uppercase">Weight: 1x</span>
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Linguistic Texture</h4>
+                    <span class="px-1.5 py-0.5 rounded bg-slate-200 text-[8px] font-black text-slate-600 uppercase">Contextual</span>
                 </div>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    Hand-curated vocabulary lists that stabilize the model against noise in the training data, ensuring "cleaner" logic for standard sentiment words.
+                    Word and bigram features processed via <strong>TF-IDF vectorization</strong>. This captures the primary semantic intent and grammatical sentiment of the message.
                 </p>
             </div>
         </div>
@@ -63,23 +63,23 @@ Design rules:
                 ⚖️
             </div>
             <div class="space-y-1.5">
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Statistical Drivers</h4>
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Feature Fusion</h4>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    Linguistic features extracted via <strong>TF-IDF vectorization</strong>. These drivers shift the probability toward 
+                    The model calculates the <strong>proportional contribution</strong> of every feature, shifting the probability toward 
                     <span class="text-emerald-600 font-bold">Positive (+)</span> or 
-                    <span class="text-rose-600 font-bold">Negative (-)</span>.
+                    <span class="text-rose-600 font-bold">Negative (-)</span> based on learned weights.
                 </p>
             </div>
         </div>
 
         <div class="flex gap-5">
             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                🚩
+                🎯
             </div>
             <div class="space-y-1.5">
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Ambiguity Threshold</h4>
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Confidence Logic</h4>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    Predictions with a probability spread of <span class="font-mono">&lt;20%</span> are flagged as <strong>High Ambiguity</strong>, signaling low model certainty.
+                    Final certainty is determined by the <strong>probability spread</strong>. Scores near 0.50 indicate balanced or ambiguous signals that require deeper linguistic context.
                 </p>
             </div>
         </div>

@@ -3,40 +3,69 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        Raw social media text introduces structural noise, inconsistent encoding,
-        and labeling irregularities. This stage standardizes the corpus to ensure
-        downstream modeling stability and reproducibility.
+        To maintain <strong>semantic parity</strong>, this stage enforces a deterministic 
+        cleaning protocol. Instead of aggressive text transformation, the pipeline focuses on 
+        structural standardization and schema validation—ensuring emojis and raw linguistic 
+        cues remain intact for downstream analysis.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Text Normalization
-            </h4>
-            <ul class="text-xs space-y-1 text-slate-700">
-                <li>• Lowercasing & trimming</li>
-                <li>• Null record removal</li>
-                <li>• Encoding corrections</li>
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                <h4 class="text-xs font-black uppercase tracking-widest text-slate-900">
+                    Structural Alignment
+                </h4>
+            </div>
+            <ul class="text-[11px] space-y-2 text-slate-600 font-medium">
+                <li class="flex justify-between">
+                    <span>Standardized Schema</span>
+                    <span class="text-slate-400">text, label</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Type Enforcement</span>
+                    <span class="text-slate-400">String, Int</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Index Sanitization</span>
+                    <span class="text-slate-400">Reset & Drop</span>
+                </li>
             </ul>
         </div>
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Integrity Validation
-            </h4>
-            <ul class="text-xs space-y-1 text-slate-700">
-                <li>• Label consistency checks</li>
-                <li>• Duplicate filtering</li>
-                <li>• Emoji extraction validation</li>
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                <h4 class="text-xs font-black uppercase tracking-widest text-slate-900">
+                    Preservation Guardrails
+                </h4>
+            </div>
+            <ul class="text-[11px] space-y-2 text-slate-600 font-medium">
+                <li class="flex items-center gap-2">
+                    <span class="text-emerald-500 text-[10px]">✔</span>
+                    <span>Zero-Loss Emoji Retention</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="text-emerald-500 text-[10px]">✔</span>
+                    <span>No Lowercasing/Trimming</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="text-emerald-500 text-[10px]">✔</span>
+                    <span>Null-Constraint Validation</span>
+                </li>
             </ul>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400">
-        Cleaned datasets become the canonical inputs for feature construction
-        and model training.
-    </p>
+    <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+        <span class="text-slate-400 text-xs mt-0.5">ℹ</span>
+        <p class="text-[11px] text-slate-500 leading-tight">
+            <strong>Dataset Contract:</strong> The output <code>tweets_clean.csv</code> is 
+            treated as an immutable, read-only input for all subsequent feature engineering 
+            and modeling passes.
+        </p>
+    </div>
 
 </div>

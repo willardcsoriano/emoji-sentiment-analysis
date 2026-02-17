@@ -1,0 +1,29 @@
+<!-- templates/components/header/model_scope_disclaimer.html -->
+
+<div class="max-w-2xl mx-auto px-4">
+    <div class="group relative bg-amber-50/40 backdrop-blur-sm border border-amber-200/50 rounded-2xl p-4 transition-all hover:bg-amber-50/60">
+        
+        <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span class="text-3xl font-black italic text-amber-900 select-none">!</span>
+        </div>
+
+        <div class="flex items-start gap-4 relative">
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-amber-100 rounded-lg text-amber-600 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+
+            <div class="space-y-1">
+                <h4 class="text-[10px] font-black uppercase tracking-[0.15em] text-amber-700/80">
+                    Model Scope & Constraints
+                </h4>
+                <p class="text-[11px] text-amber-800/80 leading-relaxed italic">
+                    This is a lightweight research model trained on a <strong>compact 1,000-tweet dataset</strong>. 
+                    It is optimized for sentences with emojis; single-word inputs or complex negatives 
+                    may fall outside the model's current statistical vocabulary.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
