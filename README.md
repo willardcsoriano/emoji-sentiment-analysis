@@ -4,6 +4,9 @@ A lexicon-augmented NLP pipeline for sentiment inference on emoji-enriched socia
 
 **Live Deployment:**
 [https://hybrid-sentiment-service-232900046311.us-central1.run.app/](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)
+> ⚠️ **Heads up:** This service is deployed serverlessly on Google Cloud Run.
+> If the endpoint hasn't been called recently, the first request may take
+> **5–15 seconds** to respond due to a cold start. Subsequent requests will be fast.
 
 ---
 
