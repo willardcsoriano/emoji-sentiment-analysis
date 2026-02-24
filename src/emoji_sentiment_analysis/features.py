@@ -56,10 +56,14 @@ NEGATIVE_EMOTICONS = {
 # ---------------------------------------------------------------------
 # Text Lexicon (Added to solve the small-data noise issue)
 # ---------------------------------------------------------------------
-POSITIVE_WORDS = {"happy", "good", "great", "love", "nice", "awesome"}
+POSITIVE_WORDS = {
+    "happy", "good", "great", "love", "nice", "awesome",
+    "beautiful", "amazing", "wonderful", "excellent", "perfect"
+}
+
 NEGATIVE_WORDS = {"sad", "bad", "terrible", "hate", "awful", "unhappy"}
 
-EMOJI_BOOST = 10 # Give emojis 10x the weight of a single word
+EMOJI_BOOST = 10 # Give emojis 10x the weight of a single word; sweetest spot
 
 def extract_emoji_polarity_features(text: str):
     """

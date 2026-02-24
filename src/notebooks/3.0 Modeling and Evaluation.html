@@ -7332,7 +7332,12 @@ a.anchor-link {
     if (!diagrams.length) {
       return;
     }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs")).default;
+    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs")).default;
+    const elkUrl = "https://cdnjs.cloudflare.com/ajax/libs/mermaid-layout-elk/0.1.9/mermaid-layout-elk.esm.min.mjs";
+    if(elkUrl) {
+      const elkLayouts = (await import(elkUrl)).default;
+      mermaid.registerLayoutLoaders(elkLayouts);
+    }
     const parser = new DOMParser();
 
     mermaid.initialize({
@@ -7429,7 +7434,8 @@ a.anchor-link {
      * Post-process to ensure mermaid diagrams contain only valid SVG and XHTML.
      */
     function cleanMermaidSvg(svg) {
-      return svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      svg = svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
+      return `${SVG_XML_HEADER}${svg}`;
     }
 
 
@@ -7455,6 +7461,285 @@ a.anchor-link {
       }
       return `<${tag} ${rest}>`;
     }
+
+
+  /**
+   * Named HTML entities with their decimal equivalent codes.
+   *
+   * @see https://www.w3.org/TR/WD-html40-970708/sgml/entities.html
+   * */
+  const HTML_ENTITIES = `<!ENTITY Aacute "&#193;">
+<!ENTITY aacute "&#225;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY acirc "&#226;">
+<!ENTITY acute "&#180;">
+<!ENTITY AElig "&#198;">
+<!ENTITY aelig "&#230;">
+<!ENTITY Agrave "&#192;">
+<!ENTITY agrave "&#224;">
+<!ENTITY alefsym "&#8501;">
+<!ENTITY Alpha "&#913;">
+<!ENTITY alpha "&#945;">
+<!ENTITY amp "&#38;">
+<!ENTITY and "&#8869;">
+<!ENTITY ang "&#8736;">
+<!ENTITY Aring "&#197;">
+<!ENTITY aring "&#229;">
+<!ENTITY asymp "&#8776;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY atilde "&#227;">
+<!ENTITY Auml "&#196;">
+<!ENTITY auml "&#228;">
+<!ENTITY bdquo "&#8222;">
+<!ENTITY Beta "&#914;">
+<!ENTITY beta "&#946;">
+<!ENTITY brvbar "&#166;">
+<!ENTITY bull "&#8226;">
+<!ENTITY cap "&#8745;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY cedil "&#184;">
+<!ENTITY cent "&#162;">
+<!ENTITY Chi "&#935;">
+<!ENTITY chi "&#967;">
+<!ENTITY circ "&#710;">
+<!ENTITY clubs "&#9827;">
+<!ENTITY cong "&#8773;">
+<!ENTITY copy "&#169;">
+<!ENTITY crarr "&#8629;">
+<!ENTITY cup "&#8746;">
+<!ENTITY curren "&#164;">
+<!ENTITY dagger "&#8224;">
+<!ENTITY Dagger "&#8225;">
+<!ENTITY darr "&#8595;">
+<!ENTITY dArr "&#8659;">
+<!ENTITY deg "&#176;">
+<!ENTITY Delta "&#916;">
+<!ENTITY delta "&#948;">
+<!ENTITY diams "&#9830;">
+<!ENTITY divide "&#247;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY eacute "&#233;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY egrave "&#232;">
+<!ENTITY empty "&#8709;">
+<!ENTITY emsp "&#8195;">
+<!ENTITY ensp "&#8194;">
+<!ENTITY epsilon "&#949;">
+<!ENTITY Epsilon "&#917;">
+<!ENTITY equiv "&#8801;">
+<!ENTITY Eta "&#919;">
+<!ENTITY eta "&#951;">
+<!ENTITY ETH "&#208;">
+<!ENTITY eth "&#240;">
+<!ENTITY Euml "&#203;">
+<!ENTITY euml "&#235;">
+<!ENTITY exist "&#8707;">
+<!ENTITY fnof "&#402;">
+<!ENTITY forall "&#8704;">
+<!ENTITY frac12 "&#189;">
+<!ENTITY frac14 "&#188;">
+<!ENTITY frac34 "&#190;">
+<!ENTITY frasl "&#8260;">
+<!ENTITY Gamma "&#915;">
+<!ENTITY gamma "&#947;">
+<!ENTITY ge "&#8805;">
+<!ENTITY gt "&#62;">
+<!ENTITY harr "&#8596;">
+<!ENTITY hArr "&#8660;">
+<!ENTITY hearts "&#9829;">
+<!ENTITY hellip "&#8230;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY iacute "&#237;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY icirc "&#238;">
+<!ENTITY iexcl "&#161;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY igrave "&#236;">
+<!ENTITY image "&#8465;">
+<!ENTITY infin "&#8734;">
+<!ENTITY int "&#8747;">
+<!ENTITY Iota "&#921;">
+<!ENTITY iota "&#953;">
+<!ENTITY iquest "&#191;">
+<!ENTITY isin "&#8712;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY iuml "&#239;">
+<!ENTITY Kappa "&#922;">
+<!ENTITY kappa "&#954;">
+<!ENTITY Lambda "&#923;">
+<!ENTITY lambda "&#955;">
+<!ENTITY lang "&#9001;">
+<!ENTITY laquo "&#171;">
+<!ENTITY larr "&#8592;">
+<!ENTITY lArr "&#8656;">
+<!ENTITY lceil "&#8968;">
+<!ENTITY ldquo "&#8220;">
+<!ENTITY le "&#8804;">
+<!ENTITY lfloor "&#8970;">
+<!ENTITY lowast "&#8727;">
+<!ENTITY loz "&#9674;">
+<!ENTITY lrm "&#8206;">
+<!ENTITY lsaquo "&#8249;">
+<!ENTITY lsquo "&#8216;">
+<!ENTITY lt "&#60;">
+<!ENTITY macr "&#175;">
+<!ENTITY mdash "&#8212;">
+<!ENTITY micro "&#181;">
+<!ENTITY middot "&#183;">
+<!ENTITY minus "&#8722;">
+<!ENTITY Mu "&#924;">
+<!ENTITY mu "&#956;">
+<!ENTITY nabla "&#8711;">
+<!ENTITY nbsp "&#160;">
+<!ENTITY ndash "&#8211;">
+<!ENTITY ne "&#8800;">
+<!ENTITY ni "&#8715;">
+<!ENTITY not "&#172;">
+<!ENTITY notin "&#8713;">
+<!ENTITY nsub "&#8836;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY Nu "&#925;">
+<!ENTITY nu "&#957;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY oacute "&#243;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY OElig "&#338;">
+<!ENTITY oelig "&#339;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY ograve "&#242;">
+<!ENTITY oline "&#8254;">
+<!ENTITY Omega "&#937;">
+<!ENTITY omega "&#969;">
+<!ENTITY Omicron "&#927;">
+<!ENTITY omicron "&#959;">
+<!ENTITY oplus "&#8853;">
+<!ENTITY or "&#8870;">
+<!ENTITY ordf "&#170;">
+<!ENTITY ordm "&#186;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY oslash "&#248;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY otilde "&#245;">
+<!ENTITY otimes "&#8855;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY ouml "&#246;">
+<!ENTITY para "&#182;">
+<!ENTITY part "&#8706;">
+<!ENTITY permil "&#8240;">
+<!ENTITY perp "&#8869;">
+<!ENTITY Phi "&#934;">
+<!ENTITY phi "&#966;">
+<!ENTITY Pi "&#928;">
+<!ENTITY pi "&#960;">
+<!ENTITY piv "&#982;">
+<!ENTITY plusmn "&#177;">
+<!ENTITY pound "&#163;">
+<!ENTITY prime "&#8242;">
+<!ENTITY Prime "&#8243;">
+<!ENTITY prod "&#8719;">
+<!ENTITY prop "&#8733;">
+<!ENTITY Psi "&#936;">
+<!ENTITY psi "&#968;">
+<!ENTITY quot "&#34;">
+<!ENTITY radic "&#8730;">
+<!ENTITY rang "&#9002;">
+<!ENTITY raquo "&#187;">
+<!ENTITY rarr "&#8594;">
+<!ENTITY rArr "&#8658;">
+<!ENTITY rceil "&#8969;">
+<!ENTITY rdquo "&#8221;">
+<!ENTITY real "&#8476;">
+<!ENTITY reg "&#174;">
+<!ENTITY rfloor "&#8971;">
+<!ENTITY Rho "&#929;">
+<!ENTITY rho "&#961;">
+<!ENTITY rlm "&#8207;">
+<!ENTITY rsaquo "&#8250;">
+<!ENTITY rsquo "&#8217;">
+<!ENTITY sbquo "&#8218;">
+<!ENTITY Scaron "&#352;">
+<!ENTITY scaron "&#353;">
+<!ENTITY sdot "&#8901;">
+<!ENTITY sect "&#167;">
+<!ENTITY shy "&#173;">
+<!ENTITY Sigma "&#931;">
+<!ENTITY sigma "&#963;">
+<!ENTITY sigmaf "&#962;">
+<!ENTITY sim "&#8764;">
+<!ENTITY spades "&#9824;">
+<!ENTITY sub "&#8834;">
+<!ENTITY sube "&#8838;">
+<!ENTITY sum "&#8721;">
+<!ENTITY sup "&#8835;">
+<!ENTITY sup1 "&#185;">
+<!ENTITY sup2 "&#178;">
+<!ENTITY sup3 "&#179;">
+<!ENTITY supe "&#8839;">
+<!ENTITY szlig "&#223;">
+<!ENTITY Tau "&#932;">
+<!ENTITY tau "&#964;">
+<!ENTITY there4 "&#8756;">
+<!ENTITY Theta "&#920;">
+<!ENTITY theta "&#952;">
+<!ENTITY thetasym "&#977;">
+<!ENTITY thinsp "&#8201;">
+<!ENTITY THORN "&#222;">
+<!ENTITY thorn "&#254;">
+<!ENTITY tilde "&#732;">
+<!ENTITY times "&#215;">
+<!ENTITY trade "&#8482;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY uacute "&#250;">
+<!ENTITY uarr "&#8593;">
+<!ENTITY uArr "&#8657;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY uml "&#168;">
+<!ENTITY upsih "&#978;">
+<!ENTITY Upsilon "&#933;">
+<!ENTITY upsilon "&#965;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY uuml "&#252;">
+<!ENTITY weierp "&#8472;">
+<!ENTITY Xi "&#926;">
+<!ENTITY xi "&#958;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY yacute "&#253;">
+<!ENTITY yen "&#165;">
+<!ENTITY Yuml "&#376;">
+<!ENTITY yuml "&#255;">
+<!ENTITY Zeta "&#918;">
+<!ENTITY zeta "&#950;">
+<!ENTITY zwj "&#8205;">
+<!ENTITY zwnj "&#8204;">`.replace(/\n/g, ' ');
+
+  /**
+   * A reasonably strict xml declaration.
+   */
+  const XML_DECL = '<?xml version="1.0" standalone="no"?>';
+
+  /**
+   * The beginning of the XML doctype declaration.
+   */
+  const DOCTYPE_START = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [`;
+
+  /**
+   * The end of the XML docype declaration.
+   */
+  const DOCTYPE_END = ']>';
+
+  /**
+   * A full header for an SVG XML document.
+   */
+  const SVG_XML_HEADER = `${XML_DECL}
+    ${DOCTYPE_START}${HTML_ENTITIES}${DOCTYPE_END}`;
 
     void Promise.all([...diagrams].map(renderOneMarmaid));
   });
@@ -7517,7 +7802,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%F0%9F%93%98-3.0-Modeling-and-Evaluation">📘 3.0 Modeling and Evaluation<a class="anchor-link" href="#%F0%9F%93%98-3.0-Modeling-and-Evaluation">¶</a></h1><h2 id="Notebook-Overview">Notebook Overview<a class="anchor-link" href="#Notebook-Overview">¶</a></h2><p>This notebook trains and evaluates sentiment classification models using the cleaned tweet dataset.</p>
+<h1 id="3.0-Modeling-and-Evaluation">3.0 Modeling and Evaluation<a class="anchor-link" href="#3.0-Modeling-and-Evaluation">¶</a></h1><h2 id="Notebook-Overview">Notebook Overview<a class="anchor-link" href="#Notebook-Overview">¶</a></h2><p>This notebook trains and evaluates sentiment classification models using the cleaned tweet dataset.</p>
 <p>The primary objective is to <strong>determine whether emoji-aware features provide measurable performance improvements</strong> over a text-only baseline model.</p>
 <p>All modeling decisions in this notebook are informed by the findings of Notebook 2.0.</p>
 <hr/>
@@ -7588,7 +7873,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-1:-Setup-and-Imports">🧩 Section 1: Setup and Imports<a class="anchor-link" href="#%F0%9F%A7%A9-Section-1:-Setup-and-Imports">¶</a></h2><p>This section defines the runtime environment, library imports, and reproducibility settings used throughout the notebook.</p>
+<h2 id="Section-1:-Setup-and-Imports">Section 1: Setup and Imports<a class="anchor-link" href="#Section-1:-Setup-and-Imports">¶</a></h2><p>This section defines the runtime environment, library imports, and reproducibility settings used throughout the notebook.</p>
 <p>A fixed random seed is established to ensure that all model comparisons are fair and repeatable.</p>
 <hr/>
 </div>
@@ -7599,7 +7884,7 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># --- 3.0 Modeling and Evaluation ---</span>
@@ -7626,7 +7911,7 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Reproducibility</span>
@@ -7645,7 +7930,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-2:-Load-Processed-Data">🧩 Section 2: Load Processed Data<a class="anchor-link" href="#%F0%9F%A7%A9-Section-2:-Load-Processed-Data">¶</a></h2><p>In this section, the cleaned datasets produced in Notebook 1.5 are loaded into memory.</p>
+<h2 id="Section-2:-Load-Processed-Data">Section 2: Load Processed Data<a class="anchor-link" href="#Section-2:-Load-Processed-Data">¶</a></h2><p>In this section, the cleaned datasets produced in Notebook 1.5 are loaded into memory.</p>
 <p>Basic integrity checks are performed to ensure:</p>
 <ul>
 <li>expected schemas are present</li>
@@ -7662,13 +7947,14 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/processed"</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">emoji_sentiment_analysis.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">PROCESSED_DATA_DIR</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">"tweets_clean.csv"</span><span class="p">)</span>
-<span class="n">emoji_ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">"emoji_reference_clean.csv"</span><span class="p">)</span>
+<span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">PROCESSED_DATA_DIR</span> <span class="o">/</span> <span class="s2">"tweets_clean.csv"</span><span class="p">)</span>
+<span class="n">emoji_ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">PROCESSED_DATA_DIR</span> <span class="o">/</span> <span class="s2">"emoji_reference_clean.csv"</span><span class="p">)</span>
 
 <span class="n">tweets</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -7681,7 +7967,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7743,7 +8029,7 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Basic integrity checks</span>
@@ -7762,7 +8048,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-3:-Train%E2%80%93Validation-Split">🧩 Section 3: Train–Validation Split<a class="anchor-link" href="#%F0%9F%A7%A9-Section-3:-Train%E2%80%93Validation-Split">¶</a></h2><p>This section defines the evaluation framework used for all models in this notebook.</p>
+<h2 id="Section-3:-Train%E2%80%93Validation-Split">Section 3: Train–Validation Split<a class="anchor-link" href="#Section-3:-Train%E2%80%93Validation-Split">¶</a></h2><p>This section defines the evaluation framework used for all models in this notebook.</p>
 <p>A consistent train–validation split strategy is applied so that:</p>
 <ul>
 <li>all model configurations are evaluated on identical data</li>
@@ -7773,12 +8059,12 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=037d1b91">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=037d1b91">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
@@ -7791,7 +8077,36 @@ Emoji metadata used strictly for feature derivation</p>
     <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">,</span>
     <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
 <span class="p">)</span>
+
+<span class="c1"># --- Validation ---</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s2">"Split size mismatch"</span>
+<span class="k">assert</span> <span class="n">X_train</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span> <span class="ow">and</span> <span class="n">X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span><span class="p">,</span> <span class="s2">"Duplicate indices detected"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"✅ Train/Val split successful"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Training samples   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Validation samples : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Split ratio        : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> val / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> train"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Class distribution (train) : </span><span class="si">{</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Class distribution (val)   : </span><span class="si">{</span><span class="n">y_val</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>✅ Train/Val split successful
+   Training samples   : 800
+   Validation samples : 200
+   Split ratio        : 20% val / 80% train
+   Class distribution (train) : {1: 400, 0: 400}
+   Class distribution (val)   : {1: 100, 0: 100}
+</pre>
 </div>
 </div>
 </div>
@@ -7803,7 +8118,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-4:-Text-Only-Baseline-Model">🧩 Section 4: Text-Only Baseline Model<a class="anchor-link" href="#%F0%9F%A7%A9-Section-4:-Text-Only-Baseline-Model">¶</a></h2><p>This section establishes the <strong>reference model</strong> against which all emoji-augmented models are compared.</p>
+<h2 id="Section-4:-Text-Only-Baseline-Model">Section 4: Text-Only Baseline Model<a class="anchor-link" href="#Section-4:-Text-Only-Baseline-Model">¶</a></h2><p>This section establishes the <strong>reference model</strong> against which all emoji-augmented models are compared.</p>
 <h3 id="Design-principles">Design principles<a class="anchor-link" href="#Design-principles">¶</a></h3><ul>
 <li>Use only raw tweet text as input</li>
 <li>Preserve emojis in text without special handling</li>
@@ -7819,7 +8134,7 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Vectorize text</span>
@@ -7841,7 +8156,7 @@ Emoji metadata used strictly for feature derivation</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Train baseline classifier</span>
@@ -7861,7 +8176,7 @@ Emoji metadata used strictly for feature derivation</p>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
@@ -8702,7 +9017,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Evaluate baseline</span>
@@ -8722,10 +9037,39 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(0.795, 0.7960199004975125)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a32fe649">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-4-Interpretation-%E2%80%94-Text-Only-Baseline">Section 4 Interpretation — Text-Only Baseline<a class="anchor-link" href="#Section-4-Interpretation-%E2%80%94-Text-Only-Baseline">¶</a></h3><p><strong>Result: 79.5% accuracy / 79.6% F1 on a perfectly balanced 200-sample validation set.</strong></p>
+<p>This is a stronger result than it might appear. The TF-IDF configuration is
+deliberately conservative — bigrams only up to 2-grams, minimum document frequency
+of 2, aggressive max_df pruning at 0.95. On 800 training samples, this produces a
+1,265-dimensional sparse feature space where most dimensions carry weak individual
+signal. That the model achieves nearly 80% under these constraints confirms that
+tweet text, even in its raw and noisy form, contains substantial sentiment signal.</p>
+<p>Critically, emojis are preserved in the raw text and passed through TF-IDF
+unchanged. This means the baseline is not purely linguistic — it incidentally
+captures some emoji signal as unigram tokens. Any improvement from explicit emoji
+features must therefore exceed what TF-IDF already extracts passively.</p>
+<p>The near-identical accuracy and F1 scores are also worth noting. On a perfectly
+balanced validation set (100 positive, 100 negative), a model that predicts one
+class disproportionately would show divergence between the two metrics. Their
+alignment here confirms the baseline generalizes evenly across both classes —
+it is not gaming the balanced distribution.</p>
+<p>This is the bar. 79.5% accuracy and 79.6% F1, achieved with text alone and no
+emoji-specific engineering. Any emoji-aware feature that does not meaningfully
+exceed both thresholds adds complexity without return.</p>
 </div>
 </div>
 </div>
@@ -8736,7 +9080,7 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-5:-Emoji-Feature-Construction">🧩 Section 5: Emoji Feature Construction<a class="anchor-link" href="#%F0%9F%A7%A9-Section-5:-Emoji-Feature-Construction">¶</a></h2><p>This section derives emoji-aware features informed by the findings of Notebook 2.0.</p>
+<h2 id="Section-5:-Emoji-Feature-Construction">Section 5: Emoji Feature Construction<a class="anchor-link" href="#Section-5:-Emoji-Feature-Construction">¶</a></h2><p>This section derives emoji-aware features informed by the findings of Notebook 2.0.</p>
 <h3 id="Allowed-features">Allowed features<a class="anchor-link" href="#Allowed-features">¶</a></h3><ul>
 <li>Binary indicator for emoji presence</li>
 <li>Emoji count per tweet</li>
@@ -8757,7 +9101,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Build emoji lookup</span>
@@ -8775,7 +9119,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">build_emoji_features</span><span class="p">(</span><span class="n">text_series</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
@@ -8794,7 +9138,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_train_emoji</span> <span class="o">=</span> <span class="n">build_emoji_features</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
@@ -8811,10 +9155,9 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-6:-Baseline-+-Emoji-Presence-Model">🧩 Section 6: Baseline + Emoji Presence Model<a class="anchor-link" href="#%F0%9F%A7%A9-Section-6:-Baseline-+-Emoji-Presence-Model">¶</a></h2><p>This section evaluates the simplest emoji-aware model by augmenting the text-only baseline with a binary emoji presence feature.</p>
+<h2 id="Section-6:-Baseline-+-Emoji-Presence-Model">Section 6: Baseline + Emoji Presence Model<a class="anchor-link" href="#Section-6:-Baseline-+-Emoji-Presence-Model">¶</a></h2><p>This section evaluates the simplest emoji-aware model by augmenting the text-only baseline with a binary emoji presence feature.</p>
 <p>The goal is to assess whether <strong>the mere presence of emojis</strong> adds predictive value beyond text alone.</p>
 <p>Results are directly compared to the baseline model.</p>
-<hr/>
 </div>
 </div>
 </div>
@@ -8823,7 +9166,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Use only has_emoji feature</span>
@@ -8842,7 +9185,7 @@ forceTheme('sk-container-id-1');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">emoji_presence_clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span>
@@ -8861,7 +9204,7 @@ forceTheme('sk-container-id-1');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <style>#sk-container-id-2 {
   /* Definition of color scheme common for light and dark mode */
@@ -9702,7 +10045,7 @@ forceTheme('sk-container-id-2');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">y_val_pred_presence</span> <span class="o">=</span> <span class="n">emoji_presence_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_combined</span><span class="p">)</span>
@@ -9721,10 +10064,35 @@ forceTheme('sk-container-id-2');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(0.765, 0.7751196172248804)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ac8f43b3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-6-Interpretation-%E2%80%94-Text-+-Emoji-Presence">Section 6 Interpretation — Text + Emoji Presence<a class="anchor-link" href="#Section-6-Interpretation-%E2%80%94-Text-+-Emoji-Presence">¶</a></h3><p><strong>Result: 76.5% accuracy / 77.5% F1 — below baseline on both metrics.</strong></p>
+<p>Adding emoji presence does not just fail to help — it actively hurts. This is
+the worst-performing configuration in the experiment, dropping 3 points in
+accuracy and 2.1 points in F1 relative to the text-only baseline.</p>
+<p>The likely cause is distributional symmetry. In a dataset where both positive
+and negative tweets use emojis with similar frequency, a binary presence flag
+carries no directional information. The classifier receives a signal that says
+"this tweet has an emoji" equally often for both classes — which is less useful
+than no signal at all, because it adds a feature the model may overfit to
+without gaining any predictive leverage.</p>
+<p>The conclusion is not simply that presence is a weak feature. It is that
+<strong>an uninformative feature in a small dataset is worse than no feature</strong> —
+the model pays a generalization cost for learning a weight that predicts nothing.</p>
+<p>This sets a clear constraint for subsequent experiments: emoji features must
+encode sentiment direction, not just emoji existence.</p>
 </div>
 </div>
 </div>
@@ -9735,10 +10103,9 @@ forceTheme('sk-container-id-2');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-7:-Baseline-+-Emoji-Count-Model">🧩 Section 7: Baseline + Emoji Count Model<a class="anchor-link" href="#%F0%9F%A7%A9-Section-7:-Baseline-+-Emoji-Count-Model">¶</a></h2><p>This section extends the previous configuration by adding emoji count as an additional feature.</p>
+<h2 id="Section-7:-Baseline-+-Emoji-Count-Model">Section 7: Baseline + Emoji Count Model<a class="anchor-link" href="#Section-7:-Baseline-+-Emoji-Count-Model">¶</a></h2><p>This section extends the previous configuration by adding emoji count as an additional feature.</p>
 <p>The objective is to evaluate whether <strong>emoji intensity</strong> provides incremental signal beyond simple presence.</p>
 <p>Performance differences are interpreted conservatively.</p>
-<hr/>
 </div>
 </div>
 </div>
@@ -9747,7 +10114,7 @@ forceTheme('sk-container-id-2');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Use both has_emoji and emoji_count</span>
@@ -9766,7 +10133,7 @@ forceTheme('sk-container-id-2');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">emoji_count_clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span>
@@ -9785,7 +10152,7 @@ forceTheme('sk-container-id-2');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <style>#sk-container-id-3 {
   /* Definition of color scheme common for light and dark mode */
@@ -10626,7 +10993,7 @@ forceTheme('sk-container-id-3');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">y_val_pred_count</span> <span class="o">=</span> <span class="n">emoji_count_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_combined_count</span><span class="p">)</span>
@@ -10645,10 +11012,36 @@ forceTheme('sk-container-id-3');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(0.775, 0.784688995215311)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a95494c2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-7-Interpretation-%E2%80%94-Text-+-Emoji-Count">Section 7 Interpretation — Text + Emoji Count<a class="anchor-link" href="#Section-7-Interpretation-%E2%80%94-Text-+-Emoji-Count">¶</a></h3><p><strong>Result: 77.5% accuracy / 78.5% F1 — still below baseline.</strong></p>
+<p>Emoji count partially recovers from the presence result but does not cross
+the baseline threshold. The 1-point accuracy recovery over Section 6 suggests
+that intensity carries a weak signal — tweets with more emojis may skew
+slightly more expressive — but the signal is too diffuse to overcome the
+generalization cost of adding it.</p>
+<p>The core problem is the same as Section 6: count is still directionless.
+A tweet with five emojis could be intensely positive or intensely negative.
+The classifier cannot distinguish between them using magnitude alone, so the
+additional feature adds marginal information while still paying the complexity
+cost.</p>
+<p>What Section 7 does confirm is that there is <em>something</em> in the emoji tokens
+worth extracting — the partial recovery from presence to count suggests the
+model is finding a weak but real pattern. The feature design is simply not
+resolving it with enough precision.</p>
+<p>That precision is what polarity features in Section 8 are designed to provide.</p>
 </div>
 </div>
 </div>
@@ -10659,14 +11052,14 @@ forceTheme('sk-container-id-3');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-8:-Baseline-+-Emoji-Polarity-Features-(Optional)">🧩 Section 8: Baseline + Emoji Polarity Features (Optional)<a class="anchor-link" href="#%F0%9F%A7%A9-Section-8:-Baseline-+-Emoji-Polarity-Features-(Optional)">¶</a></h2><p>This optional section evaluates coarse emoji sentiment grouping derived from the emoji reference dataset.</p>
+<h2 id="Section-8:-Baseline-+-Emoji-Polarity-Features">Section 8: Baseline + Emoji Polarity Features<a class="anchor-link" href="#Section-8:-Baseline-+-Emoji-Polarity-Features">¶</a></h2><p>This section evaluates coarse emoji sentiment grouping derived from the emoji reference dataset.</p>
 <p>Emoji polarity features are treated as:</p>
 <ul>
 <li>heuristic</li>
 <li>low-resolution</li>
 <li>explicitly non-authoritative</li>
 </ul>
-<p>This section is included only to test whether minimal semantic grouping improves performance.</p>
+<p>This section is included to test whether minimal semantic grouping improves performance.</p>
 <hr/>
 </div>
 </div>
@@ -10676,7 +11069,7 @@ forceTheme('sk-container-id-3');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Define emoji polarity map (heuristic, not learned)</span>
@@ -10698,7 +11091,7 @@ forceTheme('sk-container-id-3');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_train_polarity</span> <span class="o">=</span> <span class="n">build_polarity_features</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
@@ -10716,7 +11109,7 @@ forceTheme('sk-container-id-3');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">emoji_polarity_clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span>
@@ -10735,7 +11128,7 @@ forceTheme('sk-container-id-3');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <style>#sk-container-id-4 {
   /* Definition of color scheme common for light and dark mode */
@@ -11576,7 +11969,7 @@ forceTheme('sk-container-id-4');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">y_val_pred_polarity</span> <span class="o">=</span> <span class="n">emoji_polarity_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val_combined_polarity</span><span class="p">)</span>
@@ -11595,10 +11988,36 @@ forceTheme('sk-container-id-4');</script></body>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(0.805, 0.8235294117647058)</pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0c71877d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-8-Interpretation-%E2%80%94-Text-+-Emoji-Polarity-Features">Section 8 Interpretation — Text + Emoji Polarity Features<a class="anchor-link" href="#Section-8-Interpretation-%E2%80%94-Text-+-Emoji-Polarity-Features">¶</a></h3><p><strong>Result: 80.5% accuracy / 82.4% F1 — best performing configuration.</strong></p>
+<p>This is the only configuration that improves over the text-only baseline, and the
+margin is not marginal. A 2.8-point F1 gain from two integer-valued features added
+to a 1,265-dimensional space is disproportionately large relative to the feature cost.</p>
+<p>The result exposes why Sections 6 and 7 failed. Presence and count features treat
+emojis as uniform tokens — they know an emoji is there, but not what it means.
+Polarity features resolve that ambiguity. The same emoji that was noise in Section 6
+becomes signal in Section 8, not because the emoji changed, but because the
+representation now encodes its affective direction.</p>
+<p>What makes this particularly meaningful is the lexicon size. Only 6 emojis are
+defined — 4 positive, 2 negative. The fact that this minimal coverage produces
+measurable gains confirms that the mechanism is sound. The bottleneck in prior
+sections was not feature structure — it was semantic resolution.</p>
+<p>This raises an immediate question: if 6 emojis improve performance, what does
+broader lexicon coverage yield? That question is the primary motivation for
+Notebook 3.5.</p>
 </div>
 </div>
 </div>
@@ -11609,7 +12028,7 @@ forceTheme('sk-container-id-4');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-9:-Results-Comparison">🧩 Section 9: Results Comparison<a class="anchor-link" href="#%F0%9F%A7%A9-Section-9:-Results-Comparison">¶</a></h2><p>This section consolidates evaluation metrics from all model configurations into a single comparison table.</p>
+<h2 id="Section-9:-Results-Comparison">Section 9: Results Comparison<a class="anchor-link" href="#Section-9:-Results-Comparison">¶</a></h2><p>This section consolidates evaluation metrics from all model configurations into a single comparison table.</p>
 <p>Metrics may include:</p>
 <ul>
 <li>Accuracy</li>
@@ -11626,7 +12045,7 @@ forceTheme('sk-container-id-4');</script></body>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -11653,102 +12072,6 @@ forceTheme('sk-container-id-4');</script></body>
 <span class="p">)</span>
 
 <span class="n">results</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>Model</th>
-<th>Accuracy</th>
-<th>F1 Score</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>Text Only (Baseline)</td>
-<td>0.795</td>
-<td>0.796020</td>
-</tr>
-<tr>
-<th>1</th>
-<td>Text + Emoji Presence</td>
-<td>0.765</td>
-<td>0.775120</td>
-</tr>
-<tr>
-<th>2</th>
-<td>Text + Emoji Count</td>
-<td>0.775</td>
-<td>0.784689</td>
-</tr>
-<tr>
-<th>3</th>
-<td>Text + Emoji Polarity</td>
-<td>0.805</td>
-<td>0.823529</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1a11bb56">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-10:-Interpretation-and-Final-Decision">🧩 Section 10: Interpretation and Final Decision<a class="anchor-link" href="#%F0%9F%A7%A9-Section-10:-Interpretation-and-Final-Decision">¶</a></h2><p>This section interprets the comparative results in the context of:</p>
-<ul>
-<li>model complexity</li>
-<li>stability</li>
-<li>interpretability</li>
-<li>empirical gains</li>
-</ul>
-<p>A clear decision is made regarding whether emoji-aware features are retained or excluded from the final modeling pipeline.</p>
-<p>The rationale for this decision is explicitly documented.</p>
-<hr/>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2fecb3fc">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"F1 Score"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -11786,6 +12109,125 @@ forceTheme('sk-container-id-4');</script></body>
 </thead>
 <tbody>
 <tr>
+<th>0</th>
+<td>Text Only (Baseline)</td>
+<td>0.795</td>
+<td>0.796020</td>
+</tr>
+<tr>
+<th>1</th>
+<td>Text + Emoji Presence</td>
+<td>0.765</td>
+<td>0.775120</td>
+</tr>
+<tr>
+<th>2</th>
+<td>Text + Emoji Count</td>
+<td>0.775</td>
+<td>0.784689</td>
+</tr>
+<tr>
+<th>3</th>
+<td>Text + Emoji Polarity</td>
+<td>0.805</td>
+<td>0.823529</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6d61a745">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-9-Interpretation-%E2%80%94-Consolidated-Results">Section 9 Interpretation — Consolidated Results<a class="anchor-link" href="#Section-9-Interpretation-%E2%80%94-Consolidated-Results">¶</a></h3><p>The results table surfaces a clear hierarchy across all configurations.</p>
+<p>Emoji presence and count features both <em>hurt</em> performance relative to the text-only
+baseline — presence drops accuracy by 3 points, count by 2. This is not noise.
+It confirms that undifferentiated emoji signals introduce more confusion than signal,
+likely because both positive and negative tweets use emojis with similar frequency.</p>
+<p>Emoji polarity features reverse this entirely. Accuracy improves by 1 point over
+baseline and F1 jumps by nearly 2.8 points — the largest single gain observed.
+The asymmetry is meaningful: the same emojis that hurt performance as raw counts
+help performance when their semantic direction is resolved.</p>
+<p>The takeaway is not simply that polarity features work. It is that <strong>feature
+semantics matter more than feature inclusion</strong>. A poorly designed emoji feature
+actively degrades the model. A well-designed one meaningfully improves it.</p>
+<p>This distinction drives every decision in Notebook 3.5.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1a11bb56">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Section-10:-Interpretation-and-Final-Decision">Section 10: Interpretation and Final Decision<a class="anchor-link" href="#Section-10:-Interpretation-and-Final-Decision">¶</a></h2><p>This section interprets the comparative results in the context of:</p>
+<ul>
+<li>model complexity</li>
+<li>stability</li>
+<li>interpretability</li>
+<li>empirical gains</li>
+</ul>
+<p>A clear decision is made regarding whether emoji-aware features are retained or excluded from the final modeling pipeline.</p>
+<p>The rationale for this decision is explicitly documented.</p>
+<hr/>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2fecb3fc">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"F1 Score"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Model</th>
+<th>Accuracy</th>
+<th>F1 Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <th>3</th>
 <td>Text + Emoji Polarity</td>
 <td>0.805</td>
@@ -11817,26 +12259,39 @@ forceTheme('sk-container-id-4');</script></body>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9d53728d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3c84ea62">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-11:-Scope-Closure-and-Next-Steps">🧩 Section 11: Scope Closure and Next Steps<a class="anchor-link" href="#%F0%9F%A7%A9-Section-11:-Scope-Closure-and-Next-Steps">¶</a></h2><p>This section formally closes the feature-engineering phase.</p>
-<p>It reaffirms:</p>
-<ul>
-<li>which features are accepted</li>
-<li>which features are rejected</li>
-<li>that no further feature experimentation is planned</li>
-</ul>
-<p>Next steps are outlined for downstream work, such as:</p>
-<ul>
-<li>final model training</li>
-<li>reporting</li>
-<li>or deployment considerations</li>
-</ul>
+<h3 id="Section-10-Results:-Final-Interpretation-and-Decision">Section 10 Results: Final Interpretation and Decision<a class="anchor-link" href="#Section-10-Results:-Final-Interpretation-and-Decision">¶</a></h3><p><strong>Final Decision</strong></p>
+<p>Emoji-aware features are <strong>retained</strong> in the final modeling pipeline exclusively
+in the form of coarse polarity counts. Presence and count features are permanently
+excluded.</p>
 <hr/>
+<p><strong>Rationale</strong></p>
+<p><em>Empirical gains</em> — Emoji polarity is the only configuration that improves over the
+text-only baseline, gaining 1 point in accuracy and 2.8 points in F1. The margin
+is modest but consistent, and consistency on a 1,000-sample dataset carries more
+weight than magnitude.</p>
+<p><em>Model complexity</em> — Polarity counts add exactly two features to a 1,265-dimensional
+space. The complexity cost is negligible. There is no justification for excluding
+a feature that improves performance at near-zero complexity cost.</p>
+<p><em>Interpretability</em> — Unlike presence or count features, polarity counts have a
+self-evident relationship to the target label. A high positive count should
+correlate with positive sentiment. This semantic transparency makes the feature
+auditable and defensible — important properties for a model operating on
+informal, noisy text.</p>
+<p><em>Stability</em> — The polarity result holds across both accuracy and F1, which is
+meaningful given the perfectly balanced class distribution. A feature that inflates
+one metric while degrading another would be suspect. This one improves both.</p>
+<hr/>
+<p><strong>Boundary Condition</strong></p>
+<p>This decision is bounded by the lexicon used in Section 8. The polarity sets are
+minimal by design — sufficient to validate the mechanism, not to maximize coverage.
+Whether a richer lexicon yields further gains is an open question addressed in
+Notebook 3.5.</p>
 </div>
 </div>
 </div>
@@ -11847,27 +12302,42 @@ forceTheme('sk-container-id-4');</script></body>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%92-Design-Guarantees">🔒 Design Guarantees<a class="anchor-link" href="#%F0%9F%94%92-Design-Guarantees">¶</a></h2><p>This notebook guarantees that:</p>
-<ul>
-<li>all models are compared fairly</li>
-<li>no feature leakage occurs</li>
-<li>emoji features are evaluated transparently</li>
-<li>decisions are evidence-based</li>
+<h2 id="Scope-Closure,-Guarantees,-and-Next-Steps">Scope Closure, Guarantees, and Next Steps<a class="anchor-link" href="#Scope-Closure,-Guarantees,-and-Next-Steps">¶</a></h2><p><strong>Scope Closure</strong></p>
+<p>This notebook establishes the empirical foundation for emoji-aware feature engineering.
+Within the constraints of a minimal lexicon and controlled experimental conditions,
+the following conclusions are drawn:</p>
+<h3 id="Accepted-feature-structure">Accepted feature structure<a class="anchor-link" href="#Accepted-feature-structure">¶</a></h3><ul>
+<li>Text-based features derived from TF-IDF representations</li>
+<li>Emoji-derived features in the form of <strong>coarse polarity counts</strong></li>
 </ul>
-<p>This notebook does not attempt to optimize or over-engineer models.</p>
+<h3 id="Rejected-feature-structures">Rejected feature structures<a class="anchor-link" href="#Rejected-feature-structures">¶</a></h3><ul>
+<li>Emoji presence indicators</li>
+<li>Raw emoji count features</li>
+<li>High-dimensional or token-level emoji representations</li>
+</ul>
+<p>These conclusions reflect the feature <em>structures</em> that are worth pursuing —
+not the final production configuration. Lexicon depth, signal weighting,
+and auxiliary feature sources remain open engineering decisions addressed
+in Notebook 3.5.</p>
 <hr/>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14fef232">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Final-Note">Final Note<a class="anchor-link" href="#Final-Note">¶</a></h3><p>Notebook 3.0 exists to <strong>decide</strong>, not to impress.</p>
-<p>Its success is measured by the clarity and defensibility of its conclusions, not by absolute performance scores.</p>
+<p><strong>Design Guarantees</strong></p>
+<p>This notebook guarantees that:</p>
+<ul>
+<li>all models were evaluated using identical data splits</li>
+<li>no feature leakage occurred</li>
+<li>emoji features were tested transparently and incrementally</li>
+<li>modeling decisions were driven by empirical evidence</li>
+</ul>
+<p>This notebook intentionally avoids hyperparameter optimization or model overengineering.</p>
+<hr/>
+<p><strong>Next Steps</strong></p>
+<p>Notebook 3.5 extends these findings by:</p>
+<ul>
+<li>expanding the emoji polarity lexicon based on corpus coverage analysis</li>
+<li>introducing emoticon fallback signals</li>
+<li>validating auxiliary word-level lexicon features</li>
+<li>establishing the final production feature configuration</li>
+</ul>
 <hr/>
 </div>
 </div>

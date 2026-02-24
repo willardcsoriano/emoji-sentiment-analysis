@@ -1,4 +1,4 @@
-# emoji_sentiment_analysis/modeling/train_model.py
+# src\emoji_sentiment_analysis\modeling\train_model.py
 
 """
 Final Model Training Script

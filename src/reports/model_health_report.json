@@ -1,11 +1,16 @@
 {
-    "timestamp": "2026-02-15 16:52:44",
+    "timestamp": "2026-02-24 15:55:53",
     "status": "PASSED",
+    "exit_code": 0,
+    "exit_meaning": "all tests passed",
     "test_suite": "test_model_behavior.py",
-    "checks": {
-        "lexicon_integrity": "OK",
-        "emoji_veto_power": "OK",
-        "sarcasm_detection": "OK"
+    "summary": {
+        "total": 29,
+        "passed": 29,
+        "failed": 0
     },
+    "failed_tests": [],
+    "failed_by_category": {},
+    "internal_errors": [],
     "recommendation": "Ready for Deployment"
 }

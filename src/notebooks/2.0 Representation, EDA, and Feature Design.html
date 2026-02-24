@@ -7517,7 +7517,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%98-2.0-Representation,-EDA,-and-Feature-Design">📘 2.0 Representation, EDA, and Feature Design<a class="anchor-link" href="#%F0%9F%93%98-2.0-Representation,-EDA,-and-Feature-Design">¶</a></h2><h3 id="Notebook-Overview">Notebook Overview<a class="anchor-link" href="#Notebook-Overview">¶</a></h3><p>This notebook evaluates <strong>how the cleaned datasets should be represented for modeling</strong>.</p>
+<h1 id="2.0-Representation,-EDA,-and-Feature-Design">2.0 Representation, EDA, and Feature Design<a class="anchor-link" href="#2.0-Representation,-EDA,-and-Feature-Design">¶</a></h1><h3 id="Notebook-Overview">Notebook Overview<a class="anchor-link" href="#Notebook-Overview">¶</a></h3><p>This notebook evaluates <strong>how the cleaned datasets should be represented for modeling</strong>.</p>
 <p>Its purpose is to perform <strong>decision-driven exploratory analysis</strong> and <strong>feature feasibility assessment</strong>, with a specific focus on emoji usage in sentiment classification.</p>
 <p>No models are trained and no final feature commitments are made in this notebook.</p>
 <hr/>
@@ -7531,7 +7531,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A9-Section-1:-Setup-and-Imports">🧩 Section 1: Setup and Imports<a class="anchor-link" href="#%F0%9F%A7%A9-Section-1:-Setup-and-Imports">¶</a></h2><p>This section sets up the analysis environment, including library imports, logging, and filesystem paths.</p>
+<h2 id="Section-1:-Setup-and-Imports">Section 1: Setup and Imports<a class="anchor-link" href="#Section-1:-Setup-and-Imports">¶</a></h2><p>This section sets up the analysis environment, including library imports, logging, and filesystem paths.</p>
 <p>All configuration required for reproducibility and downstream consistency is defined here.</p>
 <hr/>
 </div>
@@ -7572,7 +7572,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">📥 Section 2: Load Cleaned Datasets<a class="anchor-link" href="#%F0%9F%93%A5-Section-2:-Load-Cleaned-Datasets">¶</a></h2><p>Load the cleaned datasets produced in Notebook 1.5.</p>
+<h2 id="Section-2:-Load-Cleaned-Datasets">Section 2: Load Cleaned Datasets<a class="anchor-link" href="#Section-2:-Load-Cleaned-Datasets">¶</a></h2><p>Load the cleaned datasets produced in Notebook 1.5.</p>
 <p>These datasets are treated as <strong>read-only inputs</strong>.
 No transformations applied here modify the canonical data stored on disk.</p>
 <hr/>
@@ -7676,7 +7676,7 @@ INFO:__main__:Emoji reference shape: (16, 3)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">🏷️ Section 3: Sentiment Label Distribution<a class="anchor-link" href="#%F0%9F%8F%B7%EF%B8%8F-Section-3:-Sentiment-Label-Distribution">¶</a></h2><p>Before evaluating emoji behavior, inspect the distribution of sentiment labels.</p>
+<h2 id="Section-3:-Sentiment-Label-Distribution">Section 3: Sentiment Label Distribution<a class="anchor-link" href="#Section-3:-Sentiment-Label-Distribution">¶</a></h2><p>Before evaluating emoji behavior, inspect the distribution of sentiment labels.</p>
 <p>This check helps identify:</p>
 <ul>
 <li>potential class imbalance</li>
@@ -7736,7 +7736,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%8F%B7%EF%B8%8F-Post-Section-3:-Interpretation-%E2%80%94-Sentiment-Label-Distribution">🏷️ Post-Section 3: Interpretation — Sentiment Label Distribution<a class="anchor-link" href="#%F0%9F%8F%B7%EF%B8%8F-Post-Section-3:-Interpretation-%E2%80%94-Sentiment-Label-Distribution">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-3-Interpretation-%E2%80%94-Sentiment-Label-Distribution">Section 3 Interpretation — Sentiment Label Distribution<a class="anchor-link" href="#Section-3-Interpretation-%E2%80%94-Sentiment-Label-Distribution">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>The sentiment labels are approximately balanced between positive and negative classes.
 This indicates that downstream analyses of emoji usage are unlikely to be biased by class imbalance.</p>
 <p>As a result:</p>
@@ -7756,7 +7756,7 @@ This indicates that downstream analyses of emoji usage are unlikely to be biased
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%98%80-Section-4:-Emoji-Extraction-Utilities">😀 Section 4: Emoji Extraction Utilities<a class="anchor-link" href="#%F0%9F%98%80-Section-4:-Emoji-Extraction-Utilities">¶</a></h2><p>This section defines helper functions for detecting emojis in tweet text.</p>
+<h2 id="Section-4:-Emoji-Extraction-Utilities">Section 4: Emoji Extraction Utilities<a class="anchor-link" href="#Section-4:-Emoji-Extraction-Utilities">¶</a></h2><p>This section defines helper functions for detecting emojis in tweet text.</p>
 <p>Emoji detection is intentionally constrained to the emoji reference dataset to:</p>
 <ul>
 <li>avoid heuristic Unicode parsing</li>
@@ -7764,6 +7764,16 @@ This indicates that downstream analyses of emoji usage are unlikely to be biased
 <li>ensure reproducibility</li>
 </ul>
 <hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f6b18600">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 </div>
 </div>
 </div>
@@ -7792,7 +7802,7 @@ This indicates that downstream analyses of emoji usage are unlikely to be biased
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">📊 Section 5: Emoji Presence and Density<a class="anchor-link" href="#%F0%9F%93%8A-Section-5:-Emoji-Presence-and-Density">¶</a></h2><p>Quantify how often emojis appear in tweets and how many emojis are used per tweet.</p>
+<h2 id="Section-5:-Emoji-Presence-and-Density">Section 5: Emoji Presence and Density<a class="anchor-link" href="#Section-5:-Emoji-Presence-and-Density">¶</a></h2><p>Quantify how often emojis appear in tweets and how many emojis are used per tweet.</p>
 <p>This analysis answers a key feasibility question:</p>
 <blockquote>
 <p><em>Do emojis appear frequently enough to justify feature engineering?</em></p>
@@ -7840,7 +7850,7 @@ This indicates that downstream analyses of emoji usage are unlikely to be biased
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%8A-Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">📊 Post-Section 5: Interpretation — Emoji Presence and Density<a class="anchor-link" href="#%F0%9F%93%8A-Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">Post-Section 5: Interpretation — Emoji Presence and Density<a class="anchor-link" href="#Post-Section-5:-Interpretation-%E2%80%94-Emoji-Presence-and-Density">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>Approximately half of the tweets (~49%) contain at least one emoji.
 Emoji usage is therefore <strong>common</strong>, not incidental.</p>
 <p>This finding establishes that:</p>
@@ -7860,7 +7870,7 @@ Emoji usage is therefore <strong>common</strong>, not incidental.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%88-Section-6:-Distribution-of-Emoji-Counts">📈 Section 6: Distribution of Emoji Counts<a class="anchor-link" href="#%F0%9F%93%88-Section-6:-Distribution-of-Emoji-Counts">¶</a></h2><p>This section visualizes the distribution of emoji counts across tweets.</p>
+<h2 id="Section-6:-Distribution-of-Emoji-Counts">Section 6: Distribution of Emoji Counts<a class="anchor-link" href="#Section-6:-Distribution-of-Emoji-Counts">¶</a></h2><p>This section visualizes the distribution of emoji counts across tweets.</p>
 <p>The goal is to understand whether emoji usage is:</p>
 <ul>
 <li>rare</li>
@@ -7869,16 +7879,6 @@ Emoji usage is therefore <strong>common</strong>, not incidental.</p>
 </ul>
 <p>This informs whether emoji features are likely to be informative or noisy.</p>
 <hr/>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3b55c486">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 </div>
 </div>
 </div>
@@ -7909,6 +7909,25 @@ Emoji usage is therefore <strong>common</strong>, not incidental.</p>
 <div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
 <img alt="No description has been provided for this image" class="" src="data:image/png;base64,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"/>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b0aab741">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Section-6-Analysis:-Emoji-Density-Distribution">Section 6 Analysis: Emoji Density Distribution<a class="anchor-link" href="#Section-6-Analysis:-Emoji-Density-Distribution">¶</a></h3><p>The histogram above visualizes the frequency of emoji occurrences across the training corpus (1,000 observations). This distribution is critical for understanding the "signal density" of our symbolic features.</p>
+<p><strong>Key Empirical Observations:</strong></p>
+<ul>
+<li><strong>Bimodal Concentration:</strong> The dataset is split nearly evenly between tweets with <strong>0 emojis</strong> (~505 records) and <strong>1 emoji</strong> (~465 records).</li>
+<li><strong>High-Count Sparsity:</strong> There is a significant "drop-off" after a single emoji. Tweets containing 2, 3, or 4 emojis represent less than <strong>5%</strong> of the total dataset.</li>
+<li><strong>Sparsity Implications:</strong> Because most tweets contain $\leq 1$ emoji, the model relies on the <em>presence</em> of a specific symbol rather than the <em>repetition</em> of symbols to derive sentiment.</li>
+</ul>
+<p><strong>Modeling Note:</strong>
+Given this right-skewed distribution, the emoji features function effectively as <strong>binary anchors</strong>. The high frequency of "single-emoji" tweets justifies our decision to use a curated lexicon, as a single symbol often carries the primary emotional weight of these short-form messages.</p>
 </div>
 </div>
 </div>
@@ -7978,7 +7997,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%8D-Post-Section-7:-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">🔍 Post-Section 7: Interpretation — Emoji Presence vs Sentiment Label<a class="anchor-link" href="#%F0%9F%94%8D-Post-Section-7:-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-7-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">Section 7 Interpretation — Emoji Presence vs Sentiment Label<a class="anchor-link" href="#Section-7-Interpretation-%E2%80%94-Emoji-Presence-vs-Sentiment-Label">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>Emoji presence differs between positive and negative sentiment labels.
 This indicates that emoji usage is <strong>not independent</strong> of sentiment.</p>
 <p>Implications:</p>
@@ -7999,7 +8018,7 @@ This indicates that emoji usage is <strong>not independent</strong> of sentiment
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%98%80%F0%9F%93%8A-Section-8:-Emoji-Count-vs-Sentiment-Label">😀📊 Section 8: Emoji Count vs Sentiment Label<a class="anchor-link" href="#%F0%9F%98%80%F0%9F%93%8A-Section-8:-Emoji-Count-vs-Sentiment-Label">¶</a></h2><p>Beyond presence, this section examines whether the <strong>number</strong> of emojis used differs by sentiment.</p>
+<h2 id="Section-8:-Emoji-Count-vs-Sentiment-Label">Section 8: Emoji Count vs Sentiment Label<a class="anchor-link" href="#Section-8:-Emoji-Count-vs-Sentiment-Label">¶</a></h2><p>Beyond presence, this section examines whether the <strong>number</strong> of emojis used differs by sentiment.</p>
 <p>This helps determine whether emoji density conveys additional signal beyond simple presence.</p>
 <hr/>
 </div>
@@ -8054,7 +8073,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%98%80%F0%9F%93%8A-Post-Section-8:-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">😀📊 Post-Section 8: Interpretation — Emoji Count vs Sentiment Label<a class="anchor-link" href="#%F0%9F%98%80%F0%9F%93%8A-Post-Section-8:-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-8-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">Section 8 Interpretation — Emoji Count vs Sentiment Label<a class="anchor-link" href="#Section-8-Interpretation-%E2%80%94-Emoji-Count-vs-Sentiment-Label">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>The average number of emojis per tweet is higher for positive sentiment than for negative sentiment.</p>
 <p>While the magnitude of this difference is modest, it is directionally consistent with:</p>
 <ul>
@@ -8073,7 +8092,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%9A-Section-9:-Emoji-Coverage-Analysis">📚 Section 9: Emoji Coverage Analysis<a class="anchor-link" href="#%F0%9F%93%9A-Section-9:-Emoji-Coverage-Analysis">¶</a></h2><p>This section compares:</p>
+<h2 id="Section-9:-Emoji-Coverage-Analysis">Section 9: Emoji Coverage Analysis<a class="anchor-link" href="#Section-9:-Emoji-Coverage-Analysis">¶</a></h2><p>This section compares:</p>
 <ul>
 <li>emojis actually appearing in tweet text</li>
 <li>emojis defined in the reference dataset</li>
@@ -8133,7 +8152,7 @@ INFO:matplotlib.category:Using categorical units to plot a list of strings that 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%9A-Post-Section-9:-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">📚 Post-Section 9: Interpretation — Emoji Coverage Analysis<a class="anchor-link" href="#%F0%9F%93%9A-Post-Section-9:-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-9-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">Section 9 Interpretation — Emoji Coverage Analysis<a class="anchor-link" href="#Section-9-Interpretation-%E2%80%94-Emoji-Coverage-Analysis">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>The emoji reference dataset captures only a subset of the emojis appearing in tweets.
 However, the most frequently occurring emojis in the tweet dataset are largely represented.</p>
 <p>This implies:</p>
@@ -8154,7 +8173,7 @@ However, the most frequently occurring emojis in the tweet dataset are largely r
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">🔁 Section 10: Emoji Frequency Analysis (Known Emojis)<a class="anchor-link" href="#%F0%9F%94%81-Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">¶</a></h2><p>We examine the frequency distribution of emojis that appear in both:</p>
+<h2 id="Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">Section 10: Emoji Frequency Analysis (Known Emojis)<a class="anchor-link" href="#Section-10:-Emoji-Frequency-Analysis-(Known-Emojis)">¶</a></h2><p>We examine the frequency distribution of emojis that appear in both:</p>
 <ul>
 <li>the tweet dataset</li>
 <li>the emoji reference dataset</li>
@@ -8285,7 +8304,7 @@ However, the most frequently occurring emojis in the tweet dataset are largely r
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%81-Post-Section-10:-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">🔁 Post-Section 10: Interpretation — Emoji Frequency Analysis<a class="anchor-link" href="#%F0%9F%94%81-Post-Section-10:-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-10-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">Section 10 Interpretation — Emoji Frequency Analysis<a class="anchor-link" href="#Section-10-Interpretation-%E2%80%94-Emoji-Frequency-Analysis">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>Emoji usage is highly skewed:</p>
 <ul>
 <li>a small number of emojis account for the majority of occurrences</li>
@@ -8309,7 +8328,7 @@ However, the most frequently occurring emojis in the tweet dataset are largely r
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A0-Section-11:-Emoji-Redundancy-with-Text-(Heuristic-Check)">🧠 Section 11: Emoji Redundancy with Text (Heuristic Check)<a class="anchor-link" href="#%F0%9F%A7%A0-Section-11:-Emoji-Redundancy-with-Text-(Heuristic-Check)">¶</a></h2><p>This section performs a lightweight heuristic check to assess redundancy between:</p>
+<h2 id="Section-11:-Emoji-Redundancy-with-Text-(Heuristic-Check)">Section 11: Emoji Redundancy with Text (Heuristic Check)<a class="anchor-link" href="#Section-11:-Emoji-Redundancy-with-Text-(Heuristic-Check)">¶</a></h2><p>This section performs a lightweight heuristic check to assess redundancy between:</p>
 <ul>
 <li>emoji usage</li>
 <li>explicit sentiment words in text</li>
@@ -8371,7 +8390,7 @@ dtype: float64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%A7%A0-Post-Section-11:-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">🧠 Post-Section 11: Interpretation — Emoji Redundancy with Text<a class="anchor-link" href="#%F0%9F%A7%A0-Post-Section-11:-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">¶</a></h2><p><strong>Interpretation</strong></p>
+<h3 id="Section-11-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">Section 11 Interpretation — Emoji Redundancy with Text<a class="anchor-link" href="#Section-11-Interpretation-%E2%80%94-Emoji-Redundancy-with-Text">¶</a></h3><p><strong>Interpretation</strong></p>
 <p>Many emoji-bearing tweets also contain explicit sentiment words, indicating partial redundancy between text and emojis.
 However, some emojis appear in otherwise neutral text, suggesting that emojis can convey sentiment independently.</p>
 <p>Conclusion:</p>
@@ -8391,7 +8410,7 @@ However, some emojis appear in otherwise neutral text, suggesting that emojis ca
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%8C-Section-12:-Feature-Feasibility-Summary">📌 Section 12: Feature Feasibility Summary<a class="anchor-link" href="#%F0%9F%93%8C-Section-12:-Feature-Feasibility-Summary">¶</a></h2><p>This section aggregates key metrics into a compact summary.</p>
+<h2 id="Section-12:-Feature-Feasibility-Summary">Section 12: Feature Feasibility Summary<a class="anchor-link" href="#Section-12:-Feature-Feasibility-Summary">¶</a></h2><p>This section aggregates key metrics into a compact summary.</p>
 <p>These metrics provide a quantitative basis for deciding:</p>
 <ul>
 <li>whether emoji features should be engineered</li>
@@ -8409,7 +8428,7 @@ However, some emojis appear in otherwise neutral text, suggesting that emojis ca
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%93%8C-Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">📌 Final Interpretation — Feature Feasibility Summary<a class="anchor-link" href="#%F0%9F%93%8C-Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">¶</a></h2><p><strong>Overall Conclusion</strong></p>
+<h3 id="Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">Final Interpretation — Feature Feasibility Summary<a class="anchor-link" href="#Final-Interpretation-%E2%80%94-Feature-Feasibility-Summary">¶</a></h3><p><strong>Overall Conclusion</strong></p>
 <p>Based on the analyses in this notebook:</p>
 <ul>
 <li>Emoji usage is common and sentiment-correlated</li>
@@ -8435,7 +8454,7 @@ However, some emojis appear in otherwise neutral text, suggesting that emojis ca
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%92-Section-13:-Cleanup-and-Scope-Enforcement">🔒 Section 13: Cleanup and Scope Enforcement<a class="anchor-link" href="#%F0%9F%94%92-Section-13:-Cleanup-and-Scope-Enforcement">¶</a></h2><p>Temporary analysis columns are removed to prevent accidental reuse in downstream notebooks.</p>
+<h2 id="Section-13:-Cleanup-and-Scope-Enforcement">Section 13: Cleanup and Scope Enforcement<a class="anchor-link" href="#Section-13:-Cleanup-and-Scope-Enforcement">¶</a></h2><p>Temporary analysis columns are removed to prevent accidental reuse in downstream notebooks.</p>
 <p>This reinforces a key design principle:</p>
 <ul>
 <li>Notebook 2.0 evaluates representations</li>
@@ -8492,7 +8511,7 @@ However, some emojis appear in otherwise neutral text, suggesting that emojis ca
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E2%9E%A1%EF%B8%8F-Next-Steps">➡️ Next Steps<a class="anchor-link" href="#%E2%9E%A1%EF%B8%8F-Next-Steps">¶</a></h2><p>Based on the findings in this notebook, the next notebook will either:</p>
+<h2 id="Next-Steps">Next Steps<a class="anchor-link" href="#Next-Steps">¶</a></h2><p>Based on the findings in this notebook, the next notebook will either:</p>
 <ul>
 <li>proceed with emoji-aware feature engineering, or</li>
 <li>explicitly exclude emoji features with justification</li>
