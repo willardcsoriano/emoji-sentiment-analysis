@@ -8,18 +8,10 @@
 python -m pip freeze > requirements.txt
 ```
 
-
-
 ```bash
 # 2. Scrub the "build-killers" (for Linux deployment env)
 (Get-Content requirements.txt) | Where-Object { $_ -notmatch 'pywinpty|win32|debugpy|jupyter|notebook|ipython|-e git' } | Set-Content requirements.txt
 ```
-
-
-
-
-
-
 
 ### Install dependencies
 ```bash
@@ -315,4 +307,68 @@ pip --version
 ### Show installed package info
 ```bash
 pip show package_name
+```
+
+## Cloud & Deployment (Google Cloud Platform)
+
+### Deployment
+
+```bash
+# Submit a manual build to Cloud Build and deploy to Cloud Run
+# This is the 'Nuclear Option' that pushes your local code live
+gcloud builds submit --config cloudbuild.yaml .
+
+```
+
+### Log Analysis & Debugging
+
+```bash
+# 1. View logs of a specific build (if it fails during Step 0 or 1)
+gcloud builds log [BUILD_ID]
+
+# 2. View recent CRASH logs from the container (if it fails during Step 2)
+# This is the "Smoking Gun" finder
+gcloud logs read "resource.type=cloud_run_revision AND resource.labels.service_name=emoji-sentiment-app" --limit 30
+
+# 3. Stream LIVE logs from production
+# Run this in a separate terminal to watch users interact with your app in real-time
+gcloud alpha logging tail "resource.type=cloud_run_revision AND resource.labels.service_name=emoji-sentiment-app"
+
+```
+
+### Service Management
+
+```bash
+# List all Cloud Run services and their public URLs
+gcloud run services list
+
+# Check the health/status of your specific service
+gcloud run services describe emoji-sentiment-app --region us-central1
+
+# Get the latest 5 revisions (useful for rollbacks)
+gcloud run revisions list --service=emoji-sentiment-app --limit=5
+
+```
+
+### Cleanup & Resource Control
+
+```bash
+# Delete all untagged (old) images to save on storage costs
+gcloud artifacts docker images list us-central1-docker.pkg.dev/hybrid-sentiment-analysis/emoji-repo/emoji-app --filter="NOT tags:*" --format="get(digest)" | ForEach-Object { gcloud artifacts docker images delete "us-central1-docker.pkg.dev/hybrid-sentiment-analysis/emoji-repo/emoji-app@$_" --quiet }
+
+# Stop/Delete the service (if you want to pause the project)
+gcloud run services delete emoji-sentiment-app --region us-central1
+
+```
+
+### Local Container Testing
+
+```bash
+# Build the image locally (requires Docker Desktop)
+docker build -t emoji-app-local .
+
+# Run the image locally to test paths before pushing to Cloud
+# Maps your local port 8000 to the container's 8080
+docker run -p 8000:8080 -e PORT=8080 emoji-app-local
+
 ```

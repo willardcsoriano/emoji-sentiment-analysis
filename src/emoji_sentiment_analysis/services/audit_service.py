@@ -13,7 +13,6 @@ import numpy as np
 from datetime import datetime
 from scipy.sparse import csr_matrix
 
-
 def explain_prediction(
     text: str,
     prediction: int,
@@ -22,6 +21,8 @@ def explain_prediction(
     model,
     tfidf,
     is_veto: bool,
+    confidence: float,     # <-- Added to signature
+    entropy_flag: str      # <-- Added to signature
 ) -> dict:
     """
     Formats and explains a completed prediction.
@@ -46,8 +47,6 @@ def explain_prediction(
 
     top_drivers = sorted(feature_impacts, key=lambda x: abs(x["weight"]), reverse=True)
 
-    # If veto was applied, surface emoji_neg_count as the primary driver
-    # so the explanation reflects what actually drove the decision
     if is_veto:
         veto_feature = next(
             (d for d in feature_impacts if d["token"] == "emoji_neg_count"), None
@@ -60,10 +59,8 @@ def explain_prediction(
         "raw_text": text,
         "prediction": "Positive" if prediction == 1 else "Negative",
         "prediction_int": prediction,
-        "confidence": round(float(np.max(probs)), 4),
-        "entropy_flag": (
-            "High Ambiguity" if abs(probs[0] - probs[1]) < 0.20 else "Clear Signal"
-        ),
+        "confidence": round(confidence, 4),
+        "entropy_flag": entropy_flag,
         "veto_applied": is_veto,
         "top_drivers": top_drivers[:6],
     }

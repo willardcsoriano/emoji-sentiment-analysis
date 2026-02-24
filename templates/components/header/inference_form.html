@@ -28,12 +28,18 @@
                         {% for preset in [
                             {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
                             {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
+                            {"label": "Neutral/Flat", "text": "The movie was just okay, I guess."},
+                            {"label": "The Veto Check", "text": "Everything is great. 💀"},
+                            {"label": "Western Vibes", "text": "I'm having a blast at this party! XD <3"},
                             {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
-                            
+                            {"label": "Corporate Speak", "text": "The Q4 results were excellent and perfect. 📈"},
+                            {"label": "The Paradox", "text": "I hate how much I love this! 😂💔"},
+                            {"label": "Soft Praise", "text": "It was actually kind of nice, I suppose."},
+                            {"label": "Ambiguous Vibe", "text": "It is what it is."}                            
                         ] %}
-                        <button 
+                        <button
                             type="button"
-                            onclick="document.getElementById('text').value = '{{ preset.text }}'; document.getElementById('text').focus();"
+                            onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
                             class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 
                                 text-[11px] font-bold text-slate-600 hover:bg-blue-500 
                                 hover:text-white hover:border-blue-500 transition-all active:scale-95"

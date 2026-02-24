@@ -16,7 +16,7 @@ from loguru import logger
 from scipy.sparse import hstack, csr_matrix
 from typing import cast
 
-from emoji_sentiment_analysis.config import MODELS_DIR, init_logging
+from emoji_sentiment_analysis.config import MODELS_DIR, init_logging, AMBIGUITY_THRESHOLD
 from emoji_sentiment_analysis.features import extract_emoji_polarity_features
 from emoji_sentiment_analysis.services.audit_service import explain_prediction
 
@@ -90,12 +90,6 @@ def _apply_sarcasm_veto(
 def predict_sentiment(text: str, run_audit: bool = False) -> dict:
     """
     Full inference pipeline with sarcasm veto and explainability.
-
-    Decision path:
-    1. Extract hybrid features (emoji + emoticon + word lexicon)
-    2. Apply sarcasm veto — if triggered, skip model inference
-    3. If no veto, run Logistic Regression model
-    4. Pass result to audit service for explainability formatting
     """
     global model, tfidf
 
@@ -113,7 +107,7 @@ def predict_sentiment(text: str, run_audit: bool = False) -> dict:
     numeric_vec = np.array([[e_pos, e_neg, w_pos, w_neg]])
     features    = cast(csr_matrix, hstack([text_vec, numeric_vec]).tocsr())
 
-    # 3. Sarcasm Veto — applied before model inference
+    # 3. Sarcasm Veto
     is_veto, veto_prediction, veto_probs = _apply_sarcasm_veto(e_neg, e_pos, w_pos)
 
     if is_veto:
@@ -123,7 +117,11 @@ def predict_sentiment(text: str, run_audit: bool = False) -> dict:
         probs      = model.predict_proba(features)[0]
         prediction = int(model.predict(features)[0])
 
-    # 4. Delegate explainability to audit service
+    # --- Determine confidence and ambiguity here! ---
+    confidence = float(np.max(probs))
+    entropy_flag = "High Ambiguity" if confidence < AMBIGUITY_THRESHOLD else "Clear Signal"
+
+    # 4. Delegate explainability to audit service (pass the new flags in)
     return explain_prediction(
         text=text,
         prediction=prediction,
@@ -132,6 +130,8 @@ def predict_sentiment(text: str, run_audit: bool = False) -> dict:
         model=model,
         tfidf=tfidf,
         is_veto=is_veto,
+        confidence=confidence,      
+        entropy_flag=entropy_flag   
     )
 
 # -------------------------------------------------------------------

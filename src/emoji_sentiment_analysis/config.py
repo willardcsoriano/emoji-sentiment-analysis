@@ -56,6 +56,7 @@ PROJ_ROOT = REPO_ROOT
 SEED: int = int(os.getenv("SEED", "42"))
 TEXT_COL: str = os.getenv("TEXT_COL", "text")
 TARGET_COL: str = os.getenv("TARGET_COL", "label")
+AMBIGUITY_THRESHOLD: float = float(os.getenv("AMBIGUITY_THRESHOLD", "0.70")) 
 
 # ---------------------------------------------------------------------
 # Directory Bootstrapping

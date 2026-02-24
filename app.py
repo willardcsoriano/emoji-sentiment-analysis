@@ -3,8 +3,6 @@
 import os
 import joblib
 import uvicorn
-import numpy as np
-import scipy.sparse as sp
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
@@ -12,8 +10,7 @@ from fastapi.templating import Jinja2Templates
 
 # Modular Imports
 from emoji_sentiment_analysis.config import MODELS_DIR
-# Corrected import to match your features.py
-from emoji_sentiment_analysis.features import extract_emoji_polarity_features
+from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,9 +25,11 @@ async def lifespan(app: FastAPI):
         if not vectorizer_path.exists():
             print(f"❌ CRITICAL ERROR: Vectorizer missing at path -> {vectorizer_path}")
             
+        # We load them into state, though predict_sentiment likely handles its own loading,
+        # keeping this here ensures artifacts are present and readable on boot.
         app.state.model = joblib.load(model_path)
         app.state.vectorizer = joblib.load(vectorizer_path)
-        print(f"✅ Production artifacts loaded successfully from {MODELS_DIR}")
+        print(f"✅ Production artifacts verified and loaded from {MODELS_DIR}")
     except Exception as e:
         print(f"❌ Startup Error: {e}")
     yield
@@ -52,55 +51,23 @@ async def home(request: Request):
 
 @app.post("/predict-ui", response_class=HTMLResponse)
 async def predict_ui(request: Request, text: str = Form(...)):
-    model = request.app.state.model
-    vectorizer = request.app.state.vectorizer
+    """
+    Unified Prediction Route:
+    Uses the master logic from predict_sentiment to ensure parity with main.py
+    """
+    # 1. Execute Master Logic
+    result = predict_sentiment(text)
 
-    # 1. Standard TF-IDF Transform (gets the 1265 text features)
-    text_features = vectorizer.transform([text])
-
-    # 2. Calculate the 4 custom Hybrid Features using YOUR function
-    # Returns: (total_pos_signal, total_neg_signal, pos_word, neg_word)
-    e_pos, e_neg, w_pos, w_neg = extract_emoji_polarity_features(text)
+    # 2. Sync UI-specific keys
+    # Ensure 'prediction_int' exists for your HTML's CSS classes
+    result["prediction_int"] = 1 if result["prediction"] == "Positive" else 0
     
-    hybrid_signals = sp.csr_matrix([[e_pos, e_neg, w_pos, w_neg]])
+    # Ensure 'entropy_flag' exists (Safety check in case config/audit fails)
+    if "entropy_flag" not in result:
+        from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD
+        result["entropy_flag"] = "High Ambiguity" if result["confidence"] < AMBIGUITY_THRESHOLD else "Clear Signal"
 
-    # 3. Combine them: 1265 + 4 = 1269 total features
-    final_features = sp.hstack([text_features, hybrid_signals])
-
-    # 4. Prediction Logic
-    prediction_int = int(model.predict(final_features)[0])
-    probs = model.predict_proba(final_features)[0]
-    confidence = float(max(probs))
-
-    # 5. Logic Breakdown (Top 6 Drivers) - This powers your UI!
-    text_feature_names = list(vectorizer.get_feature_names_out())
-    hybrid_feature_names = ["emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"]
-    all_feature_names = text_feature_names + hybrid_feature_names
-    
-    coefs = model.coef_[0]
-    
-    # Map nonzero features in this specific text to their weights
-    nonzero_indices = final_features.nonzero()[1]
-    feature_impacts = []
-    for idx in nonzero_indices:
-        feature_impacts.append({
-            "token": all_feature_names[idx],
-            "weight": float(coefs[idx])
-        })
-
-    # Sort by absolute impact (strongest signals first)
-    top_drivers = sorted(feature_impacts, key=lambda x: abs(x["weight"]), reverse=True)[:6]
-
-    # 6. Construct the Result object the HTML expects
-    result = {
-        "raw_text": text,
-        "prediction": "Positive" if prediction_int == 1 else "Negative",
-        "confidence": confidence,
-        "prediction_int": prediction_int,
-        "entropy_flag": "High Ambiguity" if abs(probs[0] - probs[1]) < 0.20 else "Clear Signal",
-        "top_drivers": top_drivers
-    }
-
+    # 3. Final Return (Only one return at the end!)
     return templates.TemplateResponse(
         "components/prediction_result.html", 
         {"request": request, "result": result}
@@ -108,4 +75,5 @@ async def predict_ui(request: Request, text: str = Form(...)):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
+    # Using 0.0.0.0 for Cloud Run compatibility
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
