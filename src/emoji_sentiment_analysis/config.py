@@ -8,20 +8,27 @@ from dotenv import load_dotenv
 from loguru import logger
 
 # ---------------------------------------------------------------------
-# Project Root Resolution
+# Project Root Resolution (Docker-Proofed)
 # ---------------------------------------------------------------------
-# __file__ is src/emoji_sentiment_analysis/config.py
-INTERNAL_PACKAGE_DIR: Path = Path(__file__).resolve().parent
-SRC_ROOT: Path = INTERNAL_PACKAGE_DIR.parent
-REPO_ROOT: Path = SRC_ROOT.parent
+# Check if we are running inside Cloud Run or a Docker container
+IS_DOCKER = os.environ.get('K_SERVICE') is not None or os.path.exists('/.dockerenv')
 
-# Load environment variables from the REPO_ROOT (where .env lives)
+if IS_DOCKER:
+    # In Docker, we enforce the explicit absolute paths based on WORKDIR /app
+    REPO_ROOT: Path = Path("/app")
+    SRC_ROOT: Path = REPO_ROOT / "src"
+else:
+    # Locally, resolve dynamically based on where this file lives
+    INTERNAL_PACKAGE_DIR: Path = Path(__file__).resolve().parent
+    SRC_ROOT: Path = INTERNAL_PACKAGE_DIR.parent
+    REPO_ROOT: Path = SRC_ROOT.parent
+
+# Load environment variables
 load_dotenv(dotenv_path=REPO_ROOT / ".env")
 
 # ---------------------------------------------------------------------
-# Data & Model Directories (Corrected to point INSIDE src/)
+# Data & Model Directories
 # ---------------------------------------------------------------------
-# Based on your 'tree', data and models are subdirectories of 'src'
 DATA_DIR: Path = SRC_ROOT / "data"
 MODELS_DIR: Path = SRC_ROOT / "models"
 
@@ -34,14 +41,13 @@ LOGS_DIR: Path = DATA_DIR / "logs"
 MODEL_ARTIFACTS_DIR: Path = MODELS_DIR / "artifacts"
 
 # ---------------------------------------------------------------------
-# Reporting, Notebooks, and Scripts (Inside SRC_ROOT)
+# Reporting, Notebooks, and Scripts
 # ---------------------------------------------------------------------
 REPORTS_DIR: Path = SRC_ROOT / "reports" 
 FIGURES_DIR: Path = REPORTS_DIR / "figures"
 NOTEBOOKS_DIR: Path = SRC_ROOT / "notebooks"
 SCRIPTS_DIR: Path = SRC_ROOT / "scripts"
 
-# Maintain compatibility
 PROJ_ROOT = REPO_ROOT 
 
 # ---------------------------------------------------------------------
@@ -57,14 +63,9 @@ TARGET_COL: str = os.getenv("TARGET_COL", "label")
 def ensure_dirs() -> None:
     """Create the standard project directory structure if missing."""
     dirs = [
-        RAW_DATA_DIR,
-        INTERIM_DATA_DIR,
-        PROCESSED_DATA_DIR,
-        EXTERNAL_DATA_DIR,
-        LOGS_DIR,
-        MODELS_DIR,
-        MODEL_ARTIFACTS_DIR,
-        FIGURES_DIR,
+        RAW_DATA_DIR, INTERIM_DATA_DIR, PROCESSED_DATA_DIR,
+        EXTERNAL_DATA_DIR, LOGS_DIR, MODELS_DIR,
+        MODEL_ARTIFACTS_DIR, FIGURES_DIR,
     ]
     for d in dirs:
         d.mkdir(parents=True, exist_ok=True)
@@ -81,23 +82,9 @@ def init_logging(use_tqdm: bool = True) -> None:
 # Public API
 # ---------------------------------------------------------------------
 __all__ = [
-    "PROJ_ROOT",
-    "SRC_ROOT",
-    "DATA_DIR",
-    "RAW_DATA_DIR",
-    "INTERIM_DATA_DIR",
-    "PROCESSED_DATA_DIR",
-    "EXTERNAL_DATA_DIR",
-    "LOGS_DIR",
-    "MODELS_DIR",
-    "MODEL_ARTIFACTS_DIR",
-    "REPORTS_DIR",
-    "FIGURES_DIR",
-    "NOTEBOOKS_DIR",
-    "SCRIPTS_DIR",
-    "SEED",
-    "TEXT_COL",
-    "TARGET_COL",
-    "ensure_dirs",
-    "init_logging",
+    "PROJ_ROOT", "SRC_ROOT", "DATA_DIR", "RAW_DATA_DIR", 
+    "INTERIM_DATA_DIR", "PROCESSED_DATA_DIR", "EXTERNAL_DATA_DIR", 
+    "LOGS_DIR", "MODELS_DIR", "MODEL_ARTIFACTS_DIR", "REPORTS_DIR", 
+    "FIGURES_DIR", "NOTEBOOKS_DIR", "SCRIPTS_DIR", "SEED", 
+    "TEXT_COL", "TARGET_COL", "ensure_dirs", "init_logging",
 ]

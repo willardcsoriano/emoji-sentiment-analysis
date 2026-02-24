@@ -20,10 +20,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # 3. Copy the entire project
 COPY . .
 
-# 4. Install the local project
-# Installing the current directory ensures all imports in src/ work
-RUN pip install --no-cache-dir .
+# 4. Install the local project in EDITABLE mode
+# This prevents Python from moving your config.py to site-packages, keeping paths intact
+RUN pip install --no-cache-dir -e .
 
 # 5. Execute the application
-# Point to app:app because app.py is in your root directory
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT}"]
+# We added --log-level debug so Cloud Run shows explicit startup errors if they happen
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT} --log-level debug"]
