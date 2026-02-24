@@ -2,15 +2,24 @@
 
 ## Dependencies
 
-### Update requirements.lock 
+### Update requirements.txt 
 ```bash
-python -m pip freeze > requirements.lock
+# 1. Generate the standard freeze
+python -m pip freeze > requirements.txt
 ```
 
-### Update requirements.txt with top-level packages only
+
+
 ```bash
-python -m pip list --format=freeze --not-required | findstr /V "pip setuptools wheel" > requirements.txt 
+# 2. Scrub the "build-killers" (for Linux deployment env)
+(Get-Content requirements.txt) | Where-Object { $_ -notmatch 'pywinpty|win32|debugpy|jupyter|notebook|ipython|-e git' } | Set-Content requirements.txt
 ```
+
+
+
+
+
+
 
 ### Install dependencies
 ```bash
