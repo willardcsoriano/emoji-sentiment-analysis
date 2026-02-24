@@ -19,10 +19,10 @@ Design rules:
 
     <div class="flex flex-col items-center mb-10 text-center space-y-2">
         <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">
-            Signal Interpretation Key
+            Engine Output Decoder
         </h3>
         <p class="text-[11px] text-slate-500 max-w-sm">
-            How the Hybrid Engine synthesizes linguistic patterns with auxiliary symbolic markers.
+            Understanding the weights, markers, and logic thresholds driving the inference result.
         </p>
     </div>
     
@@ -30,44 +30,12 @@ Design rules:
 
         <div class="flex gap-5">
             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                🎭
+                🏷️
             </div>
             <div class="space-y-1.5">
-                <div class="flex items-center gap-2">
-                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Symbolic Anchors</h4>
-                    <span class="px-1.5 py-0.5 rounded bg-blue-100 text-[8px] font-black text-blue-700 uppercase">High Reliability</span>
-                </div>
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Classification</h4>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    Signals derived from the <strong>Emoji Polarity Lexicon</strong>. These act as deterministic anchors, providing non-verbal context that stabilizes sentiment in short-form text.
-                </p>
-            </div>
-        </div>
-
-        <div class="flex gap-5">
-            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                📖
-            </div>
-            <div class="space-y-1.5">
-                <div class="flex items-center gap-2">
-                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Linguistic Texture</h4>
-                    <span class="px-1.5 py-0.5 rounded bg-slate-200 text-[8px] font-black text-slate-600 uppercase">Contextual</span>
-                </div>
-                <p class="text-[11px] leading-relaxed text-slate-500">
-                    Word and bigram features processed via <strong>TF-IDF vectorization</strong>. This captures the primary semantic intent and grammatical sentiment of the message.
-                </p>
-            </div>
-        </div>
-
-        <div class="flex gap-5">
-            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
-                ⚖️
-            </div>
-            <div class="space-y-1.5">
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Feature Fusion</h4>
-                <p class="text-[11px] leading-relaxed text-slate-500">
-                    The model calculates the <strong>proportional contribution</strong> of every feature, shifting the probability toward 
-                    <span class="text-emerald-600 font-bold">Positive (+)</span> or 
-                    <span class="text-rose-600 font-bold">Negative (-)</span> based on learned weights.
+                    The binary sentiment target: <span class="text-emerald-600 font-bold">Positive</span> or <span class="text-rose-600 font-bold">Negative</span>. This is the final decision synthesized from linguistic and symbolic features.
                 </p>
             </div>
         </div>
@@ -77,9 +45,36 @@ Design rules:
                 🎯
             </div>
             <div class="space-y-1.5">
-                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Confidence Logic</h4>
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Confidence Score</h4>
                 <p class="text-[11px] leading-relaxed text-slate-500">
-                    Final certainty is determined by the <strong>probability spread</strong>. Scores near 0.50 indicate balanced or ambiguous signals that require deeper linguistic context.
+                    A probability percentage indicating the model's mathematical certainty. Scores are influenced by the strength and consistency of the detected signal.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                ⚖️
+            </div>
+            <div class="space-y-1.5">
+                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Neural Drivers</h4>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    The top features that shifted the result. Each driver has a weight (numerical impact) and a rank: 
+                    <span class="text-slate-800 font-bold italic">Critical, Strong, or Minor</span>.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-xl">
+                📡
+            </div>
+            <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Signal Stability</h4>
+                </div>
+                <p class="text-[11px] leading-relaxed text-slate-500">
+                    <span class="text-amber-600 font-bold">High Ambiguity</span> triggers when Confidence falls below 70%. It indicates conflicting linguistic markers or purely neutral text.
                 </p>
             </div>
         </div>

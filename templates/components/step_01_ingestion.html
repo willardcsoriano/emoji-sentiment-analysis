@@ -3,52 +3,119 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        The pipeline initiates with an <strong>investigative ingestion pass</strong> of two 
-        complementary streams. Rather than a simple bulk load, this stage validates the 
-        structural integrity of the raw corpora—identifying encoding artifacts and 
-        redundant metadata before establishing a definitive data contract.
+        The pipeline initiates with an <strong>investigative ingestion pass</strong> of two
+        complementary data streams. Rather than a simple bulk load, this stage validates the
+        structural integrity of the raw corpora — identifying redundant metadata and
+        non-standard column conventions before establishing a definitive data contract
+        for all downstream processing.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm transition-hover hover:border-blue-300">
+        <!-- Dataset 1 -->
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
             <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 mb-3">
                 Supervised Corpus
             </h4>
             <div class="space-y-2">
-                <p class="text-xs font-bold text-slate-800">1k_data_emoji_tweets.csv</p>
+                <p class="text-xs font-bold text-slate-800 font-mono">
+                    1k_data_emoji_tweets_senti_posneg.csv
+                </p>
                 <ul class="text-[11px] space-y-1 text-slate-500 list-disc list-inside">
                     <li>1,000 labeled social text samples</li>
-                    <li>Embedded UTF-8 emoji tokens</li>
-                    <li>Binary sentiment targets</li>
+                    <li>Embedded UTF-8 emoji tokens preserved in-place</li>
+                    <li>Binary sentiment targets (0 = negative, 1 = positive)</li>
                 </ul>
             </div>
         </div>
 
-        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm transition-hover hover:border-blue-300">
+        <!-- Dataset 2 -->
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
             <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 mb-3">
-                Knowledge Base
+                Emoji Reference Table
             </h4>
             <div class="space-y-2">
-                <p class="text-xs font-bold text-slate-800">15_emoticon_data.csv</p>
+                <p class="text-xs font-bold text-slate-800 font-mono">
+                    15_emoticon_data.csv
+                </p>
                 <ul class="text-[11px] space-y-1 text-slate-500 list-disc list-inside">
-                    <li>Unicode metadata & annotations</li>
-                    <li>Cross-referenced polarity mapping</li>
-                    <li>Fixed-reference sentiment anchor</li>
+                    <li>16 entries — Unicode codepoints &amp; canonical names</li>
+                    <li>Structural metadata only — no polarity scores encoded</li>
+                    <li>Used downstream as an emoji coverage reference</li>
                 </ul>
             </div>
         </div>
 
     </div>
 
+    <!-- Schema snapshot -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+        <div class="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+            <div class="px-4 py-2 border-b border-slate-200 bg-slate-100">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    Raw Schema — Tweets
+                </p>
+            </div>
+            <div class="px-4 py-3 space-y-1">
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-red-400 line-through">Unnamed: 0</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="text-slate-400 italic">dropped</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-amber-500 line-through">post</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="font-mono text-green-600">text</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-amber-500 line-through">sentiment</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="font-mono text-green-600">label</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+            <div class="px-4 py-2 border-b border-slate-200 bg-slate-100">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    Raw Schema — Emoji Ref
+                </p>
+            </div>
+            <div class="px-4 py-3 space-y-1">
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-red-400 line-through">Unnamed: 0</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="text-slate-400 italic">dropped</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-slate-500">Emoji</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="font-mono text-green-600">emoji</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-mono text-slate-500">Unicode codepoint</span>
+                    <span class="text-slate-300">→</span>
+                    <span class="font-mono text-green-600">unicode_codepoint</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Investigation result -->
     <div class="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">
         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-            Initial Investigation Results
+            Investigation Output
         </p>
         <p class="text-xs text-slate-500 leading-relaxed italic">
-            "Ingestion identified redundant <code>Unnamed: 0</code> indices and non-standard 
-            <code>post/sentiment</code> naming conventions. These findings served as the 
-            direct requirements for the <code>dataset.py</code> standardization script."
+            "Ingestion identified redundant <code class="not-italic font-mono text-slate-600">Unnamed: 0</code> indices
+            and non-standard <code class="not-italic font-mono text-slate-600">post</code> /
+            <code class="not-italic font-mono text-slate-600">sentiment</code> column naming.
+            These findings served as the direct requirements for the
+            <code class="not-italic font-mono text-slate-600">dataset.py</code> standardisation script
+            and established the read-only contract: all downstream notebooks consume
+            from <code class="not-italic font-mono text-slate-600">data/processed/</code> only."
         </p>
     </div>
 

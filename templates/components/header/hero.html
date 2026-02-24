@@ -1,16 +1,5 @@
 <!-- templates/components/hero.html -->
 
-<!--
-Hero Component
-Presentational marketing header for the inference demo.
-
-Accessibility + Interaction rules:
-- Must remain non-interactive.
-- Must never intercept pointer or keyboard events.
-- All elements are decorative or informational only.
-- Interactive controls live in downstream input components.
--->
-
 <div class="text-center space-y-6 pt-4 sm:pt-8 pointer-events-none">
 
     <div
@@ -22,29 +11,26 @@ Accessibility + Interaction rules:
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
         </span>
-        Stateless Inference Active
+        Live Model Inference
     </div>
 
     <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-slate-900 leading-none max-w-4xl mx-auto">
-        Hybrid Emoji-Aware
+        Emoji-Aware
         <span class="text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-700">
-            Sentiment Engine
+            Sentiment Classification
         </span>
     </h1>
 
     <p class="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium px-4">
-        A specialized sentiment engine designed for social media text. 
-        By combining <strong>standard text analysis</strong> with a 
-        <span class="text-slate-900 underline decoration-blue-500/30 decoration-2 underline-offset-4">
-            dedicated emoji reference system
-        </span>, 
-        the pipeline captures emotional nuance that traditional tools often miss.
+        An interpretable machine learning model for short-form text. 
+        By integrating statistical text representations with engineered emoji polarity signals, 
+        the system captures emotional nuance that conventional token-based approaches often overlook.
     </p>
 
     <div class="space-y-2">
         <p class="text-sm text-slate-600 max-w-xl mx-auto font-medium">
-            Process short-form text to trigger the 
-            <span class="text-slate-800 font-bold italic">Emoji-Aware Inference Pipeline</span>.
+            Submit text below to execute the full <span class="text-slate-800 font-bold italic">
+            Emoji-Aware Inference Pipeline</span>.
         </p>
         <div class="flex items-center justify-center gap-4 text-[10px] uppercase tracking-widest text-slate-500 font-black">
             <span>Enter → Run Inference</span>

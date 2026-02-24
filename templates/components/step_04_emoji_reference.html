@@ -3,37 +3,105 @@
 <div class="space-y-6">
 
     <p class="text-sm text-slate-600 leading-relaxed">
-        Embedded emojis are treated as high-signal auxiliary features. Rather than 
-        relying on implicit text embeddings alone, the pipeline extracts these tokens 
-        and references an external <strong>polarity lexicon</strong> to generate 
-        discrete sentiment signals (+1, 0, -1) that augment the primary text-only model.
+        Before committing to any emoji feature design, the pipeline runs a
+        <strong>controlled ablation</strong> — establishing a text-only baseline,
+        then testing three emoji feature types incrementally. Only features that
+        demonstrably improve on the baseline are retained.
     </p>
 
+    <!-- Ablation results table -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Feature Ablation — Validation F1
+            </p>
+        </div>
+        <div class="divide-y divide-slate-100">
+
+            <div class="flex items-center justify-between px-5 py-3">
+                <div>
+                    <p class="text-xs font-bold text-slate-700">Text Only (Baseline)</p>
+                    <p class="text-[11px] text-slate-400">TF-IDF bigrams, 1,265 features</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-slate-800">0.796</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest">Reference</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-3 bg-red-50/40">
+                <div>
+                    <p class="text-xs font-bold text-slate-700">+ Emoji Presence</p>
+                    <p class="text-[11px] text-slate-400">Binary has_emoji flag</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-red-500">0.775</p>
+                    <p class="text-[10px] text-red-400 uppercase tracking-widest">−0.021 ✕ Rejected</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-3 bg-red-50/40">
+                <div>
+                    <p class="text-xs font-bold text-slate-700">+ Emoji Count</p>
+                    <p class="text-[11px] text-slate-400">Raw emoji frequency per tweet</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-red-500">0.785</p>
+                    <p class="text-[10px] text-red-400 uppercase tracking-widest">−0.011 ✕ Rejected</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-3 bg-emerald-50/40">
+                <div>
+                    <p class="text-xs font-bold text-slate-700">+ Emoji Polarity Counts</p>
+                    <p class="text-[11px] text-slate-400">Separate pos / neg counts via curated lexicon</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-emerald-600">0.8235</p>
+                    <p class="text-[10px] text-emerald-500 uppercase tracking-widest">+0.027 ✓ Accepted</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Code block — correct implementation -->
     <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner border border-slate-800/50">
 
         <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
             <span class="text-slate-500 tracking-widest uppercase text-[10px]">
-                Auxiliary Feature Pipeline
+                Polarity Feature Construction
             </span>
-            <span class="text-blue-500">polarity.extraction</span>
+            <span class="text-blue-400">NB 3.0 — §8</span>
         </div>
 
         <div class="space-y-2 text-slate-300">
-            <p><span class="text-slate-500"># 1. Isolate known tokens from text</span></p>
-            <p>detected = extract_known_emojis(tweet_text) <span class="text-slate-500">→ ["😊"]</span></p>
+            <p><span class="text-slate-500"># Manually defined polarity sets (label-agnostic)</span></p>
+            <p>POSITIVE_EMOJIS = <span class="text-emerald-400">{"😍", "😊", "😁", "😘"}</span></p>
+            <p>NEGATIVE_EMOJIS = <span class="text-red-400">{"😭", "😧"}</span></p>
 
-            <p class="pt-2"><span class="text-slate-500"># 2. Reference curated lexicon (emoji_reference_clean.csv)</span></p>
-            <p>val = lexicon.get("😊") <span class="text-slate-500">→ "Positive"</span></p>
+            <p class="pt-2"><span class="text-slate-500"># Count matches per polarity class</span></p>
+            <p>pos = <span class="text-blue-300">sum</span>(1 for c in text if c in POSITIVE_EMOJIS)</p>
+            <p>neg = <span class="text-blue-300">sum</span>(1 for c in text if c in NEGATIVE_EMOJIS)</p>
 
-            <p class="pt-2"><span class="text-slate-500"># 3. Append to feature vector (hstack)</span></p>
-            <p>X_combined = hstack([text_tfidf, pos_count_feature])</p>
+            <p class="pt-2"><span class="text-slate-500"># Stack with TF-IDF → final feature matrix</span></p>
+            <p>X_combined = <span class="text-blue-300">hstack</span>([X_tfidf, [[pos, neg]]])</p>
+            <p class="text-slate-500">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↑ 1,265 dims + 2 dims = 1,267</p>
         </div>
 
     </div>
 
-    <p class="text-xs text-slate-400 italic text-center px-4">
-        By deriving polarity-weighted counts, the model captures non-verbal sentiment intensity 
-        without introducing the noise of unverified characters.
-    </p>
+    <!-- Key insight -->
+    <div class="bg-slate-50 border-l-4 border-amber-400 pl-4 py-3">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
+            Key Finding
+        </p>
+        <p class="text-xs text-slate-600 italic leading-relaxed">
+            "Feature semantics matter more than feature inclusion. Undirected emoji signals
+            — presence or raw count — introduce more noise than signal. Only when
+            direction is resolved (positive vs. negative) do emoji features improve
+            on the text-only baseline. This distinction drives every decision downstream."
+        </p>
+    </div>
 
 </div>

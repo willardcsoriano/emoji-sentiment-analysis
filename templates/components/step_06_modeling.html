@@ -1,46 +1,114 @@
 <!-- templates/components/step_06_modeling.html -->
 
-<div class="space-y-8 text-slate-600">
+<div class="space-y-6 text-slate-600">
 
-    <div class="grid grid-cols-1 gap-4">
-        <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
-            <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-2">
-                Classification Logic
-            </h4>
+    <p class="text-sm leading-relaxed">
+        The production classifier is <strong>Logistic Regression</strong> — selected
+        for interpretability and stability on a 1,000-sample dataset. Model selection
+        was closed in NB 3.0; this stage trains on the finalised feature matrix,
+        gates on a hard performance benchmark, and serialises the artifacts.
+    </p>
 
-            <p class="text-xs leading-relaxed">
-                The pipeline utilizes <strong>Logistic Regression</strong> as the primary classifier. 
-                This decision prioritizes <strong>interpretability over complexity</strong>, 
-                ensuring that every sentiment prediction can be mathematically traced back 
-                to specific textual tokens and emoji signals.
+    <!-- Performance results -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Validation Performance — 200 Held-Out Samples
             </p>
         </div>
+        <div class="grid grid-cols-2 divide-x divide-slate-100">
+            <div class="p-5 text-center">
+                <p class="text-3xl font-black text-slate-800">0.8402</p>
+                <p class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">F1 Score ✓ Benchmark Met</p>
+            </div>
+            <div class="p-5 text-center">
+                <p class="text-3xl font-black text-slate-800">82.5%</p>
+                <p class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Accuracy</p>
+            </div>
+        </div>
+        <!-- Class asymmetry -->
+        <div class="px-5 pb-4 pt-1 border-t border-slate-100 grid grid-cols-2 gap-3">
+            <div class="p-3 bg-slate-50 rounded-lg">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Negative Class</p>
+                <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Precision</span>
+                    <span class="font-mono font-bold text-slate-800">0.90</span>
+                </div>
+                <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Recall</span>
+                    <span class="font-mono font-bold text-amber-600">0.73</span>
+                </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Positive Class</p>
+                <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Precision</span>
+                    <span class="font-mono font-bold text-amber-600">0.77</span>
+                </div>
+                <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Recall</span>
+                    <span class="font-mono font-bold text-slate-800">0.92</span>
+                </div>
+            </div>
+        </div>
+        <p class="text-[10px] text-slate-400 italic px-5 pb-3">
+            27 false positives vs 8 false negatives — the model is generous with positive
+            predictions. The sarcasm veto in <code class="font-mono">predict.py</code>
+            directly targets this failure mode.
+        </p>
     </div>
 
-    <div class="space-y-3">
-        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-            Learned Sentiment Drivers
-        </p>
-        <div class="grid grid-cols-2 gap-3">
-            <div class="px-4 py-3 bg-blue-50/50 rounded-xl border border-blue-100">
-                <span class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Pos. Magnitude</span>
-                <span class="text-sm font-mono text-blue-700">+1.53 (😊)</span>
+    <!-- Coefficient inspection — the surprising finding -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Learned Feature Weights — Surprising Result
+            </p>
+        </div>
+        <div class="divide-y divide-slate-100">
+            <div class="flex items-center justify-between px-5 py-3">
+                <div>
+                    <p class="text-xs font-bold text-slate-700 font-mono">word_neg_count</p>
+                    <p class="text-[11px] text-slate-400">Word lexicon — negative hits</p>
+                </div>
+                <span class="text-sm font-black font-mono text-red-600">−4.079</span>
             </div>
-            <div class="px-4 py-3 bg-rose-50/50 rounded-xl border border-rose-100">
-                <span class="block text-[10px] text-rose-400 uppercase font-bold mb-1">Neg. Magnitude</span>
-                <span class="text-sm font-mono text-rose-700">-2.57 (😭)</span>
+            <div class="flex items-center justify-between px-5 py-3">
+                <div>
+                    <p class="text-xs font-bold text-slate-700 font-mono">word_pos_count</p>
+                    <p class="text-[11px] text-slate-400">Word lexicon — positive hits</p>
+                </div>
+                <span class="text-sm font-black font-mono text-emerald-600">+0.856</span>
+            </div>
+            <div class="flex items-center justify-between px-5 py-3">
+                <div>
+                    <p class="text-xs font-bold text-slate-700 font-mono">emoji_pos_count</p>
+                    <p class="text-[11px] text-slate-400">Emoji polarity — positive</p>
+                </div>
+                <span class="text-sm font-black font-mono text-emerald-500">+0.148</span>
+            </div>
+            <div class="flex items-center justify-between px-5 py-3">
+                <div>
+                    <p class="text-xs font-bold text-slate-700 font-mono">emoji_neg_count</p>
+                    <p class="text-[11px] text-slate-400">Emoji polarity — negative</p>
+                </div>
+                <span class="text-sm font-black font-mono text-red-400">−0.049</span>
             </div>
         </div>
     </div>
 
-    <div class="bg-slate-900 p-5 rounded-2xl space-y-3 shadow-lg">
-        <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">
-            Stability & Robustness
+    <!-- Key architectural insight -->
+    <div class="bg-slate-50 border-l-4 border-amber-400 pl-4 py-3">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
+            Architectural Implication
         </p>
-        <p class="text-xs text-slate-300 italic leading-relaxed">
-            "By selecting a linear model, I achieved 88.2% accuracy while maintaining 
-            the ability to perform counterfactual testing—proving that emoji features 
-            shift 9.6% of predictions that would have been missed by text alone."
+        <p class="text-xs text-slate-600 italic leading-relaxed">
+            "The word lexicon is the single strongest feature in the model at −4.08,
+            outweighing every TF-IDF unigram. Meanwhile, emoji coefficients are
+            surprisingly weak (+0.15, −0.05) — the model treats word signal as
+            more reliable than emoji signal. This is precisely why the sarcasm veto
+            must exist as a <strong class='not-italic font-black'>deterministic rule</strong>
+            rather than a learned weight: the model alone cannot resolve emoji-text conflict."
         </p>
     </div>
 

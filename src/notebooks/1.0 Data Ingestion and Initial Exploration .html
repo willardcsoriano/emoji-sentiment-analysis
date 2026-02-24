@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>1.0-data-ingestion-and-initial-exploration</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>1.0 Data Ingestion and Initial Exploration </title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7517,7 +7517,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="1.0-Data-Ingestion-and-Initial-Exploration">1.0 Data Ingestion and Initial Exploration<a class="anchor-link" href="#1.0-Data-Ingestion-and-Initial-Exploration">¶</a></h1><h2 id="%F0%9F%93%91-Notebook-Overview">📑 Notebook Overview<a class="anchor-link" href="#%F0%9F%93%91-Notebook-Overview">¶</a></h2><p>This notebook performs an <strong>initial exploration of raw emoji sentiment datasets</strong> to guide data cleaning and preprocessing.</p>
+<h1 id="1.0-Data-Ingestion-and-Initial-Exploration">1.0 Data Ingestion and Initial Exploration<a class="anchor-link" href="#1.0-Data-Ingestion-and-Initial-Exploration">¶</a></h1><h2 id="Notebook-Overview">Notebook Overview<a class="anchor-link" href="#Notebook-Overview">¶</a></h2><p>This notebook performs an <strong>initial exploration of raw emoji sentiment datasets</strong> to guide data cleaning and preprocessing.</p>
 <p><strong>Objectives:</strong></p>
 <ul>
 <li>Ingest and inspect raw data files.</li>
@@ -7547,13 +7547,36 @@ to understand their structure and identify any initial issues.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Markdown Title</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Code for Setup and Imports</span>
 
-<span class="c1"># --- 1.0 Data Ingestion and Initial Exploration ---</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="c1"># ### Section 1: Setup and Imports</span>
-<span class="c1"># This notebook is the first investigative pass at the raw data files</span>
-<span class="c1"># to understand their structure and identify any initial issues.</span>
+<span class="c1"># Find the project's root by searching for a known file (like config.py)</span>
+<span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">current_path</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">'emoji_sentiment_analysis'</span> <span class="o">/</span> <span class="s1">'config.py'</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">project_root</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="k">break</span>
+        
+<span class="k">if</span> <span class="n">project_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">"Could not find the project root. Make sure you are inside the repository."</span><span class="p">)</span>
+
+<span class="c1"># Add the project's root directory to the Python path</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">project_root</span><span class="p">))</span>
+
+<span class="c1"># Now, import the config module from the project root</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">project_root</span> <span class="o">/</span> <span class="s1">'emoji_sentiment_analysis'</span><span class="p">))</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">config</span>
+
+<span class="c1"># Access variables via the imported module</span>
+<span class="n">RAW_DATA_DIR</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">RAW_DATA_DIR</span>
+<span class="n">TEXT_COL</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">TEXT_COL</span>
+<span class="n">TARGET_COL</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">TARGET_COL</span>
 </pre></div>
 </div>
 </div>
@@ -7740,7 +7763,7 @@ memory usage: 640.0+ bytes
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="%F0%9F%93%8A-Key-Findings-and-Next-Steps">📊 Key Findings and Next Steps<a class="anchor-link" href="#%F0%9F%93%8A-Key-Findings-and-Next-Steps">¶</a></h3><p><strong>Dataset 1: <code>1k_data_emoji_tweets_senti_posneg.csv</code></strong></p>
+<h3 id="Key-Findings-and-Next-Steps">Key Findings and Next Steps<a class="anchor-link" href="#Key-Findings-and-Next-Steps">¶</a></h3><p><strong>Dataset 1: <code>1k_data_emoji_tweets_senti_posneg.csv</code></strong></p>
 <ul>
 <li>Contains a redundant <code>Unnamed: 0</code> column.</li>
 <li>Columns <code>post</code> and <code>sentiment</code> need renaming to standardized <code>text</code> and <code>label</code>.</li>

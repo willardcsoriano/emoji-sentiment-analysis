@@ -3,41 +3,121 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        The pipeline concludes by consolidating linguistic and symbolic signals into an 
-        immutable feature matrix. Text is transformed via <strong>TF-IDF vectorization</strong>, 
-        while emoji sentiment is injected through discrete <strong>polarity count features</strong> 
-        to capture non-verbal emotional intensity.
+        With the polarity mechanism validated in Step 4, this stage asks how far it
+        can be pushed. Three independent signal sources are engineered, each justified
+        by corpus evidence, and stacked into a single production feature matrix
+        that <code class="font-mono text-xs text-slate-700">features.py</code> implements exactly.
     </p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- Three signal sources -->
+    <div class="space-y-3">
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Textual Signal (Sparse)
-            </h4>
-            <ul class="text-xs space-y-1 text-slate-700">
-                <li>• 1,265 Word & Bigram Features</li>
-                <li>• N-gram Range (1, 2)</li>
-                <li>• Document Frequency Filtering</li>
-            </ul>
+        <!-- Signal 1 -->
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center">1</span>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-800">
+                            Expanded Emoji Polarity
+                        </h4>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed ml-7">
+                        Lexicon expanded from 6 to 193 emojis — closing the 15.2% corpus
+                        coverage gap identified in EDA. Produces
+                        <code class="font-mono text-slate-600">emoji_pos_count</code> and
+                        <code class="font-mono text-slate-600">emoji_neg_count</code>
+                        via character-level lookup.
+                    </p>
+                </div>
+                <div class="text-right shrink-0">
+                    <p class="text-xs font-black text-indigo-600">0.834 F1</p>
+                    <p class="text-[10px] text-slate-400">+0.038 vs baseline</p>
+                </div>
+            </div>
         </div>
 
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
-                Emoji Signal (Dense)
-            </h4>
-            <ul class="text-xs space-y-1 text-slate-700">
-                <li>• <code>emoji_pos_count</code> feature</li>
-                <li>• <code>emoji_neg_count</code> feature</li>
-                <li>• Heuristic polarity mapping</li>
-            </ul>
+        <!-- Signal 2 -->
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center">2</span>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-800">
+                            Emoticon Fallback
+                        </h4>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed ml-7">
+                        Western-style emoticons (<code class="font-mono text-slate-600">:)</code>,
+                        <code class="font-mono text-slate-600">:(</code>, <code class="font-mono text-slate-600">:D</code>)
+                        are invisible to character-level emoji extraction. Substring
+                        matching closes this structural gap with a separate
+                        pos/neg count pair.
+                    </p>
+                </div>
+                <div class="text-right shrink-0">
+                    <p class="text-xs font-black text-indigo-600">0.838 F1</p>
+                    <p class="text-[10px] text-slate-400">+0.042 vs baseline</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signal 3 -->
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center">3</span>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-800">
+                            Word Lexicon
+                        </h4>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed ml-7">
+                        On a 1,000-sample corpus, TF-IDF may underweight low-frequency
+                        but high-signal words. A deterministic lexicon
+                        (<em>happy, love, hate, terrible…</em>) injects stable
+                        priors as <code class="font-mono text-slate-600">word_pos_count</code>
+                        and <code class="font-mono text-slate-600">word_neg_count</code>,
+                        present in 50.1% and 29.0% of tweets respectively.
+                    </p>
+                </div>
+                <div class="text-right shrink-0">
+                    <p class="text-xs font-black text-indigo-600">0.840 F1</p>
+                    <p class="text-[10px] text-slate-400">+0.044 vs baseline</p>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400 border-l-2 border-slate-200 pl-4 py-1">
-        Final dimensionality: 1,267 features. The integration of emoji polarity 
-        achieved a validation F1 score of 0.834, outperforming the text-only baseline.
-    </p>
+    <!-- Final matrix -->
+    <div class="bg-slate-900 rounded-2xl p-5 font-mono text-[11px] shadow-inner border border-slate-800/50">
+        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
+            <span class="text-slate-500 tracking-widest uppercase text-[10px]">Production Feature Matrix</span>
+            <span class="text-blue-400">features.py</span>
+        </div>
+        <div class="space-y-1.5 text-slate-300">
+            <p>X_final = <span class="text-blue-300">hstack</span>([</p>
+            <p class="pl-6">X_tfidf,          <span class="text-slate-500"># 1,265 dims — text bigrams</span></p>
+            <p class="pl-6">emoji_pol,        <span class="text-slate-500"># 2 dims — pos/neg emoji counts (×BOOST)</span></p>
+            <p class="pl-6">emoticon_pol,     <span class="text-slate-500"># 2 dims — pos/neg emoticon counts (×BOOST)</span></p>
+            <p class="pl-6">word_lex,         <span class="text-slate-500"># 2 dims — pos/neg word lexicon counts</span></p>
+            <p>])  <span class="text-slate-500"># → 1,271 total dims</span></p>
+        </div>
+    </div>
+
+    <!-- Result callout -->
+    <div class="bg-slate-50 border-l-4 border-indigo-500 pl-4 py-3">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
+            Authoritative Benchmark
+        </p>
+        <p class="text-xs text-slate-600 italic leading-relaxed">
+            "Each engineering decision produced a measurable, independent gain.
+            The full production configuration — expanded lexicon, emoticon fallback,
+            word lexicon — achieves <strong class='not-italic font-black text-slate-800'>0.840 F1</strong>,
+            a +0.044 improvement over the text-only baseline. This is the performance
+            floor that gates artifact serialisation in the training stage."
+        </p>
+    </div>
 
 </div>

@@ -1,40 +1,156 @@
-<!-- templates\components\step_07_inference.html -->
+<!-- templates/components/step_07_inference.html -->
 
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        The finalized system is encapsulated into a <strong>production inference pipeline</strong>. 
-        By loading "frozen" artifacts, it is guaranteed that live tweets undergo the exact same 
-        transformation sequence—text vectorization and emoji extraction—validated during 
-        model training.
+        The finalised system is encapsulated into a <strong>two-layer inference pipeline</strong>.
+        Frozen artifacts guarantee that every live input undergoes the exact transformation
+        sequence validated during training — followed by a deterministic
+        <strong>veto layer</strong> that overrides the model when emoji-text conflict
+        is detected.
     </p>
 
-    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner border border-slate-800/50">
+    <!-- Two-layer architecture -->
+    <div class="space-y-2">
 
-        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-            <span class="text-slate-500 tracking-widest uppercase text-[10px]">
-                Deployment Blueprint
-            </span>
-            <span class="text-green-500">predict.py</span>
+        <!-- Layer 1 -->
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-start gap-3">
+                <span class="mt-0.5 w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-[10px] font-black flex items-center justify-center shrink-0">1</span>
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-slate-800 mb-1">
+                        Model Layer — Statistical Prediction
+                    </h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Frozen <code class="font-mono text-slate-600">sentiment_model.pkl</code> and
+                        <code class="font-mono text-slate-600">tfidf_vectorizer.pkl</code> reconstruct
+                        the 1,269-feature matrix at inference time. The model returns a probability
+                        estimate and a provisional label.
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div class="space-y-2 text-slate-300">
-            <p><span class="text-slate-500"># 1. Reconstruct prediction environment</span></p>
-            <p>model = load("sentiment_model.pkl")</p>
-            <p>tfidf = load("tfidf_vectorizer.pkl")</p>
+        <!-- Arrow -->
+        <div class="flex justify-center text-slate-300 text-lg">↓</div>
 
-            <p class="pt-2"><span class="text-slate-500"># 2. Transform input (1,267 features)</span></p>
-            <p>X = hstack([tfidf.transform(raw_text), emoji_vec])</p>
-
-            <p class="pt-2"><span class="text-slate-500"># 3. Generate Confidence & Prediction</span></p>
-            <p>result = model.predict_proba(X) <span class="text-slate-500">→ [0.07, 0.93]</span></p>
+        <!-- Layer 2 -->
+        <div class="p-4 bg-white rounded-xl border border-amber-200 shadow-sm">
+            <div class="flex items-start gap-3">
+                <span class="mt-0.5 w-6 h-6 rounded-full bg-amber-100 text-amber-600 text-[10px] font-black flex items-center justify-center shrink-0">2</span>
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-slate-800 mb-1">
+                        Veto Layer — Deterministic Override
+                    </h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        If <code class="font-mono text-slate-600">emoji_neg_count &gt; 0</code> and
+                        the model predicted Positive, the veto fires — overriding to Negative.
+                        A word guard suppresses the veto when positive text overwhelms the emoji signal.
+                        This layer exists because the model's emoji coefficients are too weak
+                        (+0.15, −0.05) to resolve conflict reliably on their own.
+                    </p>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <p class="text-xs italic text-slate-400 border-l-2 border-slate-200 pl-4 py-1">
-        Validation confirms stability across edge cases (empty strings, emoji-only inputs, 
-        and multilingual text) with full audit logging for every inference call.
-    </p>
+    <!-- Code block — correct predict.py blueprint -->
+    <div class="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] leading-relaxed shadow-inner border border-slate-800/50">
+        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <span class="text-slate-500 tracking-widest uppercase text-[10px]">Inference Blueprint</span>
+            <span class="text-green-500">predict.py</span>
+        </div>
+        <div class="space-y-2 text-slate-300">
+            <p><span class="text-slate-500"># 1. Load frozen artifacts</span></p>
+            <p>model = load(<span class="text-amber-300">"sentiment_model.pkl"</span>)</p>
+            <p>tfidf = load(<span class="text-amber-300">"tfidf_vectorizer.pkl"</span>)</p>
+
+            <p class="pt-2"><span class="text-slate-500"># 2. Assemble 1,269-feature matrix</span></p>
+            <p>X = <span class="text-blue-300">hstack</span>([tfidf.transform(text), emoji_pol, word_lex])</p>
+
+            <p class="pt-2"><span class="text-slate-500"># 3. Model prediction</span></p>
+            <p>proba = model.predict_proba(X) <span class="text-slate-500">→ [0.07, 0.93]</span></p>
+
+            <p class="pt-2"><span class="text-slate-500"># 4. Veto check</span></p>
+            <p><span class="text-blue-300">if</span> emoji_neg_count > 0 <span class="text-blue-300">and</span> label == <span class="text-amber-300">"Positive"</span>:</p>
+            <p class="pl-6">label = <span class="text-amber-300">"Negative"</span> <span class="text-slate-500"># unless word guard fires</span></p>
+
+            <p class="pt-2"><span class="text-slate-500"># 5. Return 8-key response</span></p>
+            <p>→ { prediction, confidence, veto_applied,</p>
+            <p class="pl-4">entropy_flag, top_drivers, timestamp, … }</p>
+        </div>
+    </div>
+
+    <!-- Veto validation results -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Veto Verification — End-to-End Validation
+            </p>
+        </div>
+        <div class="divide-y divide-slate-100">
+
+            <div class="flex items-center justify-between px-5 py-2.5">
+                <div>
+                    <p class="text-[11px] font-mono text-slate-700">"i love having bugs 😭"</p>
+                    <p class="text-[10px] text-slate-400">Sarcasm — veto fires</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black text-emerald-600 uppercase">Negative ✓</span>
+                    <p class="text-[10px] font-mono text-slate-400">conf 0.9318</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-2.5">
+                <div>
+                    <p class="text-[11px] font-mono text-slate-700">"this is so beautiful and amazing 😭"</p>
+                    <p class="text-[10px] text-slate-400">Pos-overwhelm — word guard suppresses veto</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black text-emerald-600 uppercase">Positive ✓</span>
+                    <p class="text-[10px] font-mono text-slate-400">conf 0.7478</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-2.5">
+                <div>
+                    <p class="text-[11px] font-mono text-slate-700">"RIP grandma 😭"</p>
+                    <p class="text-[10px] text-slate-400">Genuine sad — veto fires correctly</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black text-emerald-600 uppercase">Negative ✓</span>
+                    <p class="text-[10px] font-mono text-slate-400">conf 0.9318</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-2.5 bg-amber-50/40">
+                <div>
+                    <p class="text-[11px] font-mono text-slate-700">"this is the worst :)"</p>
+                    <p class="text-[10px] text-amber-500">Known limitation — emoticon sarcasm undetected</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black text-amber-500 uppercase">Positive ✗</span>
+                    <p class="text-[10px] font-mono text-slate-400">conf 0.8479</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Closing note -->
+    <div class="bg-slate-50 border-l-4 border-green-500 pl-4 py-3">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
+            Validation Status
+        </p>
+        <p class="text-xs text-slate-600 italic leading-relaxed">
+            "End-to-end validation confirms schema integrity across all prediction
+            categories — 8 keys present in every response, audit trail consistent,
+            veto logic verified on sarcasm and genuine-sad cases. One known limitation
+            remains: emoticon-based sarcasm bypasses the veto since
+            <code class='not-italic font-mono'>:)</code> is invisible to the Unicode
+            emoji extraction pipeline."
+        </p>
+    </div>
 
 </div>

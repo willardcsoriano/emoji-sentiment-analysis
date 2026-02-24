@@ -1,24 +1,5 @@
 <!-- templates/components/data_access/data_access_framing.html -->
 
-<!--
-Data Access — Framing Panel
-Introduces dataset scope, constraints, and engineering implications.
-
-Pipeline position:
-- Precedes schema + download artifacts.
-- Provides methodological context before raw data inspection.
-
-Objectives:
-- Explain why the dataset is intentionally small.
-- Justify modeling strategy choices.
-- Frame emoji + text fusion as a core engineering problem.
-
-Design principles:
-- Narrative-first (research tone vs UI instruction).
-- Compact container to maintain readability.
-- Glassmorphism styling distinguishes it from tabular data blocks.
--->
-
 <div class="max-w-3xl space-y-4 bg-white/70 backdrop-blur rounded-2xl p-6 border border-slate-200 shadow-sm">
 
     <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
@@ -36,11 +17,28 @@ Design principles:
         </p> 
     </div>
         
-    <p class="text-sm text-slate-600 leading-relaxed"> 
-        The core engineering objective is the fusion of dual-channel sentiment signals: 
-        linguistic text and symbolic emojis. By reconciling these distinct modalities 
-        into a unified feature space, the system captures emotional nuance that is 
-        frequently lost in standard tokenization pipelines—proving that even at a 
-        1k-sample scale, targeted feature engineering can drive significant performance gains.
+
+    <p class="text-sm text-slate-600 leading-relaxed">
+        This system was developed within a deliberately constrained data environment. 
+        Rather than relying on massive corpora, the model is trained on a compact, 
+        carefully labeled dataset representative of short-form social media discourse. 
+        This scale foregrounds methodological discipline: feature design, statistical 
+        transparency, and overfitting prevention become central engineering concerns.
     </p>
+
+    <p class="text-sm text-slate-600 leading-relaxed">
+        In low-resource settings, model complexity must be balanced against interpretability. 
+        A linear classification framework was selected to preserve coefficient-level 
+        explainability while maintaining generalization performance. This design ensures 
+        that predictive behavior remains traceable to measurable input signals rather than 
+        opaque parameter interactions.
+    </p>
+
+    <p class="text-sm text-slate-600 leading-relaxed">
+        The primary technical challenge lies in fusing dual sentiment channels: linguistic 
+        structure and symbolic expression. By integrating TF-IDF textual statistics with 
+        engineered emoji polarity features, the pipeline constructs a unified representation 
+        capable of capturing emotional nuance even under data constraints.
+    </p>
+
 </div>

@@ -3,10 +3,11 @@
 <div class="space-y-6 text-slate-600">
 
     <p class="text-sm leading-relaxed">
-        To maintain <strong>semantic parity</strong>, this stage enforces a deterministic 
-        cleaning protocol. Instead of aggressive text transformation, the pipeline focuses on 
-        structural standardization and schema validation—ensuring emojis and raw linguistic 
-        cues remain intact for downstream analysis.
+        Acting on the findings from the ingestion pass, this stage enforces a
+        <strong>deterministic cleaning protocol</strong> with hard validation gates.
+        Rather than aggressive text transformation, the focus is structural
+        standardisation and schema assertion — ensuring emojis and raw linguistic
+        cues remain intact and unmodified for all downstream analysis.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -20,16 +21,20 @@
             </div>
             <ul class="text-[11px] space-y-2 text-slate-600 font-medium">
                 <li class="flex justify-between">
-                    <span>Standardized Schema</span>
-                    <span class="text-slate-400">text, label</span>
+                    <span>Standardised Schema</span>
+                    <span class="font-mono text-slate-400">text, label</span>
                 </li>
                 <li class="flex justify-between">
                     <span>Type Enforcement</span>
-                    <span class="text-slate-400">String, Int</span>
+                    <span class="font-mono text-slate-400">str, int</span>
                 </li>
                 <li class="flex justify-between">
-                    <span>Index Sanitization</span>
-                    <span class="text-slate-400">Reset & Drop</span>
+                    <span>Null Removal</span>
+                    <span class="font-mono text-slate-400">dropna + reset_index</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Ref Table snake_case</span>
+                    <span class="font-mono text-slate-400">emoji, unicode_*</span>
                 </li>
             </ul>
         </div>
@@ -44,27 +49,62 @@
             <ul class="text-[11px] space-y-2 text-slate-600 font-medium">
                 <li class="flex items-center gap-2">
                     <span class="text-emerald-500 text-[10px]">✔</span>
-                    <span>Zero-Loss Emoji Retention</span>
+                    <span>Zero-loss emoji retention — no replacement or collapse</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <span class="text-emerald-500 text-[10px]">✔</span>
-                    <span>No Lowercasing/Trimming</span>
+                    <span>No semantic transforms — raw text preserved exactly</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <span class="text-emerald-500 text-[10px]">✔</span>
-                    <span>Null-Constraint Validation</span>
+                    <span>No modeling assumptions introduced at this stage</span>
                 </li>
             </ul>
         </div>
 
     </div>
 
+    <!-- Validation assertions -->
+    <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+            <div class="w-1.5 h-1.5 rounded-full bg-violet-500"></div>
+            <h4 class="text-xs font-black uppercase tracking-widest text-slate-900">
+                Hard Validation Assertions
+            </h4>
+        </div>
+        <ul class="text-[11px] space-y-2 text-slate-500">
+            <li class="flex items-start gap-2">
+                <span class="font-mono text-violet-400 mt-0.5">assert</span>
+                <span>Schema is exactly <code class="font-mono text-slate-600">["label", "text"]</code></span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="font-mono text-violet-400 mt-0.5">assert</span>
+                <span>All labels are strictly binary — <code class="font-mono text-slate-600">label ∈ {0, 1}</code></span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="font-mono text-violet-400 mt-0.5">assert</span>
+                <span>No empty text fields — <code class="font-mono text-slate-600">len(text) &gt; 0</code> for all rows</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="font-mono text-violet-400 mt-0.5">assert</span>
+                <span>All 16 emoji reference entries are unique — no duplicate emoji characters</span>
+            </li>
+        </ul>
+        <p class="text-[10px] text-slate-400 mt-3 italic">
+            Pipeline halts if any assertion fails — this stage is gated, not advisory.
+        </p>
+    </div>
+
+    <!-- Dataset contract -->
     <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
         <span class="text-slate-400 text-xs mt-0.5">ℹ</span>
-        <p class="text-[11px] text-slate-500 leading-tight">
-            <strong>Dataset Contract:</strong> The output <code>tweets_clean.csv</code> is 
-            treated as an immutable, read-only input for all subsequent feature engineering 
-            and modeling passes.
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+            <strong>Dataset Contract:</strong> Two canonical artifacts are written to
+            <code class="font-mono">data/processed/</code> —
+            <code class="font-mono">tweets_clean.csv</code> (1,000 rows × 2 cols) and
+            <code class="font-mono">emoji_reference_clean.csv</code> (16 rows × 3 cols).
+            Both are treated as immutable, read-only inputs for all subsequent
+            feature engineering and modelling passes. Raw data is never accessed again.
         </p>
     </div>
 

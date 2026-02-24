@@ -1,63 +1,119 @@
-<!-- templates\components\step_03_eda.html -->
+<!-- templates/components/step_03_eda.html -->
 
 <div class="space-y-6">
 
+    <!-- Hero stat -->
     <div class="bg-indigo-600 rounded-2xl p-6 text-white shadow-lg">
-
         <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">
-            Statistical Discovery
+            Emoji Presence Rate
         </p>
-
         <h3 class="text-3xl font-black mb-2">
-            49.3% Signal Prevalence
+            49.3% of Corpus
         </h3>
-
         <p class="text-sm opacity-90 leading-relaxed">
-            Exploratory analysis confirms that nearly half of the corpus leverages 
-            emojis as primary or auxiliary sentiment carriers. While traditional 
-            text-length metrics showed negligible correlation with polarity, 
-            <strong>emoji density</strong> emerged as a statistically significant 
-            marker of emotional intensity.
+            Exploratory analysis confirms that nearly half of all tweets contain at
+            least one emoji — making emoji usage <strong>common, not incidental</strong>.
+            This frequency alone justified proceeding with emoji-aware feature engineering
+            rather than treating symbols as noise.
         </p>
+    </div>
+
+    <!-- Key findings grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2">
+                Label Distribution
+            </p>
+            <p class="text-sm font-black text-slate-800 mb-1">Balanced</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+                Labels are approximately 50/50 positive/negative — emoji–label
+                relationships are not artifacts of class skew.
+            </p>
+        </div>
+
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2">
+                Emoji Distribution
+            </p>
+            <p class="text-sm font-black text-slate-800 mb-1">Bimodal &amp; Sparse</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+                ~505 tweets carry zero emojis; ~465 carry exactly one.
+                Fewer than 5% contain two or more — emojis act as
+                <em>binary anchors</em>, not intensity counters.
+            </p>
+        </div>
+
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2">
+                Label Correlation
+            </p>
+            <p class="text-sm font-black text-slate-800 mb-1">Signal Confirmed</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+                Emoji presence rate differs between positive and negative labels.
+                Positive tweets use emojis at a higher average frequency —
+                consistent with emojis as <em>affective amplifiers</em>.
+            </p>
+        </div>
 
     </div>
 
-    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+    <!-- Coverage gap finding -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
         <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
-            Corpus Insights
+            Coverage Gap — The Critical Finding
         </h4>
-        
-        <div class="space-y-4">
-            <p class="text-sm text-slate-600 leading-relaxed">
-                Analysis revealed that positive sentiment is often expressed with 
-                <strong>higher emoji frequency</strong> compared to negative labels. 
-                This suggests emojis function as <em>affective amplifiers</em>, 
-                clarifying intent in short-form text where linguistic cues may be 
-                ambiguous or sparse.
-            </p>
-            
-            <div class="flex flex-wrap gap-2 pt-2">
-                <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
-                    Balanced Labels
-                </span>
-                <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
-                    Low Redundancy
-                </span>
-                <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
-                    Orthogonal Signal
-                </span>
+        <div class="grid grid-cols-3 gap-4 text-center mb-4">
+            <div>
+                <p class="text-2xl font-black text-slate-800">34</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Unique emojis<br/>in corpus</p>
+            </div>
+            <div>
+                <p class="text-2xl font-black text-slate-800">16</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Emojis in<br/>reference table</p>
+            </div>
+            <div>
+                <p class="text-2xl font-black text-indigo-600">12</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Intersection<br/>(overlap)</p>
             </div>
         </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+            The reference table covers only 12 of the 34 unique emojis found in the corpus.
+            This gap — confirmed here empirically — became the direct motivation for
+            building an expanded polarity lexicon in the feature engineering stage.
+        </p>
     </div>
 
+    <!-- Design decisions -->
+    <div class="flex flex-wrap gap-2">
+        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
+            Balanced Labels
+        </span>
+        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
+            Orthogonal Signal
+        </span>
+        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
+            Low-Dimensional Features Justified
+        </span>
+        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
+            No Dense Representations
+        </span>
+        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
+            No Label-Derived Emoji Scores
+        </span>
+    </div>
+
+    <!-- Empirical validation block -->
     <div class="bg-slate-50 border-l-4 border-indigo-500 pl-4 py-3">
         <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
-            Empirical Validation
+            Design Decision
         </p>
-        <p class="text-xs text-slate-600 italic">
-            "Initial EDA confirmed that 49.3% of the signal resides in symbolic tokens, 
-            prompting a transition from a restricted anchor set to a comprehensive 
-            lexicon to maximize model sensitivity across the full emoji vocabulary."
+        <p class="text-xs text-slate-600 italic leading-relaxed">
+            "EDA confirmed emoji-aware feature engineering is justified — but under
+            strict constraints: simple, interpretable features only; no dense emoji
+            representations; no label-derived sentiment learning. The sparse, bimodal
+            distribution validates a curated polarity lexicon as the right abstraction.
+            The 12/34 coverage gap flags lexicon expansion as a necessary next step."
         </p>
     </div>
 

@@ -1,35 +1,34 @@
 <!-- templates/components/system_overview/system_overview.html -->
 
-{# Project overview: narrative context before technical pipeline #}
-
 <section aria-labelledby="project-overview-heading" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6">
     <h2 id="system-overview-heading" class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">
         System Overview
     </h2>
 
     <p class="text-lg text-slate-700 leading-relaxed font-medium">
-        This project explores sentiment inference in low-resource, short-form social media text, 
-        where meaning is frequently compressed into symbolic cues. In these contexts, emojis 
-        function as high-signal <strong>affective amplifiers</strong> that can reinforce, 
-        soften, or redefine textual intent.
+        Human emotion is increasingly expressed in fragments — brief messages, compressed language, and symbolic cues. 
+        This project investigates how machine learning can interpret that signal. By training a statistical model on 
+        labeled examples of short-form social media text, the system learns patterns associated with positive and 
+        negative sentiment and applies them to new, unseen input.
     </p>
 
     <p class="text-slate-600 leading-relaxed">
-        Rather than treating emojis as noise, the system implements <strong>auxiliary feature 
-        engineering</strong>. By extracting symbolic polarity and joining it with TF-IDF textual 
-        representations, the pipeline enables the classifier to evaluate linguistic and symbolic 
-        sentiment channels simultaneously.
+        Unlike traditional approaches that treat emojis as noise, this system treats them as measurable affective data. 
+        Textual patterns are represented using TF-IDF statistics, capturing how strongly words correlate with sentiment 
+        across the dataset, while emoji polarity signals are extracted as structured features. These complementary 
+        channels are fused into a unified representation that allows the classifier to evaluate linguistic and symbolic 
+        meaning simultaneously.
     </p>
 
     <p class="text-slate-600 leading-relaxed">
-        The workflow encompasses the full data science lifecycle: deterministic cleaning, 
-        exploratory signal analysis, feature fusion, and interpretability diagnostics. 
-        Each stage produces <strong>immutable artifacts</strong>—from validated datasets to 
-        serialized modeling states—ensuring transparency and parity between training and inference.
+        The pipeline follows a rigorous machine learning lifecycle: deterministic data cleaning, exploratory analysis, 
+        feature engineering, supervised training, and performance evaluation. The resulting model and feature 
+        vocabulary are serialized to preserve parity between research and deployment.
     </p>
 
     <p class="text-slate-600 leading-relaxed">
-        The sections below document this progression, surfacing the empirical insights and 
-        architectural decisions that power the live sentiment analysis interface.
+        When text is submitted through the interface, it undergoes the same transformations used during training. 
+        The model then produces probability-based predictions that reflect learned confidence rather than fixed rules. 
+        The sections below document the empirical findings and architectural decisions that enable this inference process.
     </p>
 </section>
