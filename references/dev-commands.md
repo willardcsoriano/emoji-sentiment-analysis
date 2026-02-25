@@ -1,4 +1,157 @@
-# Development Commands
+# DEVELOPMENT COMMANDS
+
+# Makefile Commands
+
+This project includes a `Makefile` to standardize development, training, and deployment workflows.
+
+> Note: On Windows, use Git Bash or WSL to run `make`.
+> If using PowerShell, install `make` via Chocolatey (`choco install make`) or use Git Bash.
+
+---
+
+## Dependency Management
+
+### Install all dependencies (including editable install)
+
+```bash
+make requirements
+```
+
+### Regenerate and scrub requirements.txt
+
+```bash
+make freeze
+```
+
+---
+
+## Cleanup
+
+### Remove compiled Python files
+
+```bash
+make clean
+```
+
+---
+
+## Code Quality
+
+### Lint code
+
+```bash
+make lint
+```
+
+### Auto-format code
+
+```bash
+make format
+```
+
+---
+
+## Model Training
+
+### Train model and update serialized artifacts
+
+```bash
+make train
+```
+
+Artifacts are saved to:
+
+```
+src/models/
+```
+
+---
+
+## Local Development
+
+### Run FastAPI development server
+
+```bash
+make dev
+```
+
+Equivalent to:
+
+```bash
+uvicorn app:app --reload
+```
+
+---
+
+## Dataset Generation
+
+### Generate dataset
+
+```bash
+make data
+```
+
+---
+
+## Cloud Deployment
+
+### Deploy to Google Cloud Run
+
+```bash
+make deploy
+```
+
+### Train and deploy (full rebuild pipeline)
+
+```bash
+make deploy-full
+```
+
+---
+
+## Logs and Monitoring
+
+### View recent Cloud Run logs
+
+```bash
+make logs
+```
+
+### Stream live production logs
+
+```bash
+make stream-logs
+```
+
+---
+
+## View All Available Commands
+
+```bash
+make help
+```
+
+---
+
+# Recommended Workflow
+
+For typical development:
+
+```bash
+make requirements
+make format
+make lint
+make train
+make dev
+```
+
+For production deployment:
+
+```bash
+make deploy-full
+```
+
+---
 
 ## Dependencies
 

@@ -1,4 +1,4 @@
-<!-- templates/components/data_access/data_access_why.html -->
+<!-- templates/components/data_access/framing/data_access_why.html -->
 
 <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl relative overflow-hidden">
     
@@ -17,12 +17,13 @@
             </h6>
 
             <p class="text-[11px] text-slate-300 leading-relaxed italic">
-                Exploratory analysis revealed that symbolic expressions are not peripheral artifacts 
-                but central carriers of affect in short-form discourse. Rather than allowing emojis 
-                to be absorbed passively into tokenization, the system references a curated polarity 
-                lexicon to extract structured, non-linguistic sentiment features. These signals act 
-                orthogonally to word-based statistics, enriching the representation space and 
-                materially improving classification robustness.
+                EDA confirmed that 49.3% of the corpus contains at least one emoji — common 
+                enough to engineer around, sparse enough to treat as a binary anchor rather 
+                than a frequency signal. Rather than letting emojis dissolve passively into 
+                TF-IDF tokenisation, the pipeline extracts them as four structured polarity 
+                counts via manually curated lexicons. These signals operate orthogonally to 
+                word-based statistics and delivered a measured +0.044 F1 improvement over 
+                the text-only baseline.
             </p>
 
             <div class="pt-2 flex items-center gap-3">

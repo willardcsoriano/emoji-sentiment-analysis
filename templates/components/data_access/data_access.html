@@ -19,68 +19,24 @@ Design principles:
 - Optimized for exploratory browsing, not bulk data tooling.
 -->
 
+<!-- templates/components/data_access/data_access.html -->
+
+<!-- templates/components/data_access/data_access.html -->
+
 <div class="space-y-14">
 
-    <!--
-    Framing narrative
+    {% include "components/data_access/framing/data_access_framing.html" %}
 
-    Introduces:
-    - Dataset origin
-    - Sentiment labeling context
-    - Emoji inclusion rationale
-    -->
-    {% include "components/data_access/data_access_framing.html" %}
+    {% include "components/data_access/downloads/data_access_downloads.html" %}
 
-    <!--
-    Download access panel
+    {% include "components/data_access/framing/data_access_schema.html" %}
 
-    Provides:
-    - Direct dataset retrieval
-    - Versioned artifacts
-    - Reproducibility support for external reviewers
-    -->
-    {% include "components/data_access/data_access_downloads.html" %}
-
-    <!--
-    Dataset schema documentation
-
-    Details:
-    - Column structures
-    - Label encoding
-    - Emoji/token fields
-    - Validation guarantees
-    -->
-    {% include "components/data_access/data_access_schema.html" %}
-
-    <!--
-    Dataset preview grid
-
-    Purpose:
-    - Provide tangible inspection of source records.
-    - Bridge abstract schema → real examples.
-    - Highlight emoji + text co-occurrence patterns.
-
-    Layout:
-    - Single column stack (mobile + desktop for readability).
-    -->
     <div class="grid grid-cols-1 gap-12">
-
-        <!-- Text corpus preview -->
         {% include "components/data_access/previews/preview_text.html" %}
-
-        <!-- Emoji corpus preview -->
         {% include "components/data_access/previews/preview_emoji.html" %}
-
+        {% include "components/data_access/previews/preview_features.html" %}
     </div>
 
-    <!--
-    Methodological justification
-
-    Explains:
-    - Why these datasets were selected
-    - Representational strengths / limitations
-    - Downstream modeling implications
-    -->
-    {% include "components/data_access/data_access_why.html" %}
+    {% include "components/data_access/framing/data_access_why.html" %}
 
 </div>

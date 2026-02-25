@@ -1,0 +1,30 @@
+<!-- templates/components/data_access/data_access_framing.html -->
+
+<div class="max-w-3xl space-y-4 bg-white/70 backdrop-blur rounded-2xl p-6 border border-slate-200 shadow-sm">
+
+    <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+        Data Scale & Engineering Constraints
+    </h3>
+
+    <div class="bg-amber-50/50 border-l-2 border-amber-200 p-4 rounded-r-xl">
+        <p class="text-[11px] text-amber-700/80 leading-relaxed italic">
+            <strong>Note on Scale:</strong> At 1,000 labeled tweets, this is a 
+            <em>low-resource setting by design</em> — one that demands feature density 
+            over model complexity. Logistic Regression was chosen deliberately: 
+            its coefficient weights remain fully traceable, and on a corpus this size, 
+            a simpler model generalises better than a complex one.
+        </p>
+    </div>
+
+    <p class="text-sm text-slate-600 leading-relaxed">
+        Two raw datasets feed the pipeline. The primary corpus —
+        <code class="font-mono text-xs text-slate-700">1k_data_emoji_tweets_senti_posneg.csv</code> —
+        contains 1,000 short-form social media posts with binary sentiment labels
+        and embedded UTF-8 emojis. The second,
+        <code class="font-mono text-xs text-slate-700">15_emoticon_data.csv</code>,
+        is a 16-entry Unicode reference table used for emoji coverage analysis.
+        Neither dataset required imputation — both were structurally clean after
+        index sanitisation and column standardisation.
+    </p>
+
+</div>

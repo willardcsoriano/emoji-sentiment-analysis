@@ -1,24 +1,5 @@
 <!-- templates/components/data_access/data_access_schema.html -->
 
-<!--
-Data Access — Schema Overview
-Documents structural differences between ingested datasets.
-
-Pipeline position:
-- Sits between raw downloads and dataset previews.
-- Defines how source columns are transformed into model features.
-
-Objectives:
-- Clarify column-level data contracts.
-- Explain representation divergence (text vs emoji).
-- Prepare users for downstream feature engineering steps.
-
-Schema philosophy:
-- Dataset A → linguistic feature space.
-- Dataset B → symbolic polarity feature space.
-- Both converge during feature fusion.
--->
-
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 font-mono">
 
     <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 relative overflow-hidden">
@@ -35,9 +16,9 @@ Schema philosophy:
 
             <div class="py-2 space-y-1">
                 <p class="text-[11px] text-slate-600 leading-relaxed">
-                    Captures <strong>linguistic intent</strong> through n-gram tokenization. 
-                    Standardized via UTF-8 to preserve symbolic characters within the 
-                    textual context.
+                    Captures <strong>linguistic intent</strong> through n-gram tokenisation.
+                    Emojis are preserved in-place as UTF-8 characters and pass through
+                    the vectoriser unchanged.
                 </p>
             </div>
 
@@ -53,24 +34,25 @@ Schema philosophy:
 
         <div class="relative">
             <span class="text-slate-400 uppercase tracking-widest text-[9px] font-black">
-                Reference Lexicon / Dense Vector
+                Polarity Signal / Count Features
             </span>
 
             <p class="text-xs font-bold text-indigo-700 mt-2">
-                emoji: symbol → 2 dimensions (Polarity Counts)
+                symbols + words → 4 dimensions (Polarity Counts)
             </p>
 
             <div class="py-2 space-y-1">
                 <p class="text-[11px] text-slate-600 leading-relaxed">
-                    Captures <strong>symbolic intent</strong> by mapping tokens to 
-                    <code>pos_count</code> and <code>neg_count</code> scalars. 
-                    Acts as a high-signal sentiment anchor.
+                    Captures <strong>symbolic and lexical intent</strong> via four scalar counts:
+                    <code>emoji_pos</code>, <code>emoji_neg</code>,
+                    <code>word_pos</code>, <code>word_neg</code> —
+                    derived from curated polarity lexicons, not the reference table.
                 </p>
             </div>
 
             <div class="flex gap-2 pt-1">
                 <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-md border border-indigo-100">SCALAR</span>
-                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-md border border-indigo-100">DENSE</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] rounded-md border border-indigo-100">LABEL-AGNOSTIC</span>
             </div>
         </div>
     </div>

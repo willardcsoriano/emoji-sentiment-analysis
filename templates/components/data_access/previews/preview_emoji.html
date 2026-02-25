@@ -1,34 +1,33 @@
 <!-- templates/components/data_access/previews/preview_emoji.html -->
 
 {#
-Dataset Preview — Emoji Reference Lexicon
+Dataset Preview — Emoji Reference Table
 
 Component type:
 * Configured instance of the reusable collapsible table shell.
-* Surfaces symbolic sentiment anchor data.
+* Surfaces Unicode metadata for the 16-entry emoji reference dataset.
 
 Pipeline position:
-* Complements the primary text corpus.
-* Serves as the static knowledge base for auxiliary feature engineering.
+* Ingested alongside the primary text corpus in NB 1.0.
+* Used in NB 2.0 for emoji coverage analysis — not for feature engineering.
+* Polarity lexicons are built separately in NB 3.5 and are independent of this file.
 
 Objectives:
-* Expose symbol → codepoint mappings.
-* Provide transparency into the lexicon used for affect normalization.
-* Confirm successful cleaning of Unicode metadata from raw sources.
+* Expose emoji → Unicode codepoint → canonical name mappings.
+* Confirm index sanitisation and column standardisation applied during cleaning.
+* Provide transparency into the coverage reference used in EDA.
 
 Interpretability role:
-* Explains the deterministic "lookup" phase of the pipeline.
-* Bridges raw Unicode symbols to weighted feature scalars.
+* Explains the 12/34 coverage gap finding from NB 2.0.
+* Contextualises why lexicon expansion was necessary in NB 3.5.
 #}
 
-{% set title = "Dataset 02 · Reference Lexicon (Validated)" %}
+{% set title = "Dataset 02 · Emoji Reference Table (Cleaned)" %}
 
-{% set description = "Deterministic symbol-to-semantic mapping used for affect normalization and polarity anchoring." %}
+{% set description = "16-entry Unicode metadata table mapping emoji symbols to codepoints and canonical names. Used for coverage analysis — contains no polarity scores." %}
 
 {% set accent = "bg-indigo-500" %}
 
-{# Table implementation reference #}
 {% set table = "components/data_access/tables/table_emoji_lexicon.html" %}
 
-{# Render collapsible container wrapper #}
 {% include "components/data_access/tables/collapsible_table.html" %}

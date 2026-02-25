@@ -1,0 +1,43 @@
+<!-- templates/components/data_access/previews/preview_features.html -->
+
+{#
+Dataset Preview — Final Feature Matrix
+
+Component type:
+* Configured instance of the reusable collapsible table shell.
+* Surfaces the fully engineered feature dataset fed into model training.
+
+Pipeline position:
+* Output of NB 3.5 (Production Feature Engineering).
+* Direct input to NB 4.0 (Final Model Training).
+* Represents the convergence of all signal sources into a single matrix.
+
+Objectives:
+* Expose the 6-column schema that defines the production feature space.
+* Show how raw text and emoji symbols are resolved into numeric signals.
+* Confirm EMOJI_BOOST=10 is reflected in the polarity count magnitudes.
+
+Schema:
+* label            — binary sentiment target (0=negative, 1=positive)
+* text             — raw UTF-8 tweet text, preserved exactly from cleaning stage
+* emoji_pos_count  — weighted count of positive emoji matches (×EMOJI_BOOST=10)
+* emoji_neg_count  — weighted count of negative emoji matches (×EMOJI_BOOST=10)
+* word_pos_count   — deterministic count of positive lexicon word matches
+* word_neg_count   — deterministic count of negative lexicon word matches
+
+Interpretability notes:
+* Polarity counts of 10 reflect a single emoji match scaled by EMOJI_BOOST.
+* word_pos_count and word_neg_count are unweighted (boost not applied to word features).
+* text column is not vectorised here — TF-IDF transform occurs at training time.
+* 1,000 rows × 6 columns. No nulls. Labels strictly binary.
+#}
+
+{% set title = "Dataset 03 · Final Feature Matrix (features_final.csv)" %}
+
+{% set description = "1,000-row feature matrix combining raw text with four engineered polarity count signals — the exact input consumed by the production classifier." %}
+
+{% set accent = "bg-violet-500" %}
+
+{% set table = "components/data_access/tables/table_features_final.html" %}
+
+{% include "components/data_access/tables/collapsible_table.html" %}
