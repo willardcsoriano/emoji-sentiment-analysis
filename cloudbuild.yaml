@@ -1,21 +1,29 @@
 steps:
-  # 1. Build
+  # 1. Build the Docker image
+  # Note: Use project-id and service-name consistently
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/emoji-app:latest', '.']
+    args: [
+      'build', 
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest', 
+      '.'
+    ]
 
-  # 2. Push
+  # 2. Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/emoji-app:latest']
+    args: [
+      'push', 
+      'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
+    ]
 
-  # 3. Deploy
+  # 3. Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
-      - 'emoji-sentiment-app'
+      - 'hybrid-sentiment-analysis'
       - '--image'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/emoji-app:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
       - '--region'
       - 'us-central1'
       - '--allow-unauthenticated'
