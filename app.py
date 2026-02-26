@@ -69,7 +69,7 @@ async def predict_ui(request: Request, text: str = Form(...)):
 
     # 3. Final Return (Only one return at the end!)
     return templates.TemplateResponse(
-        "components/prediction_result.html", 
+        "components/header/prediction_result.html", 
         {"request": request, "result": result}
     )
 
