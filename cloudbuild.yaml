@@ -21,7 +21,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'hybrid-sentiment-analysis'
+      - 'emoji-sentiment-app'
       - '--image'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
       - '--region'
