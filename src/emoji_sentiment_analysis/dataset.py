@@ -44,20 +44,18 @@ app = typer.Typer()
 # Validation Helpers
 # ---------------------------------------------------------------------
 
+
 def validate_tweets(df: pd.DataFrame) -> None:
     """
     Enforces tweet dataset invariants.
     Raises AssertionError if violated.
     """
 
-    assert list(df.columns) == [TARGET_COL, TEXT_COL], \
-        f"Tweet schema mismatch: {df.columns}"
+    assert list(df.columns) == [TARGET_COL, TEXT_COL], f"Tweet schema mismatch: {df.columns}"
 
-    assert df[TARGET_COL].isin([0, 1]).all(), \
-        "Labels must be binary (0/1)."
+    assert df[TARGET_COL].isin([0, 1]).all(), "Labels must be binary (0/1)."
 
-    assert df[TEXT_COL].str.len().gt(0).all(), \
-        "Empty text rows detected."
+    assert df[TEXT_COL].str.len().gt(0).all(), "Empty text rows detected."
 
 
 def validate_emoji_reference(df: pd.DataFrame) -> None:
@@ -65,16 +63,15 @@ def validate_emoji_reference(df: pd.DataFrame) -> None:
     Enforces emoji reference dataset invariants.
     """
 
-    assert "emoji" in df.columns, \
-        "Emoji column missing."
+    assert "emoji" in df.columns, "Emoji column missing."
 
-    assert df["emoji"].nunique() == len(df), \
-        "Duplicate emojis detected."
+    assert df["emoji"].nunique() == len(df), "Duplicate emojis detected."
 
 
 # ---------------------------------------------------------------------
 # Cleaning Functions
 # ---------------------------------------------------------------------
+
 
 def clean_tweets_dataset(path: Path) -> pd.DataFrame:
     """
@@ -97,13 +94,15 @@ def clean_tweets_dataset(path: Path) -> pd.DataFrame:
     df = df.drop(columns=["Unnamed: 0"], errors="ignore")
 
     # Rename schema
-    df = df.rename(columns={
-        "post": TEXT_COL,
-        "tweet": TEXT_COL,
-        "text": TEXT_COL,
-        "sentiment": TARGET_COL,
-        "label": TARGET_COL,
-    })
+    df = df.rename(
+        columns={
+            "post": TEXT_COL,
+            "tweet": TEXT_COL,
+            "text": TEXT_COL,
+            "sentiment": TARGET_COL,
+            "label": TARGET_COL,
+        }
+    )
 
     # Keep only required columns
     df = df[[TARGET_COL, TEXT_COL]]
@@ -139,11 +138,13 @@ def clean_emoji_reference(path: Path) -> pd.DataFrame:
     df = df.drop(columns=["Unnamed: 0"], errors="ignore")
 
     # Rename columns
-    df = df.rename(columns={
-        "Emoji": "emoji",
-        "Unicode codepoint": "unicode_codepoint",
-        "Unicode name": "unicode_name",
-    })
+    df = df.rename(
+        columns={
+            "Emoji": "emoji",
+            "Unicode codepoint": "unicode_codepoint",
+            "Unicode name": "unicode_name",
+        }
+    )
 
     # Enforce string types
     for col in df.columns:
@@ -162,6 +163,7 @@ def clean_emoji_reference(path: Path) -> pd.DataFrame:
 # ---------------------------------------------------------------------
 # Main Pipeline Entry
 # ---------------------------------------------------------------------
+
 
 @app.command()
 def main():

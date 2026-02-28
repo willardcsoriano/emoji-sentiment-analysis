@@ -13,7 +13,7 @@ from loguru import logger
 # Project Root Resolution (Docker-Proofed)
 # ---------------------------------------------------------------------
 # Check if we are running inside Cloud Run or a Docker container
-IS_DOCKER = os.environ.get('K_SERVICE') is not None or os.path.exists('/.dockerenv')
+IS_DOCKER = os.environ.get("K_SERVICE") is not None or os.path.exists("/.dockerenv")
 
 if IS_DOCKER:
     # In Docker, we enforce the explicit absolute paths based on WORKDIR /app
@@ -45,12 +45,12 @@ MODEL_ARTIFACTS_DIR: Path = MODELS_DIR / "artifacts"
 # ---------------------------------------------------------------------
 # Reporting, Notebooks, and Scripts
 # ---------------------------------------------------------------------
-REPORTS_DIR: Path = SRC_ROOT / "reports" 
+REPORTS_DIR: Path = SRC_ROOT / "reports"
 FIGURES_DIR: Path = REPORTS_DIR / "figures"
 NOTEBOOKS_DIR: Path = SRC_ROOT / "notebooks"
 SCRIPTS_DIR: Path = SRC_ROOT / "scripts"
 
-PROJ_ROOT = REPO_ROOT 
+PROJ_ROOT = REPO_ROOT
 
 # ---------------------------------------------------------------------
 # Global Constants
@@ -58,7 +58,8 @@ PROJ_ROOT = REPO_ROOT
 SEED: int = int(os.getenv("SEED", "42"))
 TEXT_COL: str = os.getenv("TEXT_COL", "text")
 TARGET_COL: str = os.getenv("TARGET_COL", "label")
-AMBIGUITY_THRESHOLD: float = float(os.getenv("AMBIGUITY_THRESHOLD", "0.70")) 
+AMBIGUITY_THRESHOLD: float = float(os.getenv("AMBIGUITY_THRESHOLD", "0.70"))
+
 
 # ---------------------------------------------------------------------
 # Directory Bootstrapping
@@ -66,12 +67,18 @@ AMBIGUITY_THRESHOLD: float = float(os.getenv("AMBIGUITY_THRESHOLD", "0.70"))
 def ensure_dirs() -> None:
     """Create the standard project directory structure if missing."""
     dirs = [
-        RAW_DATA_DIR, INTERIM_DATA_DIR, PROCESSED_DATA_DIR,
-        EXTERNAL_DATA_DIR, LOGS_DIR, MODELS_DIR,
-        MODEL_ARTIFACTS_DIR, FIGURES_DIR,
+        RAW_DATA_DIR,
+        INTERIM_DATA_DIR,
+        PROCESSED_DATA_DIR,
+        EXTERNAL_DATA_DIR,
+        LOGS_DIR,
+        MODELS_DIR,
+        MODEL_ARTIFACTS_DIR,
+        FIGURES_DIR,
     ]
     for d in dirs:
         d.mkdir(parents=True, exist_ok=True)
+
 
 # ---------------------------------------------------------------------
 # Logging Initialization
@@ -87,13 +94,28 @@ def init_logging(use_tqdm: bool = True) -> None:
     )
     logger.add(sys.stderr, colorize=True, format=fmt)
 
+
 # ---------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------
 __all__ = [
-    "PROJ_ROOT", "SRC_ROOT", "DATA_DIR", "RAW_DATA_DIR", 
-    "INTERIM_DATA_DIR", "PROCESSED_DATA_DIR", "EXTERNAL_DATA_DIR", 
-    "LOGS_DIR", "MODELS_DIR", "MODEL_ARTIFACTS_DIR", "REPORTS_DIR", 
-    "FIGURES_DIR", "NOTEBOOKS_DIR", "SCRIPTS_DIR", "SEED", 
-    "TEXT_COL", "TARGET_COL", "ensure_dirs", "init_logging",
+    "PROJ_ROOT",
+    "SRC_ROOT",
+    "DATA_DIR",
+    "RAW_DATA_DIR",
+    "INTERIM_DATA_DIR",
+    "PROCESSED_DATA_DIR",
+    "EXTERNAL_DATA_DIR",
+    "LOGS_DIR",
+    "MODELS_DIR",
+    "MODEL_ARTIFACTS_DIR",
+    "REPORTS_DIR",
+    "FIGURES_DIR",
+    "NOTEBOOKS_DIR",
+    "SCRIPTS_DIR",
+    "SEED",
+    "TEXT_COL",
+    "TARGET_COL",
+    "ensure_dirs",
+    "init_logging",
 ]

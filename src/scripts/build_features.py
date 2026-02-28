@@ -38,6 +38,7 @@ app = typer.Typer()
 # Validation Helpers
 # ---------------------------------------------------------------------
 
+
 def validate_feature_dataset(df: pd.DataFrame) -> None:
     """
     Ensures the engineered dataset satisfies modeling contracts.
@@ -52,11 +53,11 @@ def validate_feature_dataset(df: pd.DataFrame) -> None:
         "word_neg_count",
     }
 
-    assert required_columns.issubset(df.columns), \
+    assert required_columns.issubset(df.columns), (
         f"Missing required columns: {required_columns - set(df.columns)}"
+    )
 
-    assert df.isna().sum().sum() == 0, \
-        "Null values detected in feature dataset."
+    assert df.isna().sum().sum() == 0, "Null values detected in feature dataset."
 
     # Verify all numeric features are non-negative
     numeric_cols = ["emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"]
@@ -67,6 +68,7 @@ def validate_feature_dataset(df: pd.DataFrame) -> None:
 # ---------------------------------------------------------------------
 # Feature Engineering Logic
 # ---------------------------------------------------------------------
+
 
 def build_features(
     input_path: Path,
@@ -108,6 +110,7 @@ def build_features(
 # ---------------------------------------------------------------------
 # CLI Entry
 # ---------------------------------------------------------------------
+
 
 @app.command()
 def main(

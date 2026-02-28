@@ -22,28 +22,23 @@ from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 
 GOLDEN_BEHAVIOR_CASES = [
     # 1. Word lexicon — unambiguous text, no emoji interference
-    ("i love you baby",           "Positive", "word_pos_count"),
-    ("i hate you baby",           "Negative", "word_neg_count"),
-
+    ("i love you baby", "Positive", "word_pos_count"),
+    ("i hate you baby", "Negative", "word_neg_count"),
     # 2. Emoji signal — emoji tips neutral text
-    ("today was okay 😊",         "Positive", "emoji_pos_count"),
-    ("today was okay 😭",         "Negative", "emoji_neg_count"),
-
+    ("today was okay 😊", "Positive", "emoji_pos_count"),
+    ("today was okay 😭", "Negative", "emoji_neg_count"),
     # 3. Sarcasm veto — negative emoji overrides positive text
-    ("i love having bugs 😭",     "Negative", "emoji_neg_count"),
+    ("i love having bugs 😭", "Negative", "emoji_neg_count"),
     ("great, another meeting 😧", "Negative", "emoji_neg_count"),
-    ("wow amazing day 😭😭",      "Negative", "emoji_neg_count"),
-
+    ("wow amazing day 😭😭", "Negative", "emoji_neg_count"),
     # 4. Mixed signals — tug of war between lexicon features
-    ("love hate love 😊",         "Negative", "word_neg_count"),
-
+    ("love hate love 😊", "Negative", "word_neg_count"),
     # 5. Emoji-dominant — no text signal at all
-    ("😊😊😊😊",                  "Positive", "emoji_pos_count"),
-    ("😭😧😔",                    "Negative", "emoji_neg_count"),
-    ("😭😭😭",                    "Negative", "emoji_neg_count"),
-
+    ("😊😊😊😊", "Positive", "emoji_pos_count"),
+    ("😭😧😔", "Negative", "emoji_neg_count"),
+    ("😭😭😭", "Negative", "emoji_neg_count"),
     # 6. Emoticon — veto-resolved via negative emoticon
-    ("feeling great today :(",    "Negative", "emoji_neg_count"),
+    ("feeling great today :(", "Negative", "emoji_neg_count"),
 ]
 
 # ---------------------------------------------------------------------------
@@ -61,6 +56,7 @@ GOLDEN_BEHAVIOR_CASES = [
 # Core Behavioral Tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.parametrize("text,expected_sentiment,expected_driver", GOLDEN_BEHAVIOR_CASES)
 def test_sentiment_and_drivers(text, expected_sentiment, expected_driver):
     """
@@ -70,8 +66,7 @@ def test_sentiment_and_drivers(text, expected_sentiment, expected_driver):
     result = predict_sentiment(text)
 
     assert result["prediction"] == expected_sentiment, (
-        f"Label mismatch for '{text}': "
-        f"expected {expected_sentiment}, got {result['prediction']}"
+        f"Label mismatch for '{text}': expected {expected_sentiment}, got {result['prediction']}"
     )
 
     driver_names = [d["token"] for d in result["top_drivers"]]
@@ -84,6 +79,7 @@ def test_sentiment_and_drivers(text, expected_sentiment, expected_driver):
 # ---------------------------------------------------------------------------
 # Veto-Specific Tests
 # ---------------------------------------------------------------------------
+
 
 def test_veto_flag_is_set_on_sarcasm():
     """
@@ -101,9 +97,7 @@ def test_veto_flag_is_false_on_clean_input():
     Confirms veto_applied is False when no conflict exists.
     """
     result = predict_sentiment("i love this project 😊")
-    assert result["veto_applied"] is False, (
-        "Veto should not fire on non-conflict input"
-    )
+    assert result["veto_applied"] is False, "Veto should not fire on non-conflict input"
 
 
 def test_veto_confidence_is_scaled():
@@ -123,14 +117,13 @@ def test_veto_confidence_is_scaled():
 # Ambiguity Tests
 # ---------------------------------------------------------------------------
 
+
 def test_ambiguity_flag_on_neutral_text():
     """
     Ensures High Ambiguity flag triggers on neutral, low-signal text.
     """
     result = predict_sentiment("the table is brown and the chair is wooden")
-    assert result["entropy_flag"] == "High Ambiguity", (
-        "Ambiguity not detected for neutral text"
-    )
+    assert result["entropy_flag"] == "High Ambiguity", "Ambiguity not detected for neutral text"
     assert result["confidence"] < 0.65, (
         f"Neutral text should not have high confidence, got {result['confidence']}"
     )
@@ -150,6 +143,7 @@ def test_ambiguity_flag_absent_on_clear_input():
 # Structural / Resilience Tests
 # ---------------------------------------------------------------------------
 
+
 def test_audit_structure():
     """
     Ensures predict_sentiment returns all keys required by the UI and API.
@@ -157,8 +151,14 @@ def test_audit_structure():
     """
     result = predict_sentiment("test text 😊")
     required_keys = {
-        "timestamp", "raw_text", "prediction", "prediction_int",
-        "confidence", "entropy_flag", "top_drivers", "veto_applied"
+        "timestamp",
+        "raw_text",
+        "prediction",
+        "prediction_int",
+        "confidence",
+        "entropy_flag",
+        "top_drivers",
+        "veto_applied",
     }
     missing = required_keys - set(result.keys())
     assert not missing, f"Missing keys in response: {missing}"
@@ -193,8 +193,11 @@ def test_emoji_only_input():
     assert result["entropy_flag"] == "Clear Signal"
 
     # ---------------------------------------------------------------------------
+
+
 # Driver Detail Tests
 # ---------------------------------------------------------------------------
+
 
 def test_driver_count():
     """
@@ -214,10 +217,12 @@ def test_driver_structure():
     for driver in result["top_drivers"]:
         assert "token" in driver, f"Driver missing 'token' key: {driver}"
         assert "weight" in driver, f"Driver missing 'weight' key: {driver}"
-        assert isinstance(driver["token"], str), \
+        assert isinstance(driver["token"], str), (
             f"Driver token should be str, got {type(driver['token'])}"
-        assert isinstance(driver["weight"], float), \
+        )
+        assert isinstance(driver["weight"], float), (
             f"Driver weight should be float, got {type(driver['weight'])}"
+        )
 
 
 def test_driver_ordering():
@@ -227,8 +232,9 @@ def test_driver_ordering():
     """
     result = predict_sentiment("i love this project 😊")
     weights = [abs(d["weight"]) for d in result["top_drivers"]]
-    assert weights == sorted(weights, reverse=True), \
+    assert weights == sorted(weights, reverse=True), (
         f"Drivers are not sorted by absolute weight: {weights}"
+    )
 
 
 def test_veto_driver_is_primary():
@@ -252,9 +258,7 @@ def test_driver_weights_are_nonzero():
     """
     result = predict_sentiment("i love this project 😊")
     for driver in result["top_drivers"]:
-        assert driver["weight"] != 0.0, (
-            f"Zero-weight driver found: {driver['token']}"
-        )
+        assert driver["weight"] != 0.0, f"Zero-weight driver found: {driver['token']}"
 
 
 def test_positive_prediction_has_positive_primary_driver():
@@ -270,7 +274,7 @@ def test_positive_prediction_has_positive_primary_driver():
     driver_names = [d["token"] for d in result["top_drivers"]]
     assert "emoji_pos_count" in driver_names, (
         f"emoji_pos_count should appear as a driver. Found: {driver_names}"
-)
+    )
 
 
 def test_negative_prediction_has_negative_primary_driver():
@@ -290,16 +294,12 @@ def test_driver_tokens_are_known_features():
     numeric feature names. TF-IDF tokens are strings so we only
     validate the hybrid ones specifically.
     """
-    HYBRID_FEATURES = {
-        "emoji_pos_count", "emoji_neg_count",
-        "word_pos_count", "word_neg_count"
-    }
+    HYBRID_FEATURES = {"emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"}
     result = predict_sentiment("i love having bugs 😭")
     driver_tokens = {d["token"] for d in result["top_drivers"]}
     hybrid_drivers_found = driver_tokens & HYBRID_FEATURES
 
     # At least one hybrid feature should appear for emoji-containing input
     assert hybrid_drivers_found, (
-        f"No hybrid features found in drivers for emoji input. "
-        f"Got: {driver_tokens}"
+        f"No hybrid features found in drivers for emoji input. Got: {driver_tokens}"
     )

@@ -23,8 +23,8 @@ def explain_prediction(
     model,
     tfidf,
     is_veto: bool,
-    confidence: float,     # <-- Added to signature
-    entropy_flag: str      # <-- Added to signature
+    confidence: float,  # <-- Added to signature
+    entropy_flag: str,  # <-- Added to signature
 ) -> dict:
     """
     Formats and explains a completed prediction.
@@ -33,8 +33,10 @@ def explain_prediction(
     # Decision Drivers
     feature_names = tfidf.get_feature_names_out()
     hybrid_feature_names = [
-        "emoji_pos_count", "emoji_neg_count",
-        "word_pos_count",  "word_neg_count",
+        "emoji_pos_count",
+        "emoji_neg_count",
+        "word_pos_count",
+        "word_neg_count",
     ]
     all_feature_names = np.concatenate([feature_names, hybrid_feature_names])
 
@@ -50,9 +52,7 @@ def explain_prediction(
     top_drivers = sorted(feature_impacts, key=lambda x: abs(x["weight"]), reverse=True)
 
     if is_veto:
-        veto_feature = next(
-            (d for d in feature_impacts if d["token"] == "emoji_neg_count"), None
-        )
+        veto_feature = next((d for d in feature_impacts if d["token"] == "emoji_neg_count"), None)
         if veto_feature and veto_feature in top_drivers:
             top_drivers.insert(0, top_drivers.pop(top_drivers.index(veto_feature)))
 
@@ -75,8 +75,10 @@ def get_global_model_signals(model, vectorizer, top_n: int = 5) -> dict:
     """
     feature_names = vectorizer.get_feature_names_out()
     hybrid_feature_names = [
-        "emoji_pos_count", "emoji_neg_count",
-        "word_pos_count", "word_neg_count"
+        "emoji_pos_count",
+        "emoji_neg_count",
+        "word_pos_count",
+        "word_neg_count",
     ]
     all_feature_names = np.concatenate([feature_names, hybrid_feature_names])
 
@@ -87,10 +89,6 @@ def get_global_model_signals(model, vectorizer, top_n: int = 5) -> dict:
     top_neg = sorted(vocab_weights, key=lambda x: x[1], reverse=False)[:top_n]
 
     return {
-        "top_positive_signals": [
-            {"token": t, "weight": round(float(w), 2)} for t, w in top_pos
-        ],
-        "top_negative_signals": [
-            {"token": t, "weight": round(float(w), 2)} for t, w in top_neg
-        ],
+        "top_positive_signals": [{"token": t, "weight": round(float(w), 2)} for t, w in top_pos],
+        "top_negative_signals": [{"token": t, "weight": round(float(w), 2)} for t, w in top_neg],
     }

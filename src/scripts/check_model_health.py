@@ -21,9 +21,9 @@ class _ResultCollector:
     """Minimal pytest plugin to capture per-test outcomes."""
 
     def __init__(self):
-        self.passed  = []
-        self.failed  = []
-        self.errors  = []
+        self.passed = []
+        self.failed = []
+        self.errors = []
 
     def pytest_runtest_logreport(self, report):
         if report.when != "call":
@@ -41,7 +41,7 @@ def run_health_check():
     report_path = REPORTS_DIR / "model_health_report.json"
     logger.info("Running Model Health Certification...")
 
-    BASE_DIR  = Path(__file__).resolve().parent.parent
+    BASE_DIR = Path(__file__).resolve().parent.parent
     test_file = BASE_DIR / "tests" / "test_model_behavior.py"
 
     if not test_file.exists():
@@ -61,16 +61,16 @@ def run_health_check():
         5: "no tests collected",
     }
     exit_meaning = EXIT_MEANINGS.get(int(exit_code), "unknown")
-    passed       = (exit_code == 0)
+    passed = exit_code == 0
 
     # Categorize failures by test name prefix
     def categorize(node_ids):
         cats = {
             "lexicon_integrity": [],
-            "emoji_veto":        [],
+            "emoji_veto": [],
             "sarcasm_detection": [],
-            "confidence":        [],
-            "other":             [],
+            "confidence": [],
+            "other": [],
         }
         for nid in node_ids:
             name = nid.split("::")[-1]
@@ -89,19 +89,19 @@ def run_health_check():
     failed_by_category = categorize(collector.failed)
 
     report = {
-        "timestamp":     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "status":        "PASSED" if passed else "FAILED",
-        "exit_code":     int(exit_code),
-        "exit_meaning":  exit_meaning,
-        "test_suite":    test_file.name,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "status": "PASSED" if passed else "FAILED",
+        "exit_code": int(exit_code),
+        "exit_meaning": exit_meaning,
+        "test_suite": test_file.name,
         "summary": {
-            "total":   len(collector.passed) + len(collector.failed),
-            "passed":  len(collector.passed),
-            "failed":  len(collector.failed),
+            "total": len(collector.passed) + len(collector.failed),
+            "passed": len(collector.passed),
+            "failed": len(collector.failed),
         },
-        "failed_tests":       collector.failed,
+        "failed_tests": collector.failed,
         "failed_by_category": failed_by_category,
-        "internal_errors":    collector.errors,
+        "internal_errors": collector.errors,
         "recommendation": (
             "Ready for Deployment"
             if passed

@@ -3,7 +3,7 @@
 """
 Final Model Training Script
 ---------------------------
-Trains the production sentiment classifier using the hybrid 
+Trains the production sentiment classifier using the hybrid
 feature dataset (TF-IDF + Emoji Lexicon + Word Lexicon).
 """
 
@@ -38,14 +38,14 @@ def train_pipeline():
     # 1. Setup
     init_logging()
     ensure_dirs()
-    
+
     random.seed(SEED)
     np.random.seed(SEED)
 
     # 2. Load Dataset
     data_path = PROCESSED_DATA_DIR / "features_final.csv"
     logger.info(f"Loading feature dataset from {data_path}")
-    
+
     try:
         df = pd.read_csv(data_path)
     except FileNotFoundError:
@@ -54,14 +54,14 @@ def train_pipeline():
 
     # Validation: Ensure the new Lexicon columns exist
     required_columns = {
-        TEXT_COL, 
-        TARGET_COL, 
-        "emoji_pos_count", 
+        TEXT_COL,
+        TARGET_COL,
+        "emoji_pos_count",
         "emoji_neg_count",
         "word_pos_count",
-        "word_neg_count"
+        "word_neg_count",
     }
-    
+
     if not required_columns.issubset(df.columns):
         logger.error(f"Dataset missing required columns: {required_columns - set(df.columns)}")
         return
@@ -71,14 +71,9 @@ def train_pipeline():
     # 3. Train / Validation Split
     logger.info("Splitting dataset (80/20)...")
     X_text = df[TEXT_COL]
-    
+
     # Select all four numeric features
-    X_numeric = df[[
-        "emoji_pos_count", 
-        "emoji_neg_count", 
-        "word_pos_count", 
-        "word_neg_count"
-    ]]
+    X_numeric = df[["emoji_pos_count", "emoji_neg_count", "word_pos_count", "word_neg_count"]]
     y = df[TARGET_COL]
 
     (
@@ -110,7 +105,7 @@ def train_pipeline():
 
     # 5. Feature Assembly
     logger.info("Combining TF-IDF + Hybrid Numeric features...")
-    
+
     # Combine sparse TF-IDF with the 4 numeric columns
     X_train_final = cast(spmatrix, hstack([X_train_text_vec, X_train_num.to_numpy()]).tocsr())
     X_val_final = cast(spmatrix, hstack([X_val_text_vec, X_val_num.to_numpy()]).tocsr())
@@ -126,18 +121,18 @@ def train_pipeline():
     # 7. Evaluation
     logger.info("Evaluating model performance...")
     y_pred = model.predict(X_val_final)
-    
+
     acc = accuracy_score(y_val, y_pred)
     f1 = f1_score(y_val, y_pred)
 
-    print("\n" + "="*30)
+    print("\n" + "=" * 30)
     print(" VALIDATION PERFORMANCE ")
-    print("="*30)
+    print("=" * 30)
     print(f"Accuracy: {acc:.4f}")
     print(f"F1 Score: {f1:.4f}")
     print("\nDetailed Report:")
     print(classification_report(y_val, y_pred))
-    print("="*30 + "\n")
+    print("=" * 30 + "\n")
 
     # 8. Artifact Serialization
     logger.info(f"Saving artifacts to {MODELS_DIR}...")
@@ -145,6 +140,7 @@ def train_pipeline():
     joblib.dump(tfidf, MODELS_DIR / "tfidf_vectorizer.pkl")
 
     logger.success("Training pipeline complete.")
+
 
 if __name__ == "__main__":
     train_pipeline()

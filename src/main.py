@@ -47,13 +47,8 @@ def run_pipeline():
                 continue
 
             result = predict_sentiment(user_input, run_audit=False)
-            print(
-                f"Result: {result['prediction']} "
-                f"| Confidence: {result['confidence']}"
-            )
-            drivers = [
-                f"{d['token']} ({d['weight']})" for d in result["top_drivers"]
-            ]
+            print(f"Result: {result['prediction']} | Confidence: {result['confidence']}")
+            drivers = [f"{d['token']} ({d['weight']})" for d in result["top_drivers"]]
             print(f"Drivers: {drivers}")
 
     except Exception as e:

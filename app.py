@@ -37,8 +37,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Hybrid Sentiment Engine",
     description=(
-        "A production-aligned pipeline synthesizing text vectors "
-        "and deterministic emoji signals."
+        "A production-aligned pipeline synthesizing text vectors and deterministic emoji signals."
     ),
     version="1.0.0",
     lifespan=lifespan,
@@ -65,9 +64,7 @@ async def predict_ui(request: Request, text: str = Form(...)):
 
     if "entropy_flag" not in result:
         result["entropy_flag"] = (
-            "High Ambiguity"
-            if result["confidence"] < AMBIGUITY_THRESHOLD
-            else "Clear Signal"
+            "High Ambiguity" if result["confidence"] < AMBIGUITY_THRESHOLD else "Clear Signal"
         )
 
     return templates.TemplateResponse(

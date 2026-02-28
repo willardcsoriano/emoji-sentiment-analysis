@@ -25,9 +25,10 @@ from emoji_sentiment_analysis.services.audit_service import explain_prediction
 # Artifact Loading
 # -------------------------------------------------------------------
 
+
 def load_artifacts():
     """Load model and vectorizer from the central models directory."""
-    model_path      = MODELS_DIR / "sentiment_model.pkl"
+    model_path = MODELS_DIR / "sentiment_model.pkl"
     vectorizer_path = MODELS_DIR / "tfidf_vectorizer.pkl"
 
     if not model_path.exists() or not vectorizer_path.exists():
@@ -35,6 +36,7 @@ def load_artifacts():
         raise FileNotFoundError("Modeling artifacts missing.")
 
     return joblib.load(model_path), joblib.load(vectorizer_path)
+
 
 # Global instances for API performance
 try:
@@ -46,9 +48,8 @@ except Exception:
 # Sarcasm Veto
 # -------------------------------------------------------------------
 
-def _apply_sarcasm_veto(
-    e_neg: int, e_pos: int, w_pos: int
-) -> tuple[bool, int, np.ndarray]:
+
+def _apply_sarcasm_veto(e_neg: int, e_pos: int, w_pos: int) -> tuple[bool, int, np.ndarray]:
     """
     Refined deterministic override rule with word context guard and
     scaled confidence.
@@ -78,15 +79,17 @@ def _apply_sarcasm_veto(
 
     # Threshold check
     if e_neg >= EMOJI_BOOST and e_neg >= e_pos:
-        signal_gap  = (e_neg - e_pos) / (e_neg + e_pos + 1)
+        signal_gap = (e_neg - e_pos) / (e_neg + e_pos + 1)
         scaled_conf = round(0.75 + (0.20 * signal_gap), 4)
         return True, 0, np.array([1 - scaled_conf, scaled_conf])
 
     return False, -1, np.array([])
 
+
 # -------------------------------------------------------------------
 # Prediction Logic
 # -------------------------------------------------------------------
+
 
 def predict_sentiment(text: str, run_audit: bool = False) -> dict:
     """
@@ -104,18 +107,18 @@ def predict_sentiment(text: str, run_audit: bool = False) -> dict:
     e_pos, e_neg, w_pos, w_neg = extract_emoji_polarity_features(text)
 
     # 2. Vectorization & Assembly
-    text_vec    = tfidf.transform([text])
+    text_vec = tfidf.transform([text])
     numeric_vec = np.array([[e_pos, e_neg, w_pos, w_neg]])
-    features    = cast(csr_matrix, hstack([text_vec, numeric_vec]).tocsr())
+    features = cast(csr_matrix, hstack([text_vec, numeric_vec]).tocsr())
 
     # 3. Sarcasm Veto
     is_veto, veto_prediction, veto_probs = _apply_sarcasm_veto(e_neg, e_pos, w_pos)
 
     if is_veto:
         prediction = veto_prediction
-        probs      = veto_probs
+        probs = veto_probs
     else:
-        probs      = model.predict_proba(features)[0]
+        probs = model.predict_proba(features)[0]
         prediction = int(model.predict(features)[0])
 
     # --- Determine confidence and ambiguity here! ---
@@ -131,9 +134,10 @@ def predict_sentiment(text: str, run_audit: bool = False) -> dict:
         model=model,
         tfidf=tfidf,
         is_veto=is_veto,
-        confidence=confidence,      
-        entropy_flag=entropy_flag   
+        confidence=confidence,
+        entropy_flag=entropy_flag,
     )
+
 
 # -------------------------------------------------------------------
 # CLI Interface
@@ -145,17 +149,14 @@ if __name__ == "__main__":
     sample_texts = [
         "I love this project 😊",
         "i love having bugs 😭",  # Sarcasm Test
-        "i love hate you baby",   # Lexicon Bias Test
+        "i love hate you baby",  # Lexicon Bias Test
     ]
 
     logger.info("Running Stateless Inference Test...")
 
     for text in sample_texts:
         res = predict_sentiment(text)
-        drivers = ", ".join([
-            f"{d['token']} ({d['weight']})"
-            for d in res['top_drivers']
-        ])
+        drivers = ", ".join([f"{d['token']} ({d['weight']})" for d in res["top_drivers"]])
         print(f"\nText    : {res['raw_text']}")
         print(f"Result  : {res['prediction']} (Confidence: {res['confidence']})")
         print(f"Drivers : {drivers}")
