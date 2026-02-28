@@ -10,27 +10,29 @@ feature dataset (TF-IDF + Emoji Lexicon + Word Lexicon).
 from __future__ import annotations
 
 import random
+from typing import cast
+
 import joblib
 import numpy as np
 import pandas as pd
 from loguru import logger
 from scipy.sparse import hstack, spmatrix
-from typing import cast
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, f1_score
+from sklearn.model_selection import train_test_split
 
 # Centralized Configuration Sync
 from emoji_sentiment_analysis.config import (
-    PROCESSED_DATA_DIR,
     MODELS_DIR,
+    PROCESSED_DATA_DIR,
     SEED,
-    TEXT_COL,
     TARGET_COL,
+    TEXT_COL,
     ensure_dirs,
-    init_logging
+    init_logging,
 )
+
 
 def train_pipeline():
     # 1. Setup
@@ -47,7 +49,7 @@ def train_pipeline():
     try:
         df = pd.read_csv(data_path)
     except FileNotFoundError:
-        logger.error(f"Features file not found. Run build_features.py first.")
+        logger.error("Features file not found. Run build_features.py first.")
         return
 
     # Validation: Ensure the new Lexicon columns exist

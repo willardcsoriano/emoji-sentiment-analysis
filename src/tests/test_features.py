@@ -1,10 +1,11 @@
 # tests/test_features.py
 
+
 import pandas as pd
-from pathlib import Path
+
 from emoji_sentiment_analysis.features import (
-    extract_emoji_polarity_features,
     build_final_features,
+    extract_emoji_polarity_features,
 )
 
 # Note: Expect EMOJI_BOOST = 10

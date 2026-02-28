@@ -11,6 +11,7 @@ is covered separately in test_features.py.
 """
 
 import pytest
+
 from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 
 # ---------------------------------------------------------------------------
@@ -128,7 +129,7 @@ def test_ambiguity_flag_on_neutral_text():
     """
     result = predict_sentiment("the table is brown and the chair is wooden")
     assert result["entropy_flag"] == "High Ambiguity", (
-        f"Ambiguity not detected for neutral text"
+        "Ambiguity not detected for neutral text"
     )
     assert result["confidence"] < 0.65, (
         f"Neutral text should not have high confidence, got {result['confidence']}"
@@ -141,7 +142,7 @@ def test_ambiguity_flag_absent_on_clear_input():
     """
     result = predict_sentiment("i absolutely hate this terrible experience 😭😭")
     assert result["entropy_flag"] == "Clear Signal", (
-        f"Strong negative input should not flag High Ambiguity"
+        "Strong negative input should not flag High Ambiguity"
     )
 
 

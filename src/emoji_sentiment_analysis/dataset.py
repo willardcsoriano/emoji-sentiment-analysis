@@ -24,17 +24,17 @@ data/processed/emoji_reference_clean.csv
 
 from __future__ import annotations
 
-import pandas as pd
 from pathlib import Path
 
-from loguru import logger
+import pandas as pd
 import typer
+from loguru import logger
 
 from emoji_sentiment_analysis.config import (
-    RAW_DATA_DIR,
     PROCESSED_DATA_DIR,
-    TEXT_COL,
+    RAW_DATA_DIR,
     TARGET_COL,
+    TEXT_COL,
 )
 
 app = typer.Typer()

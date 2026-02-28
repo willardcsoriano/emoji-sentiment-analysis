@@ -78,15 +78,15 @@ deploy-full: train deploy
 # PROJECT RULES                                                                 #
 #################################################################################
 
-## Run the local FastAPI dev server
+## Run the local FastAPI dev server (with hot reload)
 .PHONY: dev
 dev:
 	uvicorn app:app --reload
 
-## Make dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) emoji_sentiment_analysis/dataset.py
+## Run the server exactly as it runs in the container (no reload, port 8080)
+.PHONY: serve
+serve:
+	uvicorn app:app --host 0.0.0.0 --port 8080 --log-level debug
 
 #################################################################################
 # Self Documenting Commands                                                     #

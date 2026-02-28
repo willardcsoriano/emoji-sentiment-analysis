@@ -1,9 +1,11 @@
 # src/emoji_sentiment_analysis/config.py
 
 from __future__ import annotations
-from pathlib import Path
+
 import os
 import sys
+from pathlib import Path
+
 from dotenv import load_dotenv
 from loguru import logger
 

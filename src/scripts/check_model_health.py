@@ -8,10 +8,12 @@ and generates a quality report for the reports/ directory.
 """
 
 import json
-import pytest
 from datetime import datetime
 from pathlib import Path
+
+import pytest
 from loguru import logger
+
 from emoji_sentiment_analysis.config import REPORTS_DIR
 
 

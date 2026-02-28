@@ -17,17 +17,16 @@ Output:
 from __future__ import annotations
 
 from pathlib import Path
-import pandas as pd
 
-from loguru import logger
+import pandas as pd
 import typer
+from loguru import logger
 
 from emoji_sentiment_analysis.config import (
     PROCESSED_DATA_DIR,
-    TEXT_COL,
     TARGET_COL,
+    TEXT_COL,
 )
-
 from emoji_sentiment_analysis.features import (
     extract_emoji_polarity_features,
 )

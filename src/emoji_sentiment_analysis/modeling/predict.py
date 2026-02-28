@@ -10,13 +10,14 @@ Purely in-memory: No local file logging to prevent repository bloat.
 
 from __future__ import annotations
 
-import numpy as np
-import joblib
-from loguru import logger
-from scipy.sparse import hstack, csr_matrix
 from typing import cast
 
-from emoji_sentiment_analysis.config import MODELS_DIR, init_logging, AMBIGUITY_THRESHOLD
+import joblib
+import numpy as np
+from loguru import logger
+from scipy.sparse import csr_matrix, hstack
+
+from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR, init_logging
 from emoji_sentiment_analysis.features import extract_emoji_polarity_features
 from emoji_sentiment_analysis.services.audit_service import explain_prediction
 

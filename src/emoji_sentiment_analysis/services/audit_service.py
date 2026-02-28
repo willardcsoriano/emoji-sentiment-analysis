@@ -9,9 +9,11 @@ Makes no predictions, applies no overrides, has no side effects on output.
 
 from __future__ import annotations
 
-import numpy as np
 from datetime import datetime
+
+import numpy as np
 from scipy.sparse import csr_matrix
+
 
 def explain_prediction(
     text: str,
