@@ -25,22 +25,16 @@ where = ["src"]
 include = ["emoji_sentiment_analysis*"]
 
 [tool.pytest.ini_options]
-# FIX: Pointed to the correct directory inside src
 testpaths = ["src/tests"]
 pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 99
 src = ["src"]
+exclude = ["src/notebooks"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I"] # Error, Flake8, Isort (import sorting)
-# E: Syntax errors and standard conventions
-# F: Logic errors (undefined names, etc.)
-# I: Keeps your imports perfectly sorted for readability
+select = ["E", "F", "I"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["emoji_sentiment_analysis"]
-
-[tool.ruff]
-exclude = ["src/notebooks"]
