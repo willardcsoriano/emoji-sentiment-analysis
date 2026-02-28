@@ -79,7 +79,13 @@ def ensure_dirs() -> None:
 def init_logging(use_tqdm: bool = True) -> None:
     """Configure Loguru logging."""
     logger.remove()
-    logger.add(sys.stderr, colorize=True, format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>")
+    fmt = (
+        "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+        "<level>{level: <8}</level> | "
+        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> "
+        "- <level>{message}</level>"
+    )
+    logger.add(sys.stderr, colorize=True, format=fmt)
 
 # ---------------------------------------------------------------------
 # Public API
