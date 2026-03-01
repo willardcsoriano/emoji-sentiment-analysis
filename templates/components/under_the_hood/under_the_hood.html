@@ -19,6 +19,131 @@ All examples verified against live CLI output on 2026-03-01.
         </p>
     </div>
 
+{#
+Algorithm Explainer — How the Model Works
+Sits between the Under the Hood header and the collapsible worked examples.
+#}
+
+<!-- Algorithm Explainer -->
+<div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+
+    <!-- Top bar -->
+    <div class="px-6 py-3 bg-slate-800/60 border-b border-slate-700 flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <span class="ml-2 text-[10px] font-black uppercase tracking-widest text-slate-500">Inference Pipeline · Logistic Regression</span>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+
+        <p class="font-mono text-[11px] text-slate-400 leading-relaxed max-w-2xl">
+            Every prediction follows the same five-step sequence. No neural network —
+            a dot product, a sigmoid, and one deterministic override rule.
+        </p>
+
+        <div class="space-y-0 divide-y divide-slate-800">
+
+            <!-- Step 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-[2.5rem_1fr] gap-3 py-5">
+                <span class="font-mono text-[10px] font-black text-slate-600 pt-0.5">01</span>
+                <div class="space-y-1.5">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Feature Extraction</p>
+                    <p class="font-mono text-[11px] text-slate-400 leading-relaxed">
+                        Text is vectorized into <span class="text-white">1,265 TF-IDF dimensions</span> (token frequency weighted by corpus rarity),
+                        then appended with 4 hand-engineered polarity counts —
+                        <span class="text-emerald-400">emoji_pos</span>, <span class="text-red-400">emoji_neg</span>,
+                        <span class="text-emerald-400">word_pos</span>, <span class="text-red-400">word_neg</span> —
+                        each multiplied by BOOST=10 to compete against the TF-IDF dimensions.
+                        Total: <span class="text-white font-bold">1,269 features</span>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="grid grid-cols-1 sm:grid-cols-[2.5rem_1fr] gap-3 py-5">
+                <span class="font-mono text-[10px] font-black text-slate-600 pt-0.5">02</span>
+                <div class="space-y-1.5">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Dot Product → Logit</p>
+                    <p class="font-mono text-[11px] text-slate-400 leading-relaxed">
+                        Each feature is multiplied by its learned coefficient and summed into one number — the <span class="text-white">logit</span>.
+                        Coefficients were fixed at training time. The dominant one:
+                        <span class="text-red-400">word_neg_count = −4.1277</span>, the strongest predictor found during ablation.
+                    </p>
+                    <div class="mt-1 px-4 py-2.5 bg-slate-800/60 rounded-xl border border-slate-700 font-mono text-[11px] text-slate-400">
+                        logit = <span class="text-emerald-400">(w₁×f₁) + (w₂×f₂) + … + (w₁₂₆₉×f₁₂₆₉)</span> + bias
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="grid grid-cols-1 sm:grid-cols-[2.5rem_1fr] gap-3 py-5">
+                <span class="font-mono text-[10px] font-black text-slate-600 pt-0.5">03</span>
+                <div class="space-y-1.5">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Sigmoid → Confidence</p>
+                    <p class="font-mono text-[11px] text-slate-400 leading-relaxed">
+                        Sigmoid squashes the logit into (0, 1). Above 0.5 → Positive. Below → Negative.
+                        Output is two probabilities that always sum to 1.0 — one per class.
+                        Confidence below <span class="text-amber-400">0.70</span> raises the <span class="text-amber-400">High Ambiguity</span> flag.
+                    </p>
+                    <div class="mt-1 grid grid-cols-4 gap-2">
+                        <div class="px-2 py-2 bg-slate-800/60 rounded-lg border border-slate-700 text-center">
+                            <p class="font-mono text-[10px] text-slate-500">logit +4</p>
+                            <p class="font-mono text-[11px] font-bold text-emerald-400">0.982</p>
+                        </div>
+                        <div class="px-2 py-2 bg-slate-800/60 rounded-lg border border-slate-700 text-center">
+                            <p class="font-mono text-[10px] text-slate-500">logit +1</p>
+                            <p class="font-mono text-[11px] font-bold text-emerald-400">0.731</p>
+                        </div>
+                        <div class="px-2 py-2 bg-slate-800/60 rounded-lg border border-slate-700 text-center">
+                            <p class="font-mono text-[10px] text-slate-500">logit  0</p>
+                            <p class="font-mono text-[11px] font-bold text-amber-400">0.500</p>
+                        </div>
+                        <div class="px-2 py-2 bg-slate-800/60 rounded-lg border border-slate-700 text-center">
+                            <p class="font-mono text-[10px] text-slate-500">logit −4</p>
+                            <p class="font-mono text-[11px] font-bold text-red-400">0.018</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="grid grid-cols-1 sm:grid-cols-[2.5rem_1fr] gap-3 py-5">
+                <span class="font-mono text-[10px] font-black text-slate-600 pt-0.5">04</span>
+                <div class="space-y-1.5">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Sarcasm Veto</p>
+                    <p class="font-mono text-[11px] text-slate-400 leading-relaxed">
+                        Before the model runs, a deterministic rule checks for emoji-text conflict.
+                        If <span class="text-red-400">emoji_neg ≥ 10</span> and the model would predict Positive,
+                        the veto <span class="text-white">bypasses the model entirely</span> —
+                        no dot product, no sigmoid — and returns a hardcoded Negative with confidence
+                        scaled by signal dominance (<span class="text-slate-300">0.75–0.95</span>).
+                        One guard suppresses it when <span class="text-slate-300">word_pos ≥ 2 and emoji_pos = 0</span>,
+                        deferring to the model for genuine emotional overflow.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="grid grid-cols-1 sm:grid-cols-[2.5rem_1fr] gap-3 py-5">
+                <span class="font-mono text-[10px] font-black text-slate-600 pt-0.5">05</span>
+                <div class="space-y-1.5">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Driver Extraction</p>
+                    <p class="font-mono text-[11px] text-slate-400 leading-relaxed">
+                        Every non-zero feature is collected, its coefficient attached, and sorted by
+                        absolute value. The top 3 are the <span class="text-white">Top Drivers</span>.
+                        Note: token coefficients reflect training co-occurrence, not dictionary meaning —
+                        <span class="text-slate-500 italic">"love"</span> carries <span class="text-red-400">−0.5021</span> because
+                        it appeared frequently in sarcastic negative tweets.
+                        The lexicon features exist precisely to correct for this.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>    
+
     <!-- Single Collapsible Wrapper -->
     <details class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
 

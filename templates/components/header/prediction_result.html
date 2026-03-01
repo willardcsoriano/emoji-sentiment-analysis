@@ -14,12 +14,6 @@
                 <span>Confidence</span>
                 <span>{{ (result.confidence * 100) | round(1) }}%</span>
             </div>
-            {% if result.veto_applied %}
-            <div class="flex items-center gap-2 px-3 py-1.5 bg-red-50 border border-red-200 rounded-xl w-fit">
-                <span class="text-red-500 text-xs">⚡</span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-red-600">Sarcasm Veto Applied</span>
-            </div>
-            {% endif %}
             <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div class="h-full {% if result.prediction == 'Positive' %}bg-emerald-500{% else %}bg-rose-500{% endif %} transition-all duration-1000" 
                     style="--conf: {{ (result.confidence * 100) | int }}%; width: var(--conf);">
@@ -54,7 +48,9 @@
                             {{ "%.2f"|format(driver.weight) }}
                         </span>
                         <span class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter">
-                            {% if driver.weight|abs >= 4 %}Critical{% elif driver.weight|abs >= 1 %}Strong{% else %}Minor{% endif %}
+                            {% if driver.weight|abs >= 1.5 %}Critical
+                            {% elif driver.weight|abs >= 0.4 %}Strong
+                            {% else %}Minor{% endif %}
                         </span>
                     </div>
                 </div>
