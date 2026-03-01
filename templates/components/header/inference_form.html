@@ -1,135 +1,100 @@
 <!-- templates/components/header/inference_form.html -->
 
-<!--
-Inference Form — Live Classification Terminal
-
-Design direction:
-- Dark terminal aesthetic matching the CTA and algorithm explainer
-- Monospace throughout — consistent with the rest of the page language
-- Preset chips styled as command tokens
-- Emoji picker as a signal library panel
-- Result area transitions cleanly from idle → loading → result
--->
-
 <style>
     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
-
     #text::placeholder { color: #334155; }
-
-    .preset-chip {
-        transition: all 0.15s ease;
-    }
-    .preset-chip:hover {
-        background: #1d4ed8;
-        border-color: #1d4ed8;
-        color: #fff;
-        transform: translateY(-1px);
-    }
-    .preset-chip:active { transform: scale(0.96); }
 </style>
 
-<!-- Root wrapper -->
 <div class="relative" id="live-tool">
+    <div class="bg-slate-950 rounded-[2.5rem] border border-slate-800 overflow-hidden shadow-2xl">
 
-    <div class="bg-slate-950 rounded-[2.5rem] border border-slate-800 overflow-hidden">
-
-        <!-- Terminal top bar -->
         <div class="px-6 sm:px-8 py-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <div class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
-                <span class="ml-3 font-mono text-[10px] text-slate-600 uppercase tracking-widest hidden sm:block">
+                <span class="ml-3 font-mono text-[10px] text-slate-500 uppercase tracking-widest hidden sm:block">
                     natural_language_stream · hybrid_sentiment_engine
                 </span>
             </div>
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">Ready</span>
+                <span class="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">System Ready</span>
             </div>
         </div>
 
-        <div class="p-6 sm:p-10 space-y-8">
-
-            <form
-                hx-post="/predict-ui"
-                hx-target="#result-area"
-                hx-indicator="#inference-loader"
-                class="space-y-6"
-            >
+        <div class="p-6 sm:p-10 space-y-10">
+            <form hx-post="/predict-ui" hx-target="#result-area" hx-indicator="#inference-loader" class="space-y-10">
 
                 <div class="space-y-5">
+                    <div class="flex items-center gap-4 justify-center">
+                        <div class="h-px bg-slate-800 flex-1"></div>
+                        <span class="font-mono text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Rapid Logic Presets</span>
+                        <div class="h-px bg-slate-800 flex-1"></div>
+                    </div>
 
-                    <!-- Label -->
+                    <div class="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+                        {% for preset in [
+                            {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
+                            {"label": "Sarcasm Veto", "text": "Everything is great. 💀"},
+                            {"label": "Irony Guard", "text": "This is so beautiful and amazing 😭"},
+                            {"label": "Known Blind Spot", "text": "This is so beautiful 😭"},
+                            {"label": "Western Logic", "text": "I'm having a blast at this party! XD <3"},
+                            {"label": "Symbolic Only", "text": "💀 💀 💀"},
+                            {"label": "Positive Drift", "text": "It was okay, I guess. Nothing special."},
+                            {"label": "Mixed Signal", "text": "I love waiting in long lines. :-) 😭"},
+                            {"label": "Ambiguous", "text": "It is what it is."}
+                        ] %}
+                        <button
+                            type="button"
+                            onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
+                            class="preset-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800
+                                   font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest
+                                   hover:bg-blue-600 hover:text-white hover:border-blue-500 
+                                   transition-all duration-200 active:scale-95 shadow-sm"
+                        >
+                            {{ preset.label }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="space-y-5">
                     <div class="flex items-center gap-3">
                         <span class="font-mono text-[10px] text-emerald-500">▶</span>
                         <label for="text" class="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
                             Input Stream
                         </label>
                         <div class="flex-1 h-px bg-slate-800"></div>
-                        <span class="font-mono text-[9px] text-slate-600 uppercase tracking-widest">Rapid Presets</span>
                     </div>
 
-                    <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto px-4">
-                        {% for preset in [
-                            {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
-                            {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
-                            {"label": "Neutral/Flat", "text": "The movie was just okay, I guess."},
-                            {"label": "The Veto Check", "text": "Everything is great. 💀"},
-                            {"label": "Western Vibes", "text": "I'm having a blast at this party! XD <3"},
-                            {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
-                            {"label": "Corporate Speak", "text": "The Q4 results were excellent and perfect. 📈"},
-                            {"label": "The Paradox", "text": "I hate how much I love this! 😂💔"},
-                            {"label": "Soft Praise", "text": "It was actually kind of nice, I suppose."},
-                            {"label": "Ambiguous Vibe", "text": "It is what it is."}
-                        ] %}
-                        <button
-                            type="button"
-                            onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
-                            class="preset-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700
-                                font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest
-                                hover:bg-slate-800 hover:text-white hover:border-slate-500 
-                                transition-all duration-200 active:scale-95 shadow-sm"
-                        >
-                            {{ preset.label }}
-                        </button>
-                        {% endfor %}
-                    </div>
-
-                    <!-- Textarea + emoji trigger -->
                     <div class="relative z-20">
-
                         <textarea
-                            name="text"
-                            id="text"
-                            rows="3"
+                            name="text" id="text" rows="3"
                             onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
                             class="w-full px-6 py-5 bg-slate-900 border-2 border-slate-800
                                    focus:border-blue-500 outline-none transition-all duration-200
                                    rounded-2xl text-xl sm:text-2xl resize-none font-mono
                                    text-slate-100 shadow-inner pr-16 caret-blue-400"
-                            placeholder="classify this text..."
+                            placeholder="Type or select a preset..."
                             required
                         ></textarea>
 
-                        <!-- Emoji picker trigger -->
                         <button
                             type="button"
                             onclick="toggleEmojiPicker(this); event.stopPropagation();"
                             class="absolute bottom-4 right-4 w-10 h-10
-                                flex items-center justify-center
-                                rounded-xl bg-slate-800 border border-slate-700
-                                hover:border-blue-500 hover:bg-slate-700
-                                transition-all shadow-sm z-10 text-lg"
+                                   flex items-center justify-center
+                                   rounded-xl bg-slate-800 border border-slate-700
+                                   hover:border-blue-500 hover:bg-slate-700
+                                   transition-all shadow-sm z-10 text-lg"
                         >
                             👽
                         </button>
-
                     </div>
                 </div>
 
-                <!-- Submit button -->
                 <button
                     type="submit"
                     class="w-full bg-blue-600 hover:bg-blue-500 text-white
@@ -144,17 +109,7 @@ Design direction:
 
             </form>
 
-            <!-- Scope footnote -->
-            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600 text-center leading-relaxed">
-                research model · 1,000-tweet corpus
-                <span class="text-slate-700 mx-1">·</span>
-                known limitations: sarcasm, emoticon irony, neutral text
-            </p>
-
-            <!-- Result area -->
-            <div id="result-area" class="relative min-h-[140px] border-t border-slate-800 flex">
-
-                <!-- Idle state -->
+            <div id="result-area" class="relative min-h-[140px] border-t border-slate-800 flex pt-8">
                 <div class="flex flex-col items-center justify-center w-full text-center">
                     <div class="space-y-3 opacity-30">
                         <div class="flex justify-center gap-1.5">
@@ -168,12 +123,15 @@ Design direction:
                     </div>
                 </div>
 
-                <!-- Loading spinner -->
                 <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center gap-3">
                     <div class="animate-spin h-8 w-8 border-[3px] border-blue-500 border-t-transparent rounded-full"></div>
-                    <p class="font-mono text-[10px] uppercase tracking-widest text-blue-500 animate-pulse">processing</p>
+                    <p class="font-mono text-[10px] uppercase tracking-widest text-blue-500 animate-pulse">processing_inference</p>
                 </div>
             </div>
+            
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600 text-center leading-relaxed opacity-50">
+                1,271-dim hybrid vector · 1,000-tweet corpus
+            </p>
         </div>
     </div>
 </div>
