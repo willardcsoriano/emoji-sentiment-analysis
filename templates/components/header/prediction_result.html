@@ -1,97 +1,119 @@
-<!-- templates/components/header/prediction_result.html -->
+<div class="p-6 sm:p-8 w-full animate-in fade-in zoom-in duration-500">
 
-<div class="p-6 sm:p-8 w-full animate-in fade-in zoom-in duration-300">
-
-    <!-- Prediction + Confidence -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
 
         <div class="text-center md:text-left space-y-1">
-            <p class="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">
-                Classification
+            <p class="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">
+                Inference Result
             </p>
-            <h2 class="text-5xl font-black tracking-tighter font-mono
+            <h2 class="text-5xl sm:text-6xl font-black tracking-tighter font-mono
                        {% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
                 {{ result.prediction | upper }}
             </h2>
         </div>
 
-        <div class="flex-1 max-w-xs w-full space-y-2">
-            <div class="flex justify-between font-mono text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                <span>Confidence</span>
+        <div class="flex-1 max-w-sm w-full space-y-3">
+            <div class="flex justify-between font-mono text-[10px] font-black uppercase tracking-widest">
+                <span class="text-slate-500">System Confidence</span>
                 <span class="{% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
-                    {{ (result.confidence * 100) | round(1) }}%
+                    {{ (result.confidence * 100) | round(2) }}%
                 </span>
             </div>
-            <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                <div class="h-full rounded-full transition-all duration-1000
+            
+            <div class="h-2.5 w-full bg-slate-900 rounded-full border border-slate-800 overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 ease-out
                             {% if result.prediction == 'Positive' %}bg-emerald-500{% else %}bg-rose-500{% endif %}"
                      style="width: {{ (result.confidence * 100) | int }}%;">
                 </div>
             </div>
-            {% if result.entropy_flag == 'High Ambiguity' %}
-            <div class="flex items-center gap-1.5 pt-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <span class="font-mono text-[9px] font-black uppercase tracking-widest text-amber-400">
-                    High Ambiguity
-                </span>
-            </div>
-            {% endif %}
-        </div>
 
+            <div class="flex flex-wrap gap-3 pt-1">
+                {% if result.entropy_flag == 'High Ambiguity' %}
+                <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span class="font-mono text-[9px] font-black uppercase tracking-widest text-amber-500">
+                        High Ambiguity
+                    </span>
+                </div>
+                {% endif %}
+
+                {% if result.is_veto %}
+                <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                    <span class="font-mono text-[9px] font-black uppercase tracking-widest text-rose-500">
+                        Deterministic Override
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <!-- Drivers -->
-    <div class="mt-8 pt-6 border-t border-slate-800">
+    <div class="mt-8">
+        <div class="flex items-center justify-between mb-6">
+            <p class="font-mono text-[10px] font-black uppercase tracking-widest text-slate-500">
+                Primary Model Drivers
+            </p>
+            <span class="text-[10px] font-mono text-slate-700 italic">n=3 strongest signals</span>
+        </div>
 
-        <p class="font-mono text-[10px] font-black uppercase tracking-widest text-slate-600 mb-4">
-            Top 3 Drivers
-        </p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {% for driver in result.top_drivers %}
-            <div class="relative rounded-xl bg-slate-900 border border-slate-700/60 overflow-hidden p-3">
-
-                <!-- Polarity accent bar -->
-                <div class="absolute top-0 left-0 w-0.5 h-full
-                            {% if driver.weight > 0 %}bg-emerald-500{% else %}bg-rose-500{% endif %}">
+            <div class="relative rounded-2xl bg-slate-900/50 border border-slate-800 overflow-hidden p-4 group hover:border-slate-700 transition-colors">
+                
+                <div class="absolute top-0 left-0 w-1 h-full
+                            {% if driver.weight > 0 %}bg-emerald-500/30{% else %}bg-rose-500/30{% endif %}">
                 </div>
 
-                <div class="flex flex-col h-full pl-2">
-                    <span class="font-mono text-[8px] font-black uppercase tracking-widest text-slate-600">
-                        {% if 'emoji' in driver.token %}Visual Anchor
-                        {% elif 'word' in driver.token %}Lexicon Bias
-                        {% else %}Text Token{% endif %}
+                <div class="flex flex-col h-full">
+                    <span class="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">
+                        {% if 'emoji' in driver.token or '' in driver.token %}Symbolic Anchor
+                        {% elif 'word' in driver.token %}Lexicon Signal
+                        {% else %}TF-IDF Token{% endif %}
                     </span>
-                    <span class="font-mono text-[11px] font-bold text-slate-200 truncate mt-0.5 mb-3">
+                    
+                    <span class="font-mono text-[13px] font-bold text-slate-200 truncate mt-1.5 mb-4">
                         {{ driver.token }}
                     </span>
-                    <div class="mt-auto flex items-center justify-between border-t border-slate-700/50 pt-2">
-                        <span class="font-mono text-[11px] font-bold
+                    
+                    <div class="mt-auto flex items-end justify-between border-t border-slate-800 pt-3">
+                        <span class="font-mono text-xs font-bold
                                      {% if driver.weight > 0 %}text-emerald-400{% else %}text-rose-400{% endif %}">
                             {{ "%+.4f"|format(driver.weight) }}
                         </span>
-                        <span class="font-mono text-[9px] text-slate-600 uppercase tracking-wide">
+                        <span class="font-mono text-[9px] text-slate-600 uppercase tracking-widest font-black">
                             {% if driver.weight|abs >= 1.5 %}Critical
-                            {% elif driver.weight|abs >= 0.4 %}Strong
-                            {% else %}Minor{% endif %}
+                            {% elif driver.weight|abs >= 0.5 %}Strong
+                            {% else %}Moderate{% endif %}
                         </span>
                     </div>
                 </div>
-
             </div>
             {% endfor %}
         </div>
+    </div>
 
-        <!-- Legend -->
-        <div class="mt-5 flex gap-5 font-mono text-[9px] font-bold uppercase tracking-widest text-slate-600">
-            <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                Positive Driver
-            </div>
-            <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                Negative Driver
-            </div>
+    <div class="mt-8 flex flex-wrap gap-6 font-mono text-[9px] font-black uppercase tracking-widest text-slate-600">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></span>
+            Positive Weight
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]"></span>
+            Negative Weight
+        </div>
+        {% if result.is_veto %}
+        <div class="ml-auto text-rose-500 italic">
+            * Drivers ignored: Sarcasm Veto overrode statistical weights.
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="mt-8 flex items-center justify-center border-y border-slate-800/50 py-4 font-mono text-[9px] uppercase tracking-widest text-slate-600">
+        
+        <div class="flex items-center gap-2">
+            <span class="text-emerald-500 animate-pulse">●</span>
+            <span>Execution Time: <span class="text-slate-300 font-black">{{ result.latency }}ms</span></span>
         </div>
 
     </div>

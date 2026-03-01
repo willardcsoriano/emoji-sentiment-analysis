@@ -8,6 +8,7 @@ import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+import time
 
 # Modular Imports
 from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR
@@ -56,20 +57,34 @@ async def home(request: Request):
 async def predict_ui(request: Request, text: str = Form(...)):
     """
     Unified Prediction Route:
-    Uses the master logic from predict_sentiment to ensure parity with main.py
+    Captures high-precision execution latency to verify performance claims.
     """
+    # 1. Start high-precision timer
+    start_time = time.perf_counter()
+
+    # 2. Execute the hybrid inference pipeline
     result = predict_sentiment(text)
 
+    # 3. Calculate execution latency in milliseconds
+    execution_time_ms = (time.perf_counter() - start_time) * 1000
+    
+    # 4. Inject metadata for the UI
+    result["latency"] = round(execution_time_ms, 2)
     result["prediction_int"] = 1 if result["prediction"] == "Positive" else 0
 
+    # 5. Handle Ambiguity Flagging
     if "entropy_flag" not in result:
         result["entropy_flag"] = (
             "High Ambiguity" if result["confidence"] < AMBIGUITY_THRESHOLD else "Clear Signal"
         )
 
+    # 6. Render the result component
     return templates.TemplateResponse(
         "components/header/prediction_result.html",
-        {"request": request, "result": result},
+        {
+            "request": request, 
+            "result": result
+        },
     )
 
 

@@ -88,6 +88,11 @@ dev:
 serve:
 	uvicorn app:app --host 0.0.0.0 --port 8080 --log-level debug
 
+## Run dev server accessible to your phone (Same Wi-Fi)
+.PHONY: dev-mobile
+dev-mobile:
+	uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################

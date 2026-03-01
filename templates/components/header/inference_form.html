@@ -34,25 +34,26 @@
                         <div class="h-px bg-slate-800 flex-1"></div>
                     </div>
 
-                    <div class="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+                    <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto px-4">
                         {% for preset in [
                             {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
-                            {"label": "Sarcasm Veto", "text": "Everything is great. 💀"},
-                            {"label": "Irony Guard", "text": "This is so beautiful and amazing 😭"},
-                            {"label": "Known Blind Spot", "text": "This is so beautiful 😭"},
-                            {"label": "Western Logic", "text": "I'm having a blast at this party! XD <3"},
-                            {"label": "Symbolic Only", "text": "💀 💀 💀"},
-                            {"label": "Positive Drift", "text": "It was okay, I guess. Nothing special."},
-                            {"label": "Mixed Signal", "text": "I love waiting in long lines. :-) 😭"},
-                            {"label": "Ambiguous", "text": "It is what it is."}
+                            {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
+                            {"label": "Neutral/Flat", "text": "The movie was just okay, I guess."},
+                            {"label": "The Veto Check", "text": "Everything is great. 💀"},
+                            {"label": "Western Vibes", "text": "I'm having a blast at this party! XD <3"},
+                            {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
+                            {"label": "Corporate Speak", "text": "The Q4 results were excellent and perfect. 📈"},
+                            {"label": "The Paradox", "text": "I hate how much I love this! 😂💔"},
+                            {"label": "Soft Praise", "text": "It was actually kind of nice, I suppose."},
+                            {"label": "Ambiguous Vibe", "text": "It is what it is."}
                         ] %}
                         <button
                             type="button"
                             onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
-                            class="preset-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800
-                                   font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest
-                                   hover:bg-blue-600 hover:text-white hover:border-blue-500 
-                                   transition-all duration-200 active:scale-95 shadow-sm"
+                            class="preset-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700
+                                font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest
+                                hover:bg-slate-800 hover:text-white hover:border-slate-500 
+                                transition-all duration-200 active:scale-95 shadow-sm"
                         >
                             {{ preset.label }}
                         </button>

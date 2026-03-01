@@ -1,37 +1,40 @@
 <!-- templates/components/system_overview/system_overview.html -->
 
-<section aria-labelledby="project-overview-heading" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6">
-    <h2 id="system-overview-heading" class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">
+<section aria-labelledby="project-overview-heading" class="col-span-1 md:col-span-12 lg:col-span-7 space-y-6 px-4 sm:px-0">
+    
+    <h2 id="system-overview-heading" class="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-slate-400">
         System Overview
     </h2>
 
-    <p class="text-lg text-slate-700 leading-relaxed font-medium">
+    <p class="text-base sm:text-lg text-slate-700 leading-relaxed font-medium">
         Human emotion is increasingly expressed in fragments — brief messages, compressed language, and symbolic cues. 
         This project investigates how machine learning can interpret that signal. By training a statistical model on 
         labeled examples of short-form social media text, the system learns patterns associated with positive and 
         negative sentiment and applies them to new, unseen input.
     </p>
 
-    <p class="text-slate-600 leading-relaxed">
-        Unlike traditional approaches that treat emojis as noise, this system treats them as measurable affective data. 
-        Textual patterns are represented using TF-IDF statistics, capturing how strongly words correlate with sentiment 
-        across the dataset, while emoji polarity signals are extracted as structured features. These complementary 
-        channels are fused into a unified representation that allows the classifier to evaluate linguistic and symbolic 
-        meaning simultaneously.
-    </p>
+    <div class="space-y-5 text-sm sm:text-base text-slate-600 leading-relaxed">
+        <p>
+            Unlike traditional approaches that treat emojis as noise, this system treats them as measurable affective data. 
+            Textual patterns are represented using <span class="text-slate-900 font-semibold">TF-IDF statistics</span>, 
+            capturing how strongly words correlate with sentiment across the dataset, while emoji polarity signals are 
+            extracted as structured features. These complementary channels are fused into a unified representation that 
+            allows the classifier to evaluate linguistic and symbolic meaning simultaneously.
+        </p>
 
-    <p class="text-slate-600 leading-relaxed">
-        The pipeline follows a rigorous machine learning lifecycle: deterministic data cleaning, exploratory analysis, 
-        feature engineering, supervised training, and performance evaluation. The resulting model and feature 
-        vocabulary are serialized to preserve parity between research and deployment.
-    </p>
+        <p>
+            The pipeline follows a rigorous machine learning lifecycle: deterministic data cleaning, exploratory analysis, 
+            feature engineering, supervised training, and performance evaluation. The resulting model and feature 
+            vocabulary are serialized to preserve parity between research and deployment.
+        </p>
 
-    <p class="text-slate-600 leading-relaxed">
-        When text is submitted through the interface, it undergoes the same transformations used during training. 
-        While the engine relies on probability-based predictions, it is governed by a 
-        <span class="text-slate-900 font-bold">hybrid logic layer</span>. This architecture balances 
-        learned statistical patterns with deterministic rules designed to mitigate 
-        <span class="italic">positive drift</span> and interpret complex symbolic signals like sarcasm. 
-        The sections below document the empirical findings and architectural decisions that enable this inference process.
-    </p>
+        <p>
+            When text is submitted through the interface, it undergoes the same transformations used during training. 
+            While the engine relies on probability-based predictions, it is governed by a 
+            <span class="text-slate-900 font-bold underline decoration-indigo-100 underline-offset-4">hybrid logic layer</span>. 
+            This architecture balances learned statistical patterns with deterministic rules designed to mitigate 
+            <span class="italic text-slate-800">positive drift</span> and interpret complex symbolic signals like sarcasm. 
+            The sections below document the empirical findings and architectural decisions that enable this inference process.
+        </p>
+    </div>
 </section>
