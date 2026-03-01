@@ -28,7 +28,10 @@
 
     <p class="text-slate-600 leading-relaxed">
         When text is submitted through the interface, it undergoes the same transformations used during training. 
-        The model then produces probability-based predictions that reflect learned confidence rather than fixed rules. 
+        While the engine relies on probability-based predictions, it is governed by a 
+        <span class="text-slate-900 font-bold">hybrid logic layer</span>. This architecture balances 
+        learned statistical patterns with deterministic rules designed to mitigate 
+        <span class="italic">positive drift</span> and interpret complex symbolic signals like sarcasm. 
         The sections below document the empirical findings and architectural decisions that enable this inference process.
     </p>
 </section>

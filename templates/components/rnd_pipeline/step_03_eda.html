@@ -1,8 +1,5 @@
-<!-- templates/components/step_03_eda.html -->
-
 <div class="space-y-6">
 
-    <!-- Hero stat -->
     <div class="bg-indigo-600 rounded-2xl p-6 text-white shadow-lg">
         <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">
             Emoji Presence Rate
@@ -12,23 +9,23 @@
         </h3>
         <p class="text-sm opacity-90 leading-relaxed">
             Exploratory analysis confirms that nearly half of all tweets contain at
-            least one emoji — making emoji usage <strong>common, not incidental</strong>.
-            This frequency alone justified proceeding with emoji-aware feature engineering
+            least one emoji — making emoji usage <strong>common, not incidental</strong>. 
+            This frequency alone justified proceeding with emoji-aware feature engineering 
             rather than treating symbols as noise.
         </p>
     </div>
 
-    <!-- Key findings grid -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
         <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
             <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2">
                 Label Distribution
             </p>
-            <p class="text-sm font-black text-slate-800 mb-1">Balanced</p>
+            <p class="text-sm font-black text-slate-800 mb-1">Subtle Positive Lean</p>
             <p class="text-[11px] text-slate-500 leading-relaxed">
-                Labels are approximately 50/50 positive/negative — emoji–label
-                relationships are not artifacts of class skew.
+                The corpus shows a natural skew toward positive sentiment (500 pos vs 436 neg). 
+                While stable, this 14.7% baseline lean informs the eventual need for 
+                deterministic guardrails.
             </p>
         </div>
 
@@ -38,8 +35,8 @@
             </p>
             <p class="text-sm font-black text-slate-800 mb-1">Bimodal &amp; Sparse</p>
             <p class="text-[11px] text-slate-500 leading-relaxed">
-                ~505 tweets carry zero emojis; ~465 carry exactly one.
-                Fewer than 5% contain two or more — emojis act as
+                ~505 tweets carry zero emojis; ~465 carry exactly one. 
+                Fewer than 5% contain two or more — emojis act as 
                 <em>binary anchors</em>, not intensity counters.
             </p>
         </div>
@@ -48,17 +45,16 @@
             <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2">
                 Label Correlation
             </p>
-            <p class="text-sm font-black text-slate-800 mb-1">Signal Confirmed</p>
+            <p class="text-sm font-black text-slate-800 mb-1">Positive Bias Anchor</p>
             <p class="text-[11px] text-slate-500 leading-relaxed">
-                Emoji presence rate differs between positive and negative labels.
-                Positive tweets use emojis at a higher average frequency —
-                consistent with emojis as <em>affective amplifiers</em>.
+                Positive tweets use emojis at a significantly higher rate. 
+                As <em>affective amplifiers</em>, these symbols frequently outweigh textual weight, 
+                justifying a hybrid logic layer to mitigate positive drift.
             </p>
         </div>
 
     </div>
 
-    <!-- Coverage gap finding -->
     <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
         <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
             Coverage Gap — The Critical Finding
@@ -78,16 +74,15 @@
             </div>
         </div>
         <p class="text-[11px] text-slate-500 leading-relaxed">
-            The reference table covers only 12 of the 34 unique emojis found in the corpus.
-            This gap — confirmed here empirically — became the direct motivation for
+            The reference table covers only 12 of the 34 unique emojis found in the corpus. 
+            This gap — confirmed here empirically — became the direct motivation for 
             building an expanded polarity lexicon in the feature engineering stage.
         </p>
     </div>
 
-    <!-- Design decisions -->
     <div class="flex flex-wrap gap-2">
         <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
-            Balanced Labels
+            Account for Positive Lean
         </span>
         <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
             Orthogonal Signal
@@ -98,22 +93,18 @@
         <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
             No Dense Representations
         </span>
-        <span class="px-2 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase">
-            No Label-Derived Emoji Scores
-        </span>
     </div>
 
-    <!-- Empirical validation block -->
     <div class="bg-slate-50 border-l-4 border-indigo-500 pl-4 py-3">
         <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
             Design Decision
         </p>
         <p class="text-xs text-slate-600 italic leading-relaxed">
-            "EDA confirmed emoji-aware feature engineering is justified — but under
-            strict constraints: simple, interpretable features only; no dense emoji
-            representations; no label-derived sentiment learning. The sparse, bimodal
-            distribution validates a curated polarity lexicon as the right abstraction.
-            The 12/34 coverage gap flags lexicon expansion as a necessary next step."
+            "EDA confirmed emoji-aware feature engineering is justified — but under 
+            strict constraints: simple, interpretable features only; no dense emoji 
+            representations. The subtle 14.7% positive class skew 
+            validates the use of a curated polarity lexicon paired with a 
+            deterministic logic layer to ensure reliable inference."
         </p>
     </div>
 

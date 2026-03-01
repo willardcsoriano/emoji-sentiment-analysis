@@ -1,0 +1,68 @@
+<!-- templates\components\under_the_hood\examples\ex_05_veto_trigger.html -->
+
+{# Example 05 — Model Casualty · "This is so beautiful 😭" #}
+<details class="group bg-white transition-all duration-300">
+    <summary class="flex items-center justify-between px-6 py-5 cursor-pointer list-none hover:bg-slate-50/80 transition-colors">
+        <div class="flex items-center gap-4">
+            <span class="text-slate-400 font-mono text-[10px] font-black tracking-tighter">05</span>
+            <span class="font-mono text-sm text-slate-900 font-bold">"This is so beautiful 😭"</span>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-wide">Known Blind Spot</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-[10px] font-mono text-slate-400 uppercase group-open:hidden">Inspect Casualty</span>
+            <span class="text-slate-400 text-sm group-open:rotate-180 transition-transform duration-200 select-none">▾</span>
+        </div>
+    </summary>
+
+    <div class="p-6 sm:p-8 space-y-6 border-t border-slate-100 bg-slate-50/30">
+        
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <p class="text-[11px] text-amber-900 leading-relaxed">
+                <span class="font-black uppercase tracking-wider text-[10px] block mb-1">Engineering Trade-off</span>
+                This is a <strong>heuristic casualty</strong>. While a human might read this as "crying from happiness," the system treats it as sarcasm because the <span class="font-mono bg-white px-1">word_pos</span> count fails to hit the "Sincerity Guard" threshold of 2. 
+                This blind spot is the necessary collateral for preventing thousands of sarcastic False Positives caused by the model's inherent 14.7% positive drift.
+            </p>
+        </div>
+
+        <div class="p-5 bg-slate-900 rounded-xl border border-red-900/50 shadow-xl font-mono relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/5 blur-3xl"></div>
+            
+            <p class="text-[10px] font-black uppercase tracking-widest text-red-400 mb-4 flex items-center gap-2">
+                <span class="animate-pulse">⚡</span> Veto Strike: Statistical Bypass
+            </p>
+            
+            <div class="text-[11px] space-y-4 text-slate-300 relative">
+                <div class="grid grid-cols-2 gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <p class="text-[9px] text-slate-500 uppercase mb-1">Signal Status</p>
+                        <p>word_pos: <span class="text-white">1</span> <span class="text-red-500">(Insufficient Guard)</span></p>
+                        <p>e_neg: <span class="text-white">10</span> <span class="text-emerald-400 font-bold">(Veto Triggered)</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-500 uppercase mb-1">Model Result</p>
+                        <p class="text-emerald-500 font-bold opacity-50">Positive (Discarded)</p>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <p class="text-[9px] text-slate-500 uppercase mb-2">Deterministic Confidence Calculation</p>
+                    <div class="space-y-2 text-slate-400 font-mono">
+                        <div class="p-2 bg-slate-950 rounded border border-slate-800 text-[9px]">
+                            <p class="text-indigo-300"># Anchoring at 93.18% to override "Positive Drift"</p>
+                            <p class="text-slate-400">0.75 + (0.20 * 0.9091) = <span class="text-red-400 font-bold">0.9318</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between px-5 py-3 bg-red-600 rounded-xl text-white shadow-lg shadow-red-900/10">
+            <span class="text-[10px] font-black uppercase tracking-widest opacity-80">Final Output</span>
+            <div class="font-mono text-xs flex gap-3">
+                <span class="font-black text-sm tracking-wider">NEGATIVE</span>
+                <span class="opacity-40">|</span>
+                <span class="font-bold">93.18% Confidence</span>
+            </div>
+        </div>
+    </div>
+</details>

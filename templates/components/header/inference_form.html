@@ -1,9 +1,55 @@
 <!-- templates/components/header/inference_form.html -->
 
-<!-- Root wrapper controls overlay positioning -->
-<div class="relative">
+<!--
+Inference Form — Live Classification Terminal
 
-    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-200">
+Design direction:
+- Dark terminal aesthetic matching the CTA and algorithm explainer
+- Monospace throughout — consistent with the rest of the page language
+- Preset chips styled as command tokens
+- Emoji picker as a signal library panel
+- Result area transitions cleanly from idle → loading → result
+-->
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    #text::placeholder { color: #334155; }
+
+    .preset-chip {
+        transition: all 0.15s ease;
+    }
+    .preset-chip:hover {
+        background: #1d4ed8;
+        border-color: #1d4ed8;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+    .preset-chip:active { transform: scale(0.96); }
+</style>
+
+<!-- Root wrapper -->
+<div class="relative" id="live-tool">
+
+    <div class="bg-slate-950 rounded-[2.5rem] border border-slate-800 overflow-hidden">
+
+        <!-- Terminal top bar -->
+        <div class="px-6 sm:px-8 py-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
+                <span class="ml-3 font-mono text-[10px] text-slate-600 uppercase tracking-widest hidden sm:block">
+                    natural_language_stream · hybrid_sentiment_engine
+                </span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">Ready</span>
+            </div>
+        </div>
+
         <div class="p-6 sm:p-10 space-y-8">
 
             <form
@@ -13,18 +59,19 @@
                 class="space-y-6"
             >
 
-                <div class="space-y-4">
-                    <div class="px-1 space-y-1">
-                        <label for="text" class="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 text-center">
-                            Natural Language Stream
+                <div class="space-y-5">
+
+                    <!-- Label -->
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono text-[10px] text-emerald-500">▶</span>
+                        <label for="text" class="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                            Input Stream
                         </label>
-                        
-                        <p class="text-[9px] font-bold uppercase tracking-wider text-slate-300 text-center">
-                            Rapid Presets
-                        </p>
+                        <div class="flex-1 h-px bg-slate-800"></div>
+                        <span class="font-mono text-[9px] text-slate-600 uppercase tracking-widest">Rapid Presets</span>
                     </div>
 
-                    <div class="flex flex-wrap gap-2 justify-center">
+                    <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto px-4">
                         {% for preset in [
                             {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
                             {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
@@ -35,143 +82,98 @@
                             {"label": "Corporate Speak", "text": "The Q4 results were excellent and perfect. 📈"},
                             {"label": "The Paradox", "text": "I hate how much I love this! 😂💔"},
                             {"label": "Soft Praise", "text": "It was actually kind of nice, I suppose."},
-                            {"label": "Ambiguous Vibe", "text": "It is what it is."}                            
+                            {"label": "Ambiguous Vibe", "text": "It is what it is."}
                         ] %}
                         <button
                             type="button"
                             onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
-                            class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 
-                                text-[11px] font-bold text-slate-600 hover:bg-blue-500 
-                                hover:text-white hover:border-blue-500 transition-all active:scale-95"
+                            class="preset-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700
+                                font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest
+                                hover:bg-slate-800 hover:text-white hover:border-slate-500 
+                                transition-all duration-200 active:scale-95 shadow-sm"
                         >
                             {{ preset.label }}
                         </button>
                         {% endfor %}
                     </div>
 
-                    <div class="relative z-20"> 
-                        
+                    <!-- Textarea + emoji trigger -->
+                    <div class="relative z-20">
+
                         <textarea
                             name="text"
                             id="text"
                             rows="3"
                             onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
-                            class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl
-                                focus:border-blue-500 focus:bg-white outline-none transition-all
-                                text-xl sm:text-2xl placeholder-slate-300 resize-none font-medium shadow-inner pr-16"
-                            placeholder="Analyze the vibe... ✨"
+                            class="w-full px-6 py-5 bg-slate-900 border-2 border-slate-800
+                                   focus:border-blue-500 outline-none transition-all duration-200
+                                   rounded-2xl text-xl sm:text-2xl resize-none font-mono
+                                   text-slate-100 shadow-inner pr-16 caret-blue-400"
+                            placeholder="classify this text..."
                             required
                         ></textarea>
 
+                        <!-- Emoji picker trigger -->
                         <button
                             type="button"
-                            onclick="toggleEmojiPicker()"
+                            onclick="toggleEmojiPicker(this); event.stopPropagation();"
                             class="absolute bottom-4 right-4 w-10 h-10
-                                   flex items-center justify-center
-                                   rounded-xl bg-white border border-slate-200
-                                   hover:border-blue-400 hover:text-blue-500
-                                   transition-all shadow-sm z-10"
+                                flex items-center justify-center
+                                rounded-xl bg-slate-800 border border-slate-700
+                                hover:border-blue-500 hover:bg-slate-700
+                                transition-all shadow-sm z-10 text-lg"
                         >
-                            ✨
+                            👽
                         </button>
 
-                        <div
-                            id="emoji-picker"
-                            class="hidden absolute top-full right-0 mt-2
-                                bg-white border border-slate-200 shadow-2xl
-                                rounded-3xl p-5 w-72 sm:w-80
-                                z-50 animate-in fade-in slide-in-from-top-2"
-                        >
-                            <div class="flex items-center justify-between mb-4 px-1">
-                                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    Signal Library
-                                </h3>
-                                <div class="flex gap-2">
-                                    <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[9px] font-bold uppercase">Hybrid Set</span>
-                                </div>
-                            </div>
-
-                            <div class="max-h-64 overflow-y-auto pr-2 custom-scrollbar">
-                                
-                                <div class="mb-4">
-                                    <p class="text-[9px] font-bold text-slate-300 uppercase mb-2 px-1">Positive Signals</p>
-                                    <div class="grid grid-cols-5 gap-2">
-                                        {% for emoji in [
-                                            "😂","🤣","😊","😍","🥰","😘","😁","😉","😄","😆",
-                                            "😀","😛","🥳","😇","😋","😏","😌","👍","🙌","👏",
-                                            "👌","💪","🔥","✨","🌟","💯","✅","❤️","💖","🚀"
-                                        ] %}
-                                        <button type="button" onclick="insertEmoji('{{ emoji }}')"
-                                                class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-blue-50 hover:scale-110 transition-all text-xl">
-                                            {{ emoji }}
-                                        </button>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <p class="text-[9px] font-bold text-slate-300 uppercase mb-2 px-1">Negative Signals</p>
-                                    <div class="grid grid-cols-5 gap-2">
-                                        {% for emoji in [
-                                            "😭","😒","😔","😢","😞","😟","😠","😡","🤬","🤯",
-                                            "😩","😫","😤","😰","😨","😱","😧","😲","🙄","🤨",
-                                            "💔","👎","❌","🛑","⚠️","💀","🤡","🤮","💩","📉"
-                                        ] %}
-                                        <button type="button" onclick="insertEmoji('{{ emoji }}')"
-                                                class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-50 hover:scale-110 transition-all text-xl">
-                                            {{ emoji }}
-                                        </button>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <style>
-                            /* Custom scrollbar for a cleaner look */
-                            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-                            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-                        </style>
-                        </div>
+                    </div>
                 </div>
 
+                <!-- Submit button -->
                 <button
                     type="submit"
-                    class="w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-5
-                           rounded-2xl transition-all shadow-lg active:scale-[0.98]
-                           flex items-center justify-center gap-3"
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white
+                           font-mono font-black py-5 rounded-2xl
+                           transition-all duration-200 shadow-lg shadow-blue-900/30
+                           active:scale-[0.98] flex items-center justify-center gap-3
+                           uppercase tracking-[0.2em] text-[11px]"
                 >
-                    <span class="tracking-wide text-sm uppercase">
-                        Execute Classification
-                    </span>
+                    <span class="text-blue-300">▶</span>
+                    Execute Classification
                 </button>
 
             </form>
 
-            <div id="result-area" class="relative min-h-[140px] border-t border-slate-50 flex">
+            <!-- Scope footnote -->
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600 text-center leading-relaxed">
+                research model · 1,000-tweet corpus
+                <span class="text-slate-700 mx-1">·</span>
+                known limitations: sarcasm, emoticon irony, neutral text
+            </p>
 
-                <div class="flex flex-col items-center justify-center w-full text-center group-[.htmx-request]:hidden">
-                    <div class="space-y-4 opacity-40">
+            <!-- Result area -->
+            <div id="result-area" class="relative min-h-[140px] border-t border-slate-800 flex">
+
+                <!-- Idle state -->
+                <div class="flex flex-col items-center justify-center w-full text-center">
+                    <div class="space-y-3 opacity-30">
                         <div class="flex justify-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_0ms]"></span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_200ms]"></span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-[bounce_2s_infinite_400ms]"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_0ms]"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_200ms]"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_400ms]"></span>
                         </div>
-                        
-                        <p class="text-[10px] font-mono uppercase tracking-[0.3em] animate-pulse">
-                            Ready for Stream
+                        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500 animate-pulse">
+                            awaiting_input
                         </p>
                     </div>
                 </div>
-                
-                <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center text-blue-600">
-                    <div class="animate-spin h-10 w-10 border-[4px] border-blue-600 border-t-transparent rounded-full"></div>
+
+                <!-- Loading spinner -->
+                <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center gap-3">
+                    <div class="animate-spin h-8 w-8 border-[3px] border-blue-500 border-t-transparent rounded-full"></div>
+                    <p class="font-mono text-[10px] uppercase tracking-widest text-blue-500 animate-pulse">processing</p>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

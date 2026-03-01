@@ -1,0 +1,23 @@
+<!-- templates\components\under_the_hood\worked_examples_wrapper.html -->
+
+<div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+    <div class="flex items-center justify-between gap-4 px-6 py-5 border-b border-slate-100 bg-white">
+        <div class="flex items-center gap-3">
+            <span class="text-slate-700 font-bold text-sm">Worked Examples</span>
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase">Positive</span>
+                <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-black uppercase">Negative</span>
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase">Ambiguity</span>
+            </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Select Input to Expand</span>
+    </div>
+
+    <div class="divide-y divide-slate-100">
+        {% include "components/under_the_hood/examples/ex_01_clear_positive.html" %}
+        {% include "components/under_the_hood/examples/ex_02_sarcasm_veto.html" %}
+        {% include "components/under_the_hood/examples/ex_03_high_ambiguity.html" %}
+        {% include "components/under_the_hood/examples/ex_04_guard_suppression.html" %}
+        {% include "components/under_the_hood/examples/ex_05_veto_trigger.html" %}
+    </div>
+</div>

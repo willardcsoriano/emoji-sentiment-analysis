@@ -1,0 +1,30 @@
+<div class="grid grid-cols-1 sm:grid-cols-[3.5rem_1fr] gap-4 py-6 group">
+    <div class="flex flex-col items-center">
+        <span class="font-mono text-[10px] font-black text-slate-400 mb-2">04</span>
+        <div class="w-[1px] h-full bg-slate-200 group-last:bg-transparent"></div>
+    </div>
+    <div class="space-y-3">
+        <div class="flex items-center gap-2">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Sigmoid → Confidence</p>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 border border-amber-200">PROB_DIST</span>
+        </div>
+        <p class="font-mono text-[11px] text-slate-600 leading-relaxed">
+            Sigmoid squashes the logit into (0, 1). Values below <span class="text-amber-600 font-bold">0.70</span> raise 
+            the <span class="text-amber-600 font-bold">High Ambiguity</span> flag.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div class="p-2 bg-slate-900 rounded border border-slate-800 text-center shadow-sm">
+                <p class="text-[9px] text-slate-500 uppercase">Logit +4</p>
+                <p class="font-mono text-emerald-400 font-bold text-[10px]">0.982</p>
+            </div>
+            <div class="p-2 bg-slate-900 rounded border border-slate-800 text-center shadow-sm">
+                <p class="text-[9px] text-slate-500 uppercase">Logit 0</p>
+                <p class="font-mono text-amber-400 font-bold text-[10px]">0.500</p>
+            </div>
+            <div class="p-2 bg-slate-900 rounded border border-slate-800 text-center shadow-sm">
+                <p class="text-[9px] text-slate-500 uppercase">Logit -4</p>
+                <p class="font-mono text-red-400 font-bold text-[10px]">0.018</p>
+            </div>
+        </div>
+    </div>
+</div>

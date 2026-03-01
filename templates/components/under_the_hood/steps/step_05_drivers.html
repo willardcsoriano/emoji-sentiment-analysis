@@ -1,0 +1,25 @@
+<div class="grid grid-cols-1 sm:grid-cols-[3.5rem_1fr] gap-4 py-6 group">
+    <div class="flex flex-col items-center">
+        <span class="font-mono text-[10px] font-black text-slate-400 mb-2">05</span>
+        </div>
+    <div class="space-y-2">
+        <div class="flex items-center gap-2">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Driver Extraction</p>
+            <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">POST_PROCESS</span>
+        </div>
+        
+        <p class="font-mono text-[11px] text-slate-600 leading-relaxed">
+            Non-zero features are collected and sorted by absolute coefficient value. 
+            The top 3 results are flagged as <span class="text-slate-900 font-bold uppercase tracking-tight">Top Drivers</span>. 
+        </p>
+
+        <div class="mt-2 p-3 bg-emerald-50/50 rounded-xl border border-emerald-100/80">
+            <p class="font-mono text-[10px] text-emerald-800 leading-relaxed">
+                <span class="font-bold">Note:</span> Token coefficients reflect training co-occurrence. 
+                Lexicon features (emoji/word counts) are engineered specifically to correct for 
+                sarcastic drift where positive words like <span class="italic font-bold">"love"</span> 
+                carry negative weights.
+            </p>
+        </div>
+    </div>
+</div>

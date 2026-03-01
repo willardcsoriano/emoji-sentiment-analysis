@@ -1,0 +1,91 @@
+<!-- templates\components\under_the_hood\algorithm_explainer.html -->
+
+<details class="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 open:shadow-md">
+    <summary class="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none hover:bg-emerald-50/50 transition-colors">
+        <div class="flex items-center gap-3">
+            <span class="text-slate-700 font-bold text-sm">Algorithm Explainer</span>
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wide">Hybrid System</span>
+                <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wide">Deterministic Gate</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-[10px] font-mono text-slate-400 uppercase tracking-tight group-open:hidden">View Logic Map</span>
+            <span class="text-slate-400 text-sm group-open:rotate-180 transition-transform duration-200 select-none shrink-0">▾</span>
+        </div>
+    </summary>
+
+    <div class="border-t border-slate-100 bg-emerald-50/10 p-6 sm:p-8 space-y-8">
+        
+        <section class="grid grid-cols-1 md:grid-cols-[14rem_1fr] gap-4">
+            <div>
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">01. Extraction</h4>
+                <p class="text-[11px] text-slate-500 italic leading-relaxed">Encoding raw text into a 1,269-dimension matrix.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm font-mono text-[11px] text-slate-600">
+                Vector <span class="text-slate-900 font-bold">X</span> = [ 1,265 TF-IDF tokens ] + [ <span class="text-emerald-600">e_pos</span>, <span class="text-red-600">e_neg</span>, <span class="text-emerald-600">w_pos</span>, <span class="text-red-600">w_neg</span> ]
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-[14rem_1fr] gap-4">
+            <div>
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-1">02. Inference Gate</h4>
+                <p class="text-[11px] text-slate-500 italic leading-relaxed">A deterministic "Sarcasm Veto" that overrides the model.</p>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-[10px]">
+                    <p class="text-slate-400 mb-2">// Veto Trigger Condition</p>
+                    <p class="text-white"><span class="text-indigo-400">if</span> (e_neg >= 10 && prediction == POSITIVE):</p>
+                    <p class="pl-4 text-red-400"><span class="text-slate-500"># Apply Signal Gap Confidence</span></p>
+                    <p class="pl-4 text-white">conf = 0.75 + (0.20 * (e_neg / total_signal))</p>
+                </div>
+                <div class="p-3 bg-red-50 rounded-lg border border-red-100 text-[10px] text-red-800 font-mono">
+                    <strong>SUPPRESSION GUARD:</strong> Veto is aborted if <code class="bg-white px-1 rounded">w_pos >= 2</code>, deferring to statistical model.
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-[14rem_1fr] gap-4">
+            <div>
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">03. Statistical Model</h4>
+                <p class="text-[11px] text-slate-500 italic leading-relaxed">Arithmetic logic used only if Gatekeeper allows.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Dot Product (Logit)</p>
+                    <p class="font-mono text-sm text-slate-900 font-bold">z = Σ(w<sub>i</sub>f<sub>i</sub>) + b</p>
+                    <p class="text-[10px] text-slate-500 mt-1 italic">Sum of feature-weight products.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Sigmoid Function</p>
+                    <p class="font-mono text-sm text-slate-900 font-bold">S(z) = 1 / (1 + e<sup>-z</sup>)</p>
+                    <p class="text-[10px] text-slate-500 mt-1 italic">Squashes logit into range.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-[14rem_1fr] gap-4">
+            <div>
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">04. Calibration</h4>
+                <p class="text-[11px] text-slate-500 italic leading-relaxed">Finalizing output status based on probability.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div class="px-3 py-3 bg-white border border-slate-200 rounded-xl text-center shadow-sm">
+                    <p class="text-[9px] font-black text-emerald-600 uppercase mb-1">Clear Signal</p>
+                    <p class="text-[11px] font-mono text-slate-900 font-bold">Conf > 0.70</p>
+                </div>
+                <div class="px-3 py-3 bg-white border border-slate-200 rounded-xl text-center shadow-sm">
+                    <p class="text-[9px] font-black text-amber-600 uppercase mb-1">Ambiguous</p>
+                    <p class="text-[11px] font-mono text-slate-900 font-bold">Conf < 0.70</p>
+                </div>
+                <div class="px-3 py-3 bg-white border border-slate-200 rounded-xl text-center shadow-sm">
+                    <p class="text-[9px] font-black text-red-600 uppercase mb-1">Veto Applied</p>
+                    <p class="text-[10px] font-mono text-slate-900 font-bold leading-tight">
+                        0.75 + (0.20 * Gap)
+                    </p>
+                    <p class="text-[8px] text-slate-400 mt-1 uppercase tracking-tighter">Scaled Confidence</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</details>
