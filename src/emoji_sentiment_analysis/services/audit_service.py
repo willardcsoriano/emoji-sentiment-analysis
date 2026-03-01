@@ -64,7 +64,7 @@ def explain_prediction(
         "confidence": round(confidence, 4),
         "entropy_flag": entropy_flag,
         "veto_applied": is_veto,
-        "top_drivers": top_drivers[:6],
+        "top_drivers": top_drivers[:3],
     }
 
 

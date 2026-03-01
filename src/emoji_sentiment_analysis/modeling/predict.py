@@ -91,7 +91,7 @@ def _apply_sarcasm_veto(e_neg: int, e_pos: int, w_pos: int) -> tuple[bool, int, 
 # -------------------------------------------------------------------
 
 
-def predict_sentiment(text: str, run_audit: bool = False) -> dict:
+def predict_sentiment(text: str) -> dict:
     """
     Full inference pipeline with sarcasm veto and explainability.
     """

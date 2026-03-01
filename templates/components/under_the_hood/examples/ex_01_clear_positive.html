@@ -1,0 +1,97 @@
+<!-- templates\components\under_the_hood\examples\ex_01_clear_positive.html -->
+
+{# Example 01 — Clear Positive · "My real time happy 😊" · conf=0.9510 #}
+<div class="p-5 sm:p-6 space-y-4">
+
+    <div class="flex flex-wrap items-center gap-2">
+        <span class="text-slate-400 font-mono text-[10px] font-black">01</span>
+        <span class="font-mono text-sm text-slate-800">"My real time happy 😊"</span>
+        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wide">Clear Positive</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Feature Extraction</p>
+            </div>
+            <table class="w-full font-mono">
+                <tbody class="divide-y divide-slate-100 text-[11px]">
+                    <tr>
+                        <td class="px-4 py-2.5 text-slate-500">emoji_pos_count</td>
+                        <td class="px-4 py-2.5 text-emerald-600 font-bold">10</td>
+                        <td class="px-4 py-2.5 text-slate-400 italic text-[10px]">😊 × BOOST 10</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2.5 text-slate-400">emoji_neg_count</td>
+                        <td class="px-4 py-2.5 text-slate-300">0</td>
+                        <td class="px-4 py-2.5 text-slate-300 text-[10px]">—</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2.5 text-slate-500">word_pos_count</td>
+                        <td class="px-4 py-2.5 text-emerald-600 font-bold">1</td>
+                        <td class="px-4 py-2.5 text-slate-400 italic text-[10px]">"happy"</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2.5 text-slate-400">word_neg_count</td>
+                        <td class="px-4 py-2.5 text-slate-300">0</td>
+                        <td class="px-4 py-2.5 text-slate-300 text-[10px]">—</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2.5 bg-slate-800/80 border-b border-slate-700">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Top Drivers <span class="text-emerald-500 normal-case font-medium text-[10px]">(verified)</span></p>
+            </div>
+            <div class="p-4 font-mono text-[11px] space-y-2">
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">"happy" <span class="text-slate-600 text-[10px]">(TF-IDF)</span></span>
+                    <span class="text-emerald-400">+1.6744</span>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">word_pos_count</span>
+                    <span class="text-emerald-400">+0.8915</span>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">"my" <span class="text-slate-600 text-[10px]">(TF-IDF)</span></span>
+                    <span class="text-red-400">−0.3416</span>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">"time" <span class="text-slate-600 text-[10px]">(TF-IDF)</span></span>
+                    <span class="text-red-400">−0.1786</span>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">emoji_pos_count</span>
+                    <span class="text-emerald-400">+0.1471</span>
+                </div>
+                <div class="flex justify-between gap-2">
+                    <span class="text-slate-400">"time happy" <span class="text-slate-600 text-[10px]">(bigram)</span></span>
+                    <span class="text-emerald-400">+0.1177</span>
+                </div>
+                <div class="border-t border-slate-700 pt-2 flex justify-between gap-2">
+                    <span class="text-slate-500">sigmoid → confidence</span>
+                    <span class="text-emerald-300 font-bold">0.9510</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
+        <span class="text-emerald-500 text-xs shrink-0">✔</span>
+        <p class="font-mono text-[11px] text-emerald-700">emoji_neg_count = 0 → veto skipped</p>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 bg-emerald-600 rounded-xl text-white">
+        <span class="text-[10px] font-black uppercase tracking-widest opacity-70">Output</span>
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+            <span class="font-black text-sm">POSITIVE</span>
+            <span class="opacity-40">·</span>
+            <span>95.10% confidence</span>
+            <span class="opacity-40">·</span>
+            <span class="opacity-70">Clear Signal</span>
+        </div>
+    </div>
+
+</div>

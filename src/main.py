@@ -22,6 +22,21 @@ from scripts.build_features import main as run_feature_engineering
 from scripts.check_model_health import run_health_check
 
 
+def print_result(result: dict) -> None:
+    """Pretty-print the full 8-key inference response."""
+    print("\n" + "=" * 60)
+    print(f"  INPUT       : {result['raw_text']}")
+    print(f"  PREDICTION  : {result['prediction']} ({result['prediction_int']})")
+    print(f"  CONFIDENCE  : {result['confidence']:.4f}")
+    print(f"  ENTROPY     : {result['entropy_flag']}")
+    print(f"  VETO APPLIED: {result['veto_applied']}")
+    print(f"  TIMESTAMP   : {result['timestamp']}")
+    print("  TOP DRIVERS :")
+    for d in result["top_drivers"]:
+        print(f"    {d['token']:<30} {d['weight']:>+.4f}")
+    print("=" * 60)
+
+
 def run_pipeline():
     init_logging()
     ensure_dirs()
@@ -46,10 +61,8 @@ def run_pipeline():
             if not user_input.strip():
                 continue
 
-            result = predict_sentiment(user_input, run_audit=False)
-            print(f"Result: {result['prediction']} | Confidence: {result['confidence']}")
-            drivers = [f"{d['token']} ({d['weight']})" for d in result["top_drivers"]]
-            print(f"Drivers: {drivers}")
+            result = predict_sentiment(user_input)
+            print_result(result)
 
     except Exception as e:
         logger.exception(f"Pipeline failed: {e}")
