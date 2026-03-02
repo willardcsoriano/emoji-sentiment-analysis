@@ -3,9 +3,10 @@
 A lexicon-augmented NLP pipeline for sentiment inference on emoji-enriched social media text.
 
 **Live Deployment:**
-[https://hybrid-sentiment-service-232900046311.us-central1.run.app/](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)
-> ⚠️ **Heads up:** This service is deployed serverlessly on Google Cloud Run.  
-> If the endpoint hasn't been called recently, the first request may take  
+[https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)
+
+> ⚠️ **Heads up:** This service is deployed serverlessly on Google Cloud Run.
+> If the endpoint hasn't been called recently, the first request may take
 > **5–15 seconds** to respond due to a cold start. Subsequent requests will be fast.
 
 ---
@@ -22,14 +23,14 @@ The system is fully reproducible — spanning data ingestion, feature engineerin
 
 ## Key Capabilities
 
-* Emoji-aware sentiment modeling
-* Lexicon-augmented feature engineering
-* TF-IDF linguistic vectorization
-* Logistic Regression classification
-* Reproducible training + inference parity
-* API-driven prediction service
-* Inference audit logging
-* Model health reporting
+- Emoji-aware sentiment modeling
+- Lexicon-augmented feature engineering
+- TF-IDF linguistic vectorization
+- Logistic Regression classification
+- Reproducible training + inference parity
+- API-driven prediction service
+- Deterministic sarcasm veto layer
+- Model health reporting
 
 ---
 
@@ -37,14 +38,14 @@ The system is fully reproducible — spanning data ingestion, feature engineerin
 
 Try the deployed inference interface:
 
-**[https://hybrid-sentiment-service-232900046311.us-central1.run.app/](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)**
+**[https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)**
 
 Features:
 
-* Real-time sentiment prediction
-* Emoji signal interpretation
-* Confidence scoring
-* Prediction logging
+- Real-time sentiment prediction
+- Emoji signal interpretation
+- Confidence scoring
+- Top 3 decision driver breakdown
 
 ---
 
@@ -72,21 +73,32 @@ Inference Pipeline Deployment
 
 ### Text Representation
 
-* Tokenization
-* N-gram extraction
-* TF-IDF weighting
+- Tokenization
+- N-gram extraction
+- TF-IDF weighting
 
 ### Emoji Signal Processing
 
-* Emoji detection within tweets
-* Polarity referencing via lexicon dataset
-* Derived sentiment feature signals
+- Emoji detection within tweets
+- Polarity referencing via curated lexicon
+- Derived sentiment feature signals (emoji_pos_count, emoji_neg_count)
+
+### Word Lexicon Layer
+
+- Deterministic word polarity counts (word_pos_count, word_neg_count)
+- Anchors probabilistic model with stable priors
 
 ### Classifier
 
-* Logistic Regression
-* Linear decision boundary
-* Interpretable feature coefficients
+- Logistic Regression
+- Linear decision boundary
+- Interpretable feature coefficients
+
+### Sarcasm Veto
+
+- Deterministic override layer
+- Fires when emoji_neg signal conflicts with model's positive prediction
+- Suppressed by word context guard when positive text is strong enough
 
 ---
 
@@ -99,56 +111,42 @@ emoji_sentiment_analysis/
 ├── Dockerfile              # Container spec for Cloud Run
 ├── cloudbuild.yaml         # CI/CD pipeline configuration
 ├── requirements.txt        # Production dependencies
-├── Makefile                # Task automation (build, test, etc.)
+├── Makefile                # Task automation (build, train, deploy)
 │
 ├── templates/              # HTMX/Frontend UI templates
 │
 └── src/
-    ├── main.py             # Runtime orchestration & API logic
+    ├── main.py             # Runtime orchestration
     ├── .dockerignore       # Docker build optimization
     │
     ├── emoji_sentiment_analysis/   # Core Package
     │   ├── dataset.py      # Data loading logic
     │   ├── features.py     # Feature engineering (Emoji-to-Sentiment)
     │   ├── config.py       # Project-wide constants
-    │   ├── services/       # Business logic (Audit/Logging)
-    │   └── modeling/       # Training & Inference pipelines
+    │   ├── services/       # Inference audit service
+    │   └── modeling/       # Training & inference pipelines
     │
     ├── data/               # Versioned data layers
-    │   ├── raw/            # Original Kaggle/Scraped datasets
+    │   ├── raw/            # Original datasets
     │   ├── processed/      # Cleaned tweets and features
     │   └── logs/           # Application runtime logs
     │
-    ├── models/             # Serialized artifacts
-    │   ├── sentiment_model.pkl
-    │   └── tfidf_vectorizer.pkl
+    ├── models/             # Local artifact cache (gitignored)
+    │   ├── sentiment_model.pkl     # ← served from GCS in production
+    │   └── tfidf_vectorizer.pkl    # ← served from GCS in production
     │
     ├── notebooks/          # Complete ML lifecycle (Exploration to Validation)
     ├── scripts/            # Model health & feature building utilities
     └── tests/              # Pytest suite for model behavior & features
 ```
 
----
-
-## Data Assets
-
-### Tweet Corpus
-
-* Emoji-bearing tweets
-* Binary sentiment labels
-* Short-form informal text
-
-### Emoji Reference Lexicon
-
-* Emoji / emoticon symbols
-* Polarity annotations
-* Used for sentiment referencing (not training rows)
+> **Note on model artifacts:** `.pkl` files are excluded from version control. In production, artifacts are stored in Google Cloud Storage (`gs://hybrid-sentiment-models/models/`) and downloaded by the container at startup. Locally, run `make train` to regenerate them.
 
 ---
 
 ## Reproducibility
 
-To run locally:
+### Local Development
 
 ```bash
 # Clone repository
@@ -157,13 +155,28 @@ cd emoji_sentiment_analysis
 
 # Create environment
 python -m venv .venv
-source .venv/bin/activate  # or .venv\\Scripts\\activate (Windows)
+source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 
 # Install dependencies
-pip install -r requirements.txt
+make requirements
+
+# Train model (generates local .pkl artifacts)
+make train
 
 # Run application
-python app.py
+make dev
+```
+
+### Production Deployment
+
+Model artifacts are stored in GCS and loaded at container startup — no `.pkl` files are committed to the repository.
+
+```bash
+# Deploy code-only changes
+make deploy
+
+# Retrain model + upload to GCS + deploy
+make deploy-full
 ```
 
 ---
@@ -172,7 +185,7 @@ python app.py
 
 ```bash
 docker build -t emoji-sentiment .
-docker run -p 8080:8080 emoji-sentiment
+docker run -p 8000:8080 -e PORT=8080 emoji-sentiment
 ```
 
 ---
@@ -185,18 +198,9 @@ pytest src/tests
 
 Covers:
 
-* Feature consistency
-* Model behavior
-* Prediction stability
-
----
-
-## Monitoring & Reporting
-
-Generated artifacts include:
-
-* `inference_history.csv` — prediction logs
-* `model_health_report.json` — performance diagnostics
+- Feature consistency
+- Model behavior
+- Prediction stability
 
 ---
 
@@ -209,20 +213,21 @@ Lifecycle notebooks document the full experimentation process:
 3. Representation & Feature Design
 4. Modeling & Evaluation
 5. Final Training
-6. Interpretability Analysis
-7. Inference Reconstruction
+6. Interpretability & Performance Deep Dive
+7. End-to-End System Validation
 
 ---
 
 ## Tech Stack
 
-* **Language:** Python 3.11+
-* **ML Library:** Scikit-learn (Sentiment Analysis)
-* **Web Framework:** FastAPI + HTMX + TailwindCSS
-* **Containerization:** Docker
-* **Cloud Infrastructure:** Google Cloud Run (Serverless Hosting)
-* **CI/CD Pipeline:** Google Cloud Build (Automated Triggers on Push)
-* **Artifact Management:** Google Artifact Registry
+- **Language:** Python 3.12
+- **ML Library:** Scikit-learn (TF-IDF + Logistic Regression)
+- **Web Framework:** FastAPI + HTMX + TailwindCSS
+- **Containerization:** Docker
+- **Cloud Infrastructure:** Google Cloud Run (Serverless)
+- **CI/CD Pipeline:** Google Cloud Build
+- **Artifact Registry:** Google Artifact Registry
+- **Model Storage:** Google Cloud Storage (GCS)
 
 ---
 
@@ -235,5 +240,3 @@ Built by **Willard C. Soriano**
 ## License
 
 This project is licensed under the MIT License — see the LICENSE file for details.
-
----
