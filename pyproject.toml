@@ -38,3 +38,9 @@ select = ["E", "F", "I"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["emoji_sentiment_analysis"]
+
+[tool.pyright]
+exclude = ["src/notebooks", "**/node_modules", "**/__pycache__", "**/.*"]
+reportArgumentType = "none"
+reportCallIssue = "none"
+reportOptionalSubscript = "none"

@@ -139,6 +139,17 @@ def train_pipeline():
     joblib.dump(model, MODELS_DIR / "sentiment_model.pkl")
     joblib.dump(tfidf, MODELS_DIR / "tfidf_vectorizer.pkl")
 
+    # 9. Upload to GCS
+    logger.info("Uploading artifacts to GCS...")
+    from google.cloud import storage
+    client = storage.Client()
+    bucket = client.bucket("hybrid-sentiment-models")
+
+    for filename in ["sentiment_model.pkl", "tfidf_vectorizer.pkl"]:
+        blob = bucket.blob(f"models/{filename}")
+        blob.upload_from_filename(MODELS_DIR / filename)
+        logger.info(f"Uploaded {filename} to GCS")
+
     logger.success("Training pipeline complete.")
 
 
