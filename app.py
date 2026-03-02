@@ -30,12 +30,12 @@ async def lifespan(app: FastAPI):
         print(f"❌ Startup Error: {e}")
         yield
     finally:
-            # Graceful cleanup
-            if hasattr(app.state, 'model'): 
-                del app.state.model
-            if hasattr(app.state, 'vectorizer'): 
-                del app.state.vectorizer
-            print("🛑 System shutdown complete.")
+        # Graceful cleanup
+        if hasattr(app.state, "model"):
+            del app.state.model
+        if hasattr(app.state, "vectorizer"):
+            del app.state.vectorizer
+        print("🛑 System shutdown complete.")
 
 
 app = FastAPI(
@@ -70,7 +70,7 @@ async def predict_ui(request: Request, text: str = Form(...)):
 
     # 3. Calculate execution latency in milliseconds
     execution_time_ms = (time.perf_counter() - start_time) * 1000
-    
+
     # 4. Inject metadata for the UI
     result["latency"] = round(execution_time_ms, 2)
     result["prediction_int"] = 1 if result["prediction"] == "Positive" else 0
@@ -84,10 +84,7 @@ async def predict_ui(request: Request, text: str = Form(...)):
     # 6. Render the result component
     return templates.TemplateResponse(
         "components/header/prediction_result.html",
-        {
-            "request": request, 
-            "result": result
-        },
+        {"request": request, "result": result},
     )
 
 
