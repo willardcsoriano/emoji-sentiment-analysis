@@ -1,6 +1,7 @@
 # app.py - Main FastAPI application for Hybrid Sentiment Engine
 
 import os
+import time
 from contextlib import asynccontextmanager
 
 import joblib
@@ -8,7 +9,6 @@ import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-import time
 
 # Modular Imports
 from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR
@@ -30,10 +30,12 @@ async def lifespan(app: FastAPI):
         print(f"❌ Startup Error: {e}")
         yield
     finally:
-        # Graceful cleanup
-        if hasattr(app.state, 'model'): del app.state.model
-        if hasattr(app.state, 'vectorizer'): del app.state.vectorizer
-        print("🛑 System shutdown complete.")
+            # Graceful cleanup
+            if hasattr(app.state, 'model'): 
+                del app.state.model
+            if hasattr(app.state, 'vectorizer'): 
+                del app.state.vectorizer
+            print("🛑 System shutdown complete.")
 
 
 app = FastAPI(
