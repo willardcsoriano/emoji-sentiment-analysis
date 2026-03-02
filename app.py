@@ -1,10 +1,10 @@
 # app.py - Main FastAPI application for Hybrid Sentiment Engine
 
 import os
+import tempfile
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
-import tempfile
 
 import joblib
 import uvicorn

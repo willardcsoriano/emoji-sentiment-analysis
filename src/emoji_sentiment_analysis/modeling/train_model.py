@@ -142,6 +142,7 @@ def train_pipeline():
     # 9. Upload to GCS
     logger.info("Uploading artifacts to GCS...")
     from google.cloud import storage
+
     client = storage.Client()
     bucket = client.bucket("hybrid-sentiment-models")
 
