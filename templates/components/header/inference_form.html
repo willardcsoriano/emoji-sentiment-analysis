@@ -1,138 +1,178 @@
 <!-- templates/components/header/inference_form.html -->
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
-    #text::placeholder { color: #334155; }
+    #text::placeholder { color: #1e293b; }
+
+    /* Hide scrollbar on preset strip but keep scroll */
+    .preset-strip { scrollbar-width: none; }
+    .preset-strip::-webkit-scrollbar { display: none; }
+
+    .preset-chip {
+        transition: background 0.12s, color 0.12s, border-color 0.12s;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .preset-chip:hover  { background: #1d4ed8; border-color: #2563eb; color: #fff; }
+    .preset-chip:active { transform: scale(0.95); }
+
+    /* Submit sweep */
+    .submit-btn { position: relative; overflow: hidden; }
+    .submit-btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.07) 50%, transparent 60%);
+        transform: translateX(-100%);
+        transition: transform 0.45s ease;
+    }
+    .submit-btn:hover::after { transform: translateX(100%); }
 </style>
 
 <div class="relative" id="live-tool">
-    <div class="bg-slate-950 rounded-[2.5rem] border border-slate-800 overflow-hidden shadow-2xl">
+    <div class="bg-slate-950 rounded-[2.5rem] border border-slate-800 overflow-hidden">
 
-        <div class="px-6 sm:px-8 py-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span class="ml-3 font-mono text-[10px] text-slate-600 uppercase tracking-widest">hybrid_sentiment_engine</span>
+        <!-- Terminal top bar -->
+        <div class="px-6 sm:px-8 py-3.5 bg-slate-900 border-b border-slate-800
+                    flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/70   border border-rose-400/20"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500/70  border border-amber-400/20"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 border border-emerald-400/20"></span>
+                <span class="ml-4 font-mono text-[10px] text-slate-600 uppercase tracking-widest hidden sm:block">
+                    hybrid_sentiment_engine · v1.0
+                </span>
             </div>
             <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">System Ready</span>
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span class="font-mono text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Ready</span>
             </div>
         </div>
 
-        <div class="p-4 sm:p-10 space-y-6 sm:space-y-10">
-            <form hx-post="/predict-ui" hx-target="#result-area" hx-indicator="#inference-loader" class="space-y-10">
+        <!-- Body -->
+        <div class="p-4 sm:p-8 space-y-5">
 
-                <div class="space-y-5">
-                    <div class="flex items-center gap-4 justify-center">
-                        <div class="h-px bg-slate-800 flex-1"></div>
-                        <span class="font-mono text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Rapid Logic Presets</span>
-                        <div class="h-px bg-slate-800 flex-1"></div>
-                    </div>
-
-                    <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto px-4">
-                        {% for preset in [
-                            {"label": "Pure Joy", "text": "This engineering is top tier! 😍🚀"},
-                            {"label": "Frustration", "text": "The service was extremely slow today... 😒"},
-                            {"label": "Neutral/Flat", "text": "The movie was just okay, I guess."},
-                            {"label": "The Veto Check", "text": "Everything is great. 💀"},
-                            {"label": "Western Vibes", "text": "I'm having a blast at this party! XD <3"},
-                            {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
-                            {"label": "Corporate Speak", "text": "The Q4 results were excellent and perfect. 📈"},
-                            {"label": "The Paradox", "text": "I hate how much I love this! 😂💔"},
-                            {"label": "Soft Praise", "text": "It was actually kind of nice, I suppose."},
-                            {"label": "Ambiguous Vibe", "text": "It is what it is."}
-                        ] %}
-                        <button
-                            type="button"
-                            onclick="const area = document.getElementById('text'); area.value = `{{ preset.text | e }}`; area.focus();"
-                            class="preset-chip px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700
-                                font-mono text-[9px] font-bold text-slate-400 uppercase tracking-wide
-                                hover:bg-slate-800 hover:text-white hover:border-slate-500 
-                                transition-all duration-200 active:scale-95"
-                        >
-                            {{ preset.label }}
-                        </button>
-                        {% endfor %}
-                    </div>
+            <form
+                hx-post="/predict-ui"
+                hx-target="#result-area"
+                hx-indicator="#inference-loader"
+                class="space-y-4"
+            >
+                <!-- Input label -->
+                <div class="flex items-center gap-3">
+                    <span class="font-mono text-[10px] text-emerald-500 select-none">▶</span>
+                    <label for="text"
+                           class="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                        Input Stream
+                    </label>
+                    <div class="flex-1 h-px bg-slate-800"></div>
                 </div>
 
-                <div class="space-y-5">
-                    <div class="flex items-center gap-3">
-                        <span class="font-mono text-[10px] text-emerald-500">▶</span>
-                        <label for="text" class="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                            Input Stream
-                        </label>
-                        <div class="flex-1 h-px bg-slate-800"></div>
-                    </div>
+                <!-- Textarea shell — presets + alien live inside -->
+                <div class="rounded-2xl bg-slate-900 border-2 border-slate-800
+                            focus-within:border-blue-500 transition-all duration-200 overflow-hidden">
 
-                    <div class="relative z-20">
-                        <textarea
-                            name="text" id="text" rows="2"
-                            onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
-                            class="w-full px-6 py-5 bg-slate-900 border-2 border-slate-800
-                                   focus:border-blue-500 outline-none transition-all duration-200
-                                   rounded-2xl text-lg sm:text-2xl resize-none font-mono
-                                   text-slate-100 shadow-inner pr-16 caret-blue-400"
-                            placeholder="Type or select a preset..."
-                            required
-                        ></textarea>
+                    <!-- Actual textarea -->
+                    <textarea
+                        name="text"
+                        id="text"
+                        rows="3"
+                        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();this.form.requestSubmit();}"
+                        class="w-full px-5 pt-5 pb-3 bg-transparent outline-none
+                               text-lg sm:text-2xl resize-none font-mono
+                               text-slate-100 caret-blue-400 leading-snug"
+                        placeholder="Type or select a preset..."
+                        required
+                    ></textarea>
 
+                    <!-- Bottom bar: presets + alien -->
+                    <div class="flex items-center gap-2 px-3 pb-3 pt-1 border-t border-slate-800/60">
+
+                        <!-- Scrollable preset strip -->
+                        <div class="preset-strip flex items-center gap-1.5 overflow-x-auto flex-1">
+                            {% for preset in [
+                                {"label": "Pure Joy",      "text": "This engineering is top tier! 😍🚀"},
+                                {"label": "Frustration",   "text": "The service was extremely slow today... 😒"},
+                                {"label": "Neutral/Flat",  "text": "The movie was just okay, I guess."},
+                                {"label": "Veto Check",    "text": "Everything is great. 💀"},
+                                {"label": "Western Vibes", "text": "I'm having a blast at this party! XD <3"},
+                                {"label": "Sarcasm/Mixed", "text": "I love waiting in long lines. :-) 😭"},
+                                {"label": "Corp Speak",    "text": "The Q4 results were excellent and perfect. 📈"},
+                                {"label": "The Paradox",   "text": "I hate how much I love this! 😂💔"},
+                                {"label": "Soft Praise",   "text": "It was actually kind of nice, I suppose."},
+                                {"label": "Ambiguous",     "text": "It is what it is."}
+                            ] %}
+                            <button
+                                type="button"
+                                onclick="const a=document.getElementById('text');a.value=`{{ preset.text | e }}`;a.focus();"
+                                class="preset-chip px-2.5 py-1 rounded-md
+                                       bg-slate-800 border border-slate-700
+                                       font-mono text-[9px] font-bold text-slate-500
+                                       uppercase tracking-wide"
+                            >{{ preset.label }}</button>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Emoji trigger -->
                         <button
                             type="button"
                             onclick="toggleEmojiPicker(this); event.stopPropagation();"
-                            class="absolute bottom-4 right-4 w-10 h-10
-                                   flex items-center justify-center
-                                   rounded-xl bg-slate-800 border border-slate-700
+                            class="flex-shrink-0 w-8 h-8 flex items-center justify-center
+                                   rounded-lg bg-slate-800 border border-slate-700
                                    hover:border-blue-500 hover:bg-slate-700
-                                   transition-all shadow-sm z-10 text-lg"
-                        >
-                            👽
-                        </button>
+                                   transition-all text-base"
+                            title="Signal Library"
+                        >👽</button>
+
                     </div>
                 </div>
 
+                <!-- Submit -->
                 <button
                     type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-500 text-white
-                           font-mono font-black py-3.5 sm:py-5 rounded-2xl
-                           transition-all duration-200 shadow-lg shadow-blue-900/30
-                           active:scale-[0.98] flex items-center justify-center gap-3
-                           uppercase tracking-[0.2em] text-[11px]"
+                    class="submit-btn w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                           text-white font-mono font-black py-3.5 sm:py-4 rounded-2xl
+                           transition-colors duration-150 active:scale-[0.99]
+                           flex items-center justify-center gap-2.5
+                           uppercase tracking-[0.25em] text-[10px]"
                 >
-                    <span class="text-blue-300">▶</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-blue-300" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/>
+                    </svg>
                     Execute Classification
                 </button>
 
             </form>
 
-            <div id="result-area" class="relative min-h-[120px] border-t border-slate-800 flex pt-4 sm:pt-8">
-                <div class="flex flex-col items-center justify-center w-full text-center">
-                    <div class="space-y-3 opacity-30">
-                        <div class="flex justify-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_0ms]"></span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_200ms]"></span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-[bounce_2s_infinite_400ms]"></span>
-                        </div>
-                        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500 animate-pulse">
-                            awaiting_input
-                        </p>
+            <!-- Result area -->
+            <div id="result-area" class="relative min-h-[120px] border-t border-slate-800/60 flex pt-4 sm:pt-6">
+
+                <!-- Idle -->
+                <div class="flex flex-col items-center justify-center w-full gap-3 py-4">
+                    <div class="flex gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-700 animate-[bounce_2s_infinite_0ms]"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-700 animate-[bounce_2s_infinite_200ms]"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-700 animate-[bounce_2s_infinite_400ms]"></span>
                     </div>
+                    <p class="font-mono text-[9px] uppercase tracking-[0.35em] text-slate-700">
+                        awaiting_input
+                    </p>
                 </div>
 
-                <div id="inference-loader" class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center gap-3">
-                    <div class="animate-spin h-8 w-8 border-[3px] border-blue-500 border-t-transparent rounded-full"></div>
-                    <p class="font-mono text-[10px] uppercase tracking-widest text-blue-500 animate-pulse">processing_inference</p>
+                <!-- Loader -->
+                <div id="inference-loader"
+                     class="htmx-indicator absolute inset-0 flex flex-col items-center justify-center gap-3">
+                    <div class="animate-spin h-7 w-7 border-[2.5px] border-blue-500 border-t-transparent rounded-full"></div>
+                    <p class="font-mono text-[9px] uppercase tracking-widest text-blue-500 animate-pulse">
+                        classifying
+                    </p>
                 </div>
+
             </div>
-            
-            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600 text-center leading-relaxed opacity-50">
-                1,269-dim hybrid vector · 1,000-tweet corpus
-            </p>
         </div>
     </div>
 </div>

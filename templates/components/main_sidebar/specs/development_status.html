@@ -1,75 +1,42 @@
 <!-- templates\components\main_sidebar\specs\development_status.html -->
 
-<section id="iteration-roadmap" class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl shadow-indigo-900/20">
+<section class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
 
     <div class="px-6 py-3 bg-slate-800/60 border-b border-slate-700 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="flex gap-1">
-                <div class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
-            </div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">DEVELOPMENT STATUS</span>
-        </div>
-        <span class="font-mono text-[9px] text-slate-600 uppercase">Track: Production-Stable</span>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Model Status</span>
+        <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-mono text-[9px] text-emerald-500 uppercase tracking-widest">Production</span>
+        </span>
     </div>
 
-    <div class="p-6 sm:p-8 space-y-8 relative">
-        
-        <div class="absolute left-[31.5px] top-10 bottom-10 w-[1px] bg-gradient-to-b from-emerald-500 via-blue-500 to-slate-800"></div>
-
-        <div class="space-y-8 relative">
-
-            <div class="relative flex gap-6 group">
-                <div class="relative z-10 w-3 h-3 mt-1 rounded-full bg-slate-900 border-2 border-emerald-500 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.4)]">
-                    <div class="w-1 h-1 bg-emerald-500 rounded-full"></div>
-                </div>
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <p class="text-slate-100 font-bold text-[11px] leading-none uppercase tracking-wide">Emoji Sentiment Referencing</p>
-                        <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">DEPLOYED</span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 leading-relaxed max-w-[240px]">Implemented lexicon-based polarity augmentation for symbolic signal extraction.</p>
-                </div>
-            </div>
-
-            <div class="relative flex gap-6 group">
-                <div class="relative z-10 w-3 h-3 mt-1 rounded-full bg-slate-900 border-2 border-emerald-500 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.4)]">
-                    <div class="w-1 h-1 bg-emerald-500 rounded-full"></div>
-                </div>
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <p class="text-slate-100 font-bold text-[11px] leading-none uppercase tracking-wide">Feature Pipeline</p>
-                        <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">DEPLOYED</span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 leading-relaxed max-w-[240px]">TF-IDF text features combined with deterministic emoji polarity vectors.</p>
-                </div>
-            </div>
-
-            <div class="relative flex gap-6 group">
-                <div class="relative z-10 w-3 h-3 mt-1 rounded-full bg-slate-900 border-2 border-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></div>
-                </div>
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <p class="text-blue-100 font-bold text-[11px] leading-none uppercase tracking-wide italic">Model Optimization</p>
-                        <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 animate-pulse">ACTIVE_RND</span>
-                    </div>
-                    <p class="text-[10px] text-slate-300 leading-relaxed max-w-[240px]">Hyperparameter tuning and feature refinement to mitigate neutral-class drift.</p>
-                </div>
-            </div>
-
-            <div class="relative flex gap-6 group opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                <div class="relative z-10 w-3 h-3 mt-1 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center">
-                    <div class="w-1 h-1 bg-slate-700 rounded-full"></div>
-                </div>
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <p class="text-slate-300 font-bold text-[11px] leading-none uppercase tracking-wide">Deep Learning</p>
-                        <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700">BACKLOG</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 leading-relaxed max-w-[240px]">Investigating transformer-based sentiment encoders for context-heavy corpus.</p>
-                </div>
-            </div>
-
+    <div class="p-6 grid grid-cols-2 gap-4">
+        <div class="space-y-1">
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600">Accuracy</p>
+            <p class="font-mono text-2xl font-black text-white">82.5%</p>
+            <p class="font-mono text-[9px] text-slate-600">1,000-tweet corpus</p>
+        </div>
+        <div class="space-y-1">
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600">F1 Score</p>
+            <p class="font-mono text-2xl font-black text-blue-400">0.840</p>
+            <p class="font-mono text-[9px] text-slate-600">weighted avg</p>
+        </div>
+        <div class="space-y-1">
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600">Features</p>
+            <p class="font-mono text-2xl font-black text-white">1,269</p>
+            <p class="font-mono text-[9px] text-slate-600">dims per input</p>
+        </div>
+        <div class="space-y-1">
+            <p class="font-mono text-[9px] uppercase tracking-widest text-slate-600">Latency</p>
+            <p class="font-mono text-2xl font-black text-white">&lt;15ms</p>
+            <p class="font-mono text-[9px] text-slate-600">per inference</p>
         </div>
     </div>
+
+    <div class="px-6 py-3 border-t border-slate-800 bg-slate-900/50">
+        <p class="font-mono text-[9px] text-slate-600 leading-relaxed">
+            Active R&amp;D: neutral-class performance · next iteration targets ambiguous inputs
+        </p>
+    </div>
+
 </section>
