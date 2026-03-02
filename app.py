@@ -1,5 +1,7 @@
 # app.py - Main FastAPI application for Hybrid Sentiment Engine
 
+# app.py - Main FastAPI application for Hybrid Sentiment Engine
+
 import os
 import tempfile
 import time
@@ -46,7 +48,7 @@ async def lifespan(app: FastAPI):
         yield
     except Exception as e:
         print(f"❌ Startup Error: {e}")
-        raise  # Fail fast — don't serve broken requests
+        raise
     finally:
         if hasattr(app.state, "model"):
             del app.state.model
@@ -76,14 +78,22 @@ async def home(request: Request):
 @app.post("/predict-ui", response_class=HTMLResponse)
 async def predict_ui(request: Request, text: str = Form(...)):
     start_time = time.perf_counter()
-    result = predict_sentiment(text)
+
+    result = predict_sentiment(
+        text,
+        model=request.app.state.model,
+        tfidf=request.app.state.vectorizer,
+    )
+
     execution_time_ms = (time.perf_counter() - start_time) * 1000
     result["latency"] = round(execution_time_ms, 2)
     result["prediction_int"] = 1 if result["prediction"] == "Positive" else 0
+
     if "entropy_flag" not in result:
         result["entropy_flag"] = (
             "High Ambiguity" if result["confidence"] < AMBIGUITY_THRESHOLD else "Clear Signal"
         )
+
     return templates.TemplateResponse(
         "components/header/prediction_result.html",
         {"request": request, "result": result},

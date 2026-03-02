@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from typing import cast
 
-import joblib
 import numpy as np
 from loguru import logger
 from scipy.sparse import csr_matrix, hstack
@@ -22,12 +21,14 @@ from emoji_sentiment_analysis.features import extract_emoji_polarity_features
 from emoji_sentiment_analysis.services.audit_service import explain_prediction
 
 # -------------------------------------------------------------------
-# Artifact Loading
+# Artifact Loading (local fallback for CLI/dev use only)
 # -------------------------------------------------------------------
 
 
 def load_artifacts():
     """Load model and vectorizer from the central models directory."""
+    import joblib
+
     model_path = MODELS_DIR / "sentiment_model.pkl"
     vectorizer_path = MODELS_DIR / "tfidf_vectorizer.pkl"
 
@@ -37,12 +38,6 @@ def load_artifacts():
 
     return joblib.load(model_path), joblib.load(vectorizer_path)
 
-
-# Global instances for API performance
-try:
-    model, tfidf = load_artifacts()
-except Exception:
-    model, tfidf = None, None
 
 # -------------------------------------------------------------------
 # Sarcasm Veto
@@ -91,17 +86,18 @@ def _apply_sarcasm_veto(e_neg: int, e_pos: int, w_pos: int) -> tuple[bool, int, 
 # -------------------------------------------------------------------
 
 
-def predict_sentiment(text: str) -> dict:
+def predict_sentiment(text: str, model=None, tfidf=None) -> dict:
     """
     Full inference pipeline with sarcasm veto and explainability.
+    Accepts model and tfidf injected from app.state (production).
+    Falls back to loading from disk for CLI/dev use.
     """
-    global model, tfidf
-
+    # Fallback for CLI use
     if model is None or tfidf is None:
         try:
             model, tfidf = load_artifacts()
         except Exception:
-            return {"error": "Model files not found on disk."}
+            return {"error": "Model files not found."}
 
     # 1. Feature Extraction
     e_pos, e_neg, w_pos, w_neg = extract_emoji_polarity_features(text)
@@ -121,11 +117,11 @@ def predict_sentiment(text: str) -> dict:
         probs = model.predict_proba(features)[0]
         prediction = int(model.predict(features)[0])
 
-    # --- Determine confidence and ambiguity here! ---
+    # 4. Confidence & Ambiguity
     confidence = float(np.max(probs))
     entropy_flag = "High Ambiguity" if confidence < AMBIGUITY_THRESHOLD else "Clear Signal"
 
-    # 4. Delegate explainability to audit service (pass the new flags in)
+    # 5. Delegate explainability
     return explain_prediction(
         text=text,
         prediction=prediction,
@@ -148,8 +144,8 @@ if __name__ == "__main__":
 
     sample_texts = [
         "I love this project 😊",
-        "i love having bugs 😭",  # Sarcasm Test
-        "i love hate you baby",  # Lexicon Bias Test
+        "i love having bugs 😭",
+        "i love hate you baby",
     ]
 
     logger.info("Running Stateless Inference Test...")
