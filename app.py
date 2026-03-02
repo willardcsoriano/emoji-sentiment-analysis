@@ -17,22 +17,23 @@ from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Loads the model ONCE when the server starts."""
+    """Loads artifacts on startup and cleans up on shutdown."""
     model_path = MODELS_DIR / "sentiment_model.pkl"
     vectorizer_path = MODELS_DIR / "tfidf_vectorizer.pkl"
 
     try:
-        if not model_path.exists():
-            print(f"❌ CRITICAL ERROR: Model missing at path -> {model_path}")
-        if not vectorizer_path.exists():
-            print(f"❌ CRITICAL ERROR: Vectorizer missing at path -> {vectorizer_path}")
-
         app.state.model = joblib.load(model_path)
         app.state.vectorizer = joblib.load(vectorizer_path)
-        print(f"✅ Production artifacts verified and loaded from {MODELS_DIR}")
+        print(f"✅ Production artifacts loaded: {MODELS_DIR}")
+        yield
     except Exception as e:
         print(f"❌ Startup Error: {e}")
-    yield
+        yield
+    finally:
+        # Graceful cleanup
+        if hasattr(app.state, 'model'): del app.state.model
+        if hasattr(app.state, 'vectorizer'): del app.state.vectorizer
+        print("🛑 System shutdown complete.")
 
 
 app = FastAPI(
@@ -90,4 +91,4 @@ async def predict_ui(request: Request, text: str = Form(...)):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)

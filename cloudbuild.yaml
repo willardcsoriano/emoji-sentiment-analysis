@@ -1,6 +1,5 @@
 steps:
   # 1. Build the Docker image
-  # Note: Use project-id and service-name consistently
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build', 
@@ -15,7 +14,7 @@ steps:
       'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
     ]
 
-  # 3. Deploy to Cloud Run
+  # 3. Deploy to Cloud Run with Safety Constraints
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -27,6 +26,13 @@ steps:
       - '--region'
       - 'us-central1'
       - '--allow-unauthenticated'
+      # SAFETY CONSTRAINTS:
+      - '--min-instances'
+      - '0'
+      - '--max-instances'
+      - '1'
+      - '--concurrency'
+      - '80'
 
 options:
   logging: CLOUD_LOGGING_ONLY

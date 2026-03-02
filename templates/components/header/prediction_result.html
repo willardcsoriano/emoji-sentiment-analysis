@@ -57,22 +57,22 @@
             <span class="text-[10px] font-mono text-slate-700 italic">n=3 strongest signals</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 gap-2 sm:gap-4">
             {% for driver in result.top_drivers %}
-            <div class="relative rounded-2xl bg-slate-900/50 border border-slate-800 overflow-hidden p-4 group hover:border-slate-700 transition-colors">
+            <div class="relative rounded-xl bg-slate-900/50 border border-slate-800 overflow-hidden p-2.5 sm:p-4 group hover:border-slate-700 transition-colors">
                 
                 <div class="absolute top-0 left-0 w-1 h-full
                             {% if driver.weight > 0 %}bg-emerald-500/30{% else %}bg-rose-500/30{% endif %}">
                 </div>
 
                 <div class="flex flex-col h-full">
-                    <span class="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">
+                    <span class="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-slate-500">
                         {% if 'emoji' in driver.token or '' in driver.token %}Symbolic Anchor
                         {% elif 'word' in driver.token %}Lexicon Signal
                         {% else %}TF-IDF Token{% endif %}
                     </span>
                     
-                    <span class="font-mono text-[13px] font-bold text-slate-200 truncate mt-1.5 mb-4">
+                    <span class="font-mono text-[10px] sm:text-[13px] font-bold text-white truncate mt-1 mb-3">
                         {{ driver.token }}
                     </span>
                     

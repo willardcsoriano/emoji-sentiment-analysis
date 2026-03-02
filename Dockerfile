@@ -22,7 +22,7 @@ COPY . .
 
 # 4. Install the local project in EDITABLE mode
 # This prevents Python from moving your config.py to site-packages, keeping paths intact
-RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir .
 
 # 5. Execute the application
 # We added --log-level debug so Cloud Run shows explicit startup errors if they happen
