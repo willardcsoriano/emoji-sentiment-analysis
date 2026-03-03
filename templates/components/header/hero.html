@@ -1,4 +1,3 @@
-<!-- templates/components/hero.html -->
 
 <!-- templates/components/header/hero.html -->
 
@@ -18,6 +17,20 @@
     .hero-line-3 { animation: slide-up 0.4s ease 0.4s both; }
     .hero-line-4 { animation: slide-up 0.4s ease 0.55s both; }
     .hero-line-5 { animation: slide-up 0.4s ease 0.7s both; }
+
+    <style>
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    .cursor-blink {
+        animation: blink 1s step-end infinite;
+    }
+    /* Tiny helper for very small devices */
+    @media (max-width: 340px) {
+        .hero-line-5 { font-size: 8px; letter-spacing: 0.1em; }
+    }
+    </style>
 </style>
 
 <div class="text-center space-y-8 pt-4 sm:pt-8">
@@ -34,14 +47,23 @@
     </div>
 
     <!-- Monospace pipeline spec line -->
-<!-- with this -->
-<div class="hero-line-3 flex flex-wrap items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-widest">
-    <span class="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">😭 reads emoji signals</span>
-    <span class="text-slate-300">·</span>
-    <span class="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">⚖️ weighs 1,269 features</span>
-    <span class="text-slate-300">·</span>
-    <span class="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">🔍 explains its reasoning</span>
-</div>
+    <div class="hero-line-3 flex flex-wrap items-center justify-center gap-y-3 gap-x-2 font-mono text-[10px] uppercase tracking-widest sm:gap-x-4">
+        <span class="whitespace-nowrap px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">
+            😭 reads emoji signals
+        </span>
+        
+        <span class="hidden text-slate-300 sm:block">·</span>
+        
+        <span class="whitespace-nowrap px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">
+            ⚖️ calibrates context
+        </span>
+        
+        <span class="hidden text-slate-300 sm:block">·</span>
+        
+        <span class="whitespace-nowrap px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-500">
+            🔍 exposes sentiment
+        </span>
+    </div>
 
     <!-- Description -->
     <p class="hero-line-4 text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed px-4">
@@ -50,16 +72,27 @@
         text-only models miss.
     </p>
 
-    <!-- Keyboard hint -->
-    <div class="hero-line-5 flex items-center justify-center gap-4 text-[10px] font-mono uppercase tracking-widest text-slate-400">
-        <span>Enter</span>
-        <span class="text-slate-300">→</span>
-        <span class="text-slate-500">Analyse</span>
-        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-        <span>Shift + Enter</span>
-        <span class="text-slate-300">→</span>
-        <span class="text-slate-500">New Line</span>
-        <span class="cursor-blink text-blue-400 ml-1">▌</span>
+    <div class="hero-line-5 flex flex-wrap items-center justify-center 
+                gap-x-2 gap-y-2 sm:gap-x-4 
+                text-[9px] sm:text-[10px] 
+                font-mono uppercase tracking-widest text-slate-400 
+                px-4 text-center">
+        
+        <div class="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+            <span class="text-slate-200 bg-slate-800/50 px-1 rounded">Enter</span>
+            <span class="text-slate-500">→</span>
+            <span class="text-slate-500">Analyse</span>
+        </div>
+
+        <span class="hidden xs:block w-1 h-1 rounded-full bg-slate-700"></span>
+
+        <div class="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+            <span class="text-slate-200 bg-slate-800/50 px-1 rounded">Shift + Enter</span>
+            <span class="text-slate-500">→</span>
+            <span class="text-slate-500">New Line</span>
+        </div>
+
+        <span class="cursor-blink text-blue-400 ml-1 select-none">▌</span>
     </div>
 
 </div>

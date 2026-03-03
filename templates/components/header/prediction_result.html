@@ -1,124 +1,106 @@
 <!-- templates/components/header/prediction_result.html -->
 
-<div class="p-4 sm:p-6 w-full animate-in fade-in zoom-in duration-500 space-y-5">
+<div class="p-3 sm:p-6 w-full animate-in fade-in zoom-in duration-500 space-y-4 sm:space-y-6">
 
-    <!-- ── Row 1: Prediction + Confidence ── -->
-    <div class="grid grid-cols-2 gap-4">
-
-        <!-- Left: Prediction -->
-        <div class="space-y-1 text-center">
-            <p class="font-mono text-[9px] font-black uppercase tracking-widest text-slate-600">
+    <div class="flex flex-row items-center justify-between gap-2">
+        <div class="flex-1 min-w-0">
+            <p class="font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 truncate">
                 Inference Result
             </p>
-            <h2 class="font-mono font-black tracking-tighter text-4xl sm:text-5xl
-                       {% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
+            <h2 class="font-mono font-black tracking-tighter text-3xl xs:text-4xl sm:text-6xl
+                        {% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
                 {{ result.prediction | upper }}
             </h2>
         </div>
 
-        <!-- Right: Confidence -->
-        <div class="space-y-2 flex flex-col justify-center items-center text-center">
-            <p class="font-mono text-[9px] font-black uppercase tracking-widest text-slate-600">
-                System Confidence
-            </p>
-            <div class="flex justify-between font-mono text-[9px] font-black uppercase tracking-widest text-center">
-                <span class="{% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
-                    {{ (result.confidence * 100) | round(2) }}%
-                </span>
-            </div>
-            <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                <div class="h-full rounded-full transition-all duration-1000 ease-out
-                            {% if result.prediction == 'Positive' %}bg-emerald-500{% else %}bg-rose-500{% endif %}"
-                     style="width: {{ (result.confidence * 100) | int }}%;">
+        <div class="flex-1 flex flex-col items-end space-y-2 sm:space-y-3">
+            <div class="w-full max-w-[140px] sm:max-w-[200px] space-y-1">
+                <div class="flex justify-between font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-widest">
+                    <span class="text-slate-500">Conf.</span>
+                    <span class="{% if result.prediction == 'Positive' %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                        {{ (result.confidence * 100) | round(1) }}%
+                    </span>
+                </div>
+                <div class="h-1 sm:h-1.5 w-full bg-slate-800/50 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-1000 ease-out
+                                {% if result.prediction == 'Positive' %}bg-emerald-500{% else %}bg-rose-500{% endif %}"
+                         style="width: {{ (result.confidence * 100) | int }}%;">
+                    </div>
                 </div>
             </div>
-            <!-- Status flags -->
-            <div class="flex gap-3 flex-wrap">
+
+            <div class="flex flex-wrap justify-end gap-1.5 sm:gap-3">
                 {% if result.entropy_flag == 'High Ambiguity' %}
-                <div class="flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                    <span class="font-mono text-[9px] font-black uppercase tracking-widest text-amber-500">High Ambiguity</span>
-                </div>
-                {% else %}
-                <div class="flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span class="font-mono text-[9px] font-black uppercase tracking-widest text-emerald-500">Clear Signal</span>
+                <div class="flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/20 bg-amber-500/5">
+                    <span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span class="font-mono text-[7px] sm:text-[9px] font-bold uppercase text-amber-500">High Ambiguity</span>
                 </div>
                 {% endif %}
                 {% if result.is_veto %}
-                <div class="flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                    <span class="font-mono text-[9px] font-black uppercase tracking-widest text-rose-500">Irony Override</span>
+                <div class="flex items-center gap-1 px-1.5 py-0.5 rounded border border-rose-500/20 bg-rose-500/5">
+                    <span class="w-1 h-1 rounded-full bg-rose-500 animate-pulse"></span>
+                    <span class="font-mono text-[7px] sm:text-[9px] font-bold uppercase text-rose-500">Veto</span>
                 </div>
                 {% endif %}
             </div>
         </div>
-
     </div>
 
-    <!-- ── Row 2: Drivers ── -->
-    <div class="space-y-3">
-        <p class="font-mono text-[9px] font-black uppercase tracking-widest text-slate-600">
-            Top 3 Drivers
-        </p>
+    <div class="space-y-2">
+        <div class="flex items-center gap-2">
+            <p class="font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500">Top 3 Drivers</p>
+            <div class="h-px flex-1 bg-slate-800/50"></div>
+        </div>
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 gap-1.5 sm:gap-3">
             {% for driver in result.top_drivers %}
-            <div class="relative rounded-xl bg-slate-900/50 border border-slate-800
-                        overflow-hidden p-2.5 sm:p-3.5 hover:border-slate-700 transition-colors">
-
-                <!-- Polarity bar -->
-                <div class="absolute top-0 left-0 w-0.5 h-full
-                            {% if driver.weight > 0 %}bg-emerald-500{% else %}bg-rose-500{% endif %}">
+            <div class="relative rounded border border-slate-800/60 bg-slate-900/30 p-1.5 sm:p-3 overflow-hidden">
+                <div class="absolute top-0 bottom-0 left-0 w-0.5 sm:w-1
+                            {% if driver.weight > 0 %}bg-emerald-500/40{% else %}bg-rose-500/40{% endif %}">
                 </div>
 
-                <div class="flex flex-col h-full pl-1">
-                    <span class="font-mono text-[8px] font-black uppercase tracking-wide text-slate-600">
-                        {% if 'emoji' in driver.token %}Visual
-                        {% elif 'word' in driver.token %}Lexicon
-                        {% else %}Token{% endif %}
+                <div class="flex flex-col h-full pl-1 sm:pl-2">
+                    <span class="font-mono text-[6px] sm:text-[8px] font-black uppercase text-slate-600 leading-none mb-1">
+                        {% if 'emoji' in driver.token %}Visual{% elif 'word' in driver.token %}Lexicon{% else %}Token{% endif %}
                     </span>
-                    <span class="font-mono text-[10px] sm:text-[12px] font-bold text-white truncate mt-0.5 mb-2"
-                          title="{{ driver.token }}">
-                        {{ driver.token }}
+                                                            
+                    <span class="font-mono text-[10px] sm:text-sm font-bold text-slate-200 truncate leading-tight" title="{{ driver.token }}">
+                        {% if driver.token == 'emoji_pos_count' %}
+                            <span class="text-cyan-400">pos emoji</span> 
+                        {% elif driver.token == 'emoji_neg_count' %}
+                            <span class="text-amber-500">neg emoji</span> 
+                        {% elif driver.token == 'word_pos_count' %}
+                            <span class="text-cyan-400">pos word</span> 
+                        {% elif driver.token == 'word_neg_count' %}
+                            <span class="text-amber-500">neg word</span>
+                        {% else %}
+                            {{ driver.token }}
+                        {% endif %}
                     </span>
-                    <div class="mt-auto flex items-end justify-between border-t border-slate-800 pt-2">
-                        <span class="font-mono text-[10px] font-bold
-                                     {% if driver.weight > 0 %}text-emerald-400{% else %}text-rose-400{% endif %}">
-                            {{ "%+.4f"|format(driver.weight) }}
+
+                    <div class="mt-auto pt-1 sm:pt-2 flex flex-col xs:flex-row xs:justify-between items-start xs:items-center gap-0.5 border-t border-slate-800/50">
+                        <span class="font-mono text-[8px] sm:text-[10px] font-bold 
+                                    {% if driver.weight > 0 %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ "%+.2f"|format(driver.weight) }}
                         </span>
-                        <span class="font-mono text-[8px] text-slate-600 uppercase tracking-wide">
-                            {% if driver.weight|abs >= 1.5 %}Critical
-                            {% elif driver.weight|abs >= 0.5 %}Strong
-                            {% else %}Moderate{% endif %}
+                        
+                        <span class="font-mono text-[6px] sm:text-[8px] text-slate-600 uppercase">
+                            {% if driver.weight|abs >= 1.5 %}Critical{% elif driver.weight|abs >= 0.5 %}Strong{% else %}Moderate{% endif %}
                         </span>
                     </div>
                 </div>
-
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- ── Row 3: Legend + Latency ── -->
-    <div class="flex items-center justify-between flex-wrap gap-2
-                font-mono text-[9px] uppercase tracking-widest text-slate-600">
-        <div class="flex gap-4">
-            <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                Positive
-            </div>
-            <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                Negative
-            </div>
-            {% if result.is_veto %}
-            <span class="text-rose-500 italic normal-case">* veto overrode weights</span>
-            {% endif %}
+    <div class="flex items-center justify-between font-mono text-[7px] sm:text-[9px] uppercase tracking-widest text-slate-600 pt-1">
+        <div class="flex gap-2 sm:gap-4">
+            <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-emerald-500"></span> POS</span>
+            <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-rose-500"></span> NEG</span>
         </div>
-        <span class="text-slate-700">
-            <span class="text-emerald-500">●</span> {{ result.latency }}ms
-        </span>
+        <div class="flex items-center gap-1">
+            <span class="text-emerald-500/50">●</span> <span>{{ result.latency }}ms</span>
+        </div>
     </div>
-
 </div>

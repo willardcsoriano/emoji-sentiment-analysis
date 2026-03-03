@@ -6,6 +6,9 @@ PROJECT_NAME = emoji_sentiment_analysis
 PYTHON_VERSION = 3.12
 PYTHON_INTERPRETER = python
 
+# Automatically detects the IP of the current active Wi-Fi/Ethernet interface
+LOCAL_IP := $(shell $(PYTHON_INTERPRETER) -c "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0]); s.close()")
+
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
@@ -91,7 +94,8 @@ serve:
 ## Run dev server accessible to your phone (Same Wi-Fi)
 .PHONY: dev-mobile
 dev-mobile:
-	uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+	@echo ">>> Connect your phone to: http://$(LOCAL_IP):8000"
+	uvicorn app:app --host $(LOCAL_IP) --port 8000 --reload
 
 #################################################################################
 # Self Documenting Commands                                                     #
