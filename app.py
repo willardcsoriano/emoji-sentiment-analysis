@@ -9,6 +9,7 @@ import joblib
 import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR
@@ -37,6 +38,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 templates.env.filters["uppercase"] = lambda s: str(s).upper()
