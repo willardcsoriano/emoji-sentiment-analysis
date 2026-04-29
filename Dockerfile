@@ -16,4 +16,4 @@ COPY . .
 
 RUN pip install --no-cache-dir .
 
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT} --log-level debug"]
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT} --log-level warning"]

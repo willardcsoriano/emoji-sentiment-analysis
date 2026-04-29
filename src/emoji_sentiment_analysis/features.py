@@ -2,8 +2,7 @@
 
 from pathlib import Path
 
-import pandas as pd
-from loguru import logger  # Added this import
+from loguru import logger
 
 # ---------------------------------------------------------------------
 # MASTER POSITIVE LEXICON
@@ -278,6 +277,8 @@ def build_final_features(input_path: Path, output_path: Path):
     """
     Applies the hybrid feature extraction to the dataset and persists it.
     """
+    import pandas as pd
+
     df = pd.read_csv(input_path)
 
     logger.info("Extracting hybrid features (Emoji + Text Lexicons)...")

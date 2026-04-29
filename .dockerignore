@@ -1,0 +1,16 @@
+.git
+.venv
+.pytest_cache
+__pycache__
+*.pyc
+
+# Dev tools
+references/
+reports/
+
+# Notebooks and raw data are not needed at runtime
+src/notebooks/
+src/data/
+
+# Tests don't run inside the container
+src/tests/

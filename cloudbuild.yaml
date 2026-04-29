@@ -3,11 +3,10 @@ steps:
   #    COPY . . in the Dockerfile will include these files at /app/src/models/.
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gsutil
-    args: ['cp', 'gs://hybrid-sentiment-models/models/sentiment_model.pkl', './src/models/sentiment_model.pkl']
-
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gsutil
-    args: ['cp', 'gs://hybrid-sentiment-models/models/tfidf_vectorizer.pkl', './src/models/tfidf_vectorizer.pkl']
+    args: ['-m', 'cp',
+      'gs://hybrid-sentiment-models/models/sentiment_model.pkl',
+      'gs://hybrid-sentiment-models/models/tfidf_vectorizer.pkl',
+      './src/models/']
 
   # 1. Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -42,6 +41,7 @@ steps:
       - '1'
       - '--concurrency'
       - '80'
+      - '--cpu-boost'
 
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -12,7 +12,6 @@ scikit-learn==1.8.0
 joblib==1.5.3
 numpy==2.4.1
 scipy==1.17.0
-pandas==3.0.0
 
 # Templates
 Jinja2==3.1.6
@@ -36,11 +35,6 @@ idna==3.11
 # HTTP server (uvicorn dep)
 h11==0.16.0
 click==8.3.1
-
-# Pandas transitive
-python-dateutil==2.9.0.post0
-six==1.17.0
-tzdata==2025.3
 
 # scikit-learn transitive
 threadpoolctl==3.6.0
