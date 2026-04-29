@@ -4,7 +4,7 @@
 
 PROJECT_NAME = emoji_sentiment_analysis
 PYTHON_VERSION = 3.12
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = python3
 
 # Automatically detects the IP of the current active Wi-Fi/Ethernet interface
 LOCAL_IP := $(shell $(PYTHON_INTERPRETER) -c "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0]); s.close()")
@@ -60,7 +60,7 @@ deploy:
 ## View recent Cloud Run runtime logs
 .PHONY: logs
 logs:
-	gcloud logs read "resource.type=cloud_run_revision AND resource.labels.service_name=emoji-sentiment-app" --limit 20
+	gcloud run services logs read emoji-sentiment-app --limit 20 --region us-central1
 
 ## Stream live logs from the cloud
 .PHONY: stream-logs
