@@ -129,6 +129,20 @@ ipython_config.py
 .pdm-python
 .pdm-build/
 
+# AI coding agents
+CLAUDE.md
+.claude/
+GEMINI.md
+.gemini/
+.cursor/
+.cursorules
+.cursorrules
+.windsurfrules
+.continue/
+.cody/
+.aider*
+.amazonq/
+
 # pixi
 #   pixi.lock should be committed to version control for reproducibility
 #   .pixi/ contains the environments and should not be committed
@@ -193,3 +207,4 @@ src/data/logs/inference_history.csv
 
 # Model files
 src/models/*.pkl
+

@@ -7,10 +7,10 @@ ENV PORT=8080 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app/src
 
-COPY requirements.txt pyproject.toml ./
+COPY requirements-prod.txt pyproject.toml ./
 
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements-prod.txt
 
 COPY . .
 

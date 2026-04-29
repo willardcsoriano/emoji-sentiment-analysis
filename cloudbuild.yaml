@@ -1,20 +1,30 @@
 steps:
+  # 0. Download model artifacts from GCS into the workspace before the Docker build.
+  #    COPY . . in the Dockerfile will include these files at /app/src/models/.
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gsutil
+    args: ['cp', 'gs://hybrid-sentiment-models/models/sentiment_model.pkl', './src/models/sentiment_model.pkl']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gsutil
+    args: ['cp', 'gs://hybrid-sentiment-models/models/tfidf_vectorizer.pkl', './src/models/tfidf_vectorizer.pkl']
+
   # 1. Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'build', 
-      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest', 
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest',
       '.'
     ]
 
   # 2. Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'push', 
+      'push',
       'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
     ]
 
-  # 3. Deploy to Cloud Run with Safety Constraints
+  # 3. Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -26,7 +36,6 @@ steps:
       - '--region'
       - 'us-central1'
       - '--allow-unauthenticated'
-      # SAFETY CONSTRAINTS:
       - '--min-instances'
       - '0'
       - '--max-instances'

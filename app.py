@@ -1,60 +1,32 @@
 # app.py - Main FastAPI application for Hybrid Sentiment Engine
 
-# app.py - Main FastAPI application for Hybrid Sentiment Engine
-
+import asyncio
 import os
-import tempfile
 import time
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 import joblib
 import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from google.cloud import storage
 
-from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD
+from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR
 from emoji_sentiment_analysis.modeling.predict import predict_sentiment
-
-GCS_BUCKET = "hybrid-sentiment-models"
-GCS_MODEL_PREFIX = "models"
-
-
-def download_artifacts() -> Path:
-    """Download model artifacts from GCS to a temp directory."""
-    tmp_dir = Path(tempfile.mkdtemp())
-    client = storage.Client()
-    bucket = client.bucket(GCS_BUCKET)
-
-    for filename in ["sentiment_model.pkl", "tfidf_vectorizer.pkl"]:
-        blob = bucket.blob(f"{GCS_MODEL_PREFIX}/{filename}")
-        dest = tmp_dir / filename
-        blob.download_to_filename(dest)
-        print(f"✅ Downloaded {filename} from GCS")
-
-    return tmp_dir
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Downloads artifacts from GCS on startup."""
-    try:
-        artifacts_dir = download_artifacts()
-        app.state.model = joblib.load(artifacts_dir / "sentiment_model.pkl")
-        app.state.vectorizer = joblib.load(artifacts_dir / "tfidf_vectorizer.pkl")
-        print("✅ Production artifacts loaded from GCS")
-        yield
-    except Exception as e:
-        print(f"❌ Startup Error: {e}")
-        raise
-    finally:
-        if hasattr(app.state, "model"):
-            del app.state.model
-        if hasattr(app.state, "vectorizer"):
-            del app.state.vectorizer
-        print("🛑 System shutdown complete.")
+    """Loads model artifacts from the baked-in image path on startup."""
+    app.state.model = await asyncio.to_thread(joblib.load, MODELS_DIR / "sentiment_model.pkl")
+    app.state.vectorizer = await asyncio.to_thread(
+        joblib.load, MODELS_DIR / "tfidf_vectorizer.pkl"
+    )
+    print("✅ Artifacts loaded from baked-in path")
+    yield
+    del app.state.model
+    del app.state.vectorizer
+    print("🛑 System shutdown complete.")
 
 
 app = FastAPI(
