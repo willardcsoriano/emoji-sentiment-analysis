@@ -3,7 +3,7 @@
 A lexicon-augmented NLP pipeline for sentiment inference on emoji-enriched social media text.
 
 **Live Deployment:**
-[https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)
+[https://willardcsoriano.dev/projects/emoji-sentiment-analysis/](https://willardcsoriano.dev/projects/emoji-sentiment-analysis/)
 
 > ⚠️ **Heads up:** This service is deployed serverlessly on Google Cloud Run.
 > If the endpoint hasn't been called recently, the first request may take
@@ -20,6 +20,29 @@ Unlike conventional sentiment pipelines that discard symbolic tokens, this syste
 The system is fully reproducible — spanning data ingestion, feature engineering, model training, interpretability analysis, and production inference deployment.
 
 ---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Key Capabilities](#key-capabilities)
+- [Live Demo](#live-demo)
+- [Machine Learning Pipeline](#machine-learning-pipeline)
+- [Modeling Approach](#modeling-approach)
+  - [Text Representation](#text-representation)
+  - [Emoji Signal Processing](#emoji-signal-processing)
+  - [Word Lexicon Layer](#word-lexicon-layer)
+  - [Classifier](#classifier)
+  - [Sarcasm Veto](#sarcasm-veto)
+- [Project Structure](#project-structure)
+- [Reproducibility](#reproducibility)
+  - [Local Development](#local-development)
+  - [Production Deployment](#production-deployment)
+- [Docker Deployment](#docker-deployment)
+- [Testing](#testing)
+- [Notebooks](#notebooks)
+- [Tech Stack](#tech-stack)
+- [Author](#author)
+- [License](#license)
 
 ## Key Capabilities
 
@@ -38,7 +61,7 @@ The system is fully reproducible — spanning data ingestion, feature engineerin
 
 Try the deployed inference interface:
 
-**[https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app](https://emoji-sentiment-app-5e62vyvgya-uc.a.run.app)**
+**[https://willardcsoriano.dev/projects/emoji-sentiment-analysis/](https://willardcsoriano.dev/projects/emoji-sentiment-analysis/)**
 
 Features:
 
