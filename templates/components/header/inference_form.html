@@ -54,8 +54,11 @@
         <!-- Body -->
         <div class="p-4 sm:p-8 space-y-5">
 
+            <!-- Relative (not root-absolute) so the app is mount-agnostic: works
+                 standalone at run.app/ and behind a path-prefix proxy alike.
+                 Page is always served with a trailing slash for correct resolution. -->
             <form
-                hx-post="/predict-ui"
+                hx-post="predict-ui"
                 hx-target="#result-area"
                 hx-indicator="#inference-loader"
                 class="space-y-4"
