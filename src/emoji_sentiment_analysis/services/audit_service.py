@@ -12,41 +12,31 @@ from __future__ import annotations
 from datetime import datetime
 
 import numpy as np
-from scipy.sparse import csr_matrix
 
 
 def explain_prediction(
     text: str,
     prediction: int,
     probs: np.ndarray,
-    features: csr_matrix,
-    model,
-    tfidf,
+    nonzero_indices: np.ndarray,
+    all_feature_names: list[str],
+    coef: np.ndarray,
     is_veto: bool,
-    confidence: float,  # <-- Added to signature
-    entropy_flag: str,  # <-- Added to signature
+    confidence: float,
+    entropy_flag: str,
 ) -> dict:
     """
     Formats and explains a completed prediction.
     All decision-making has already occurred in predict.py before this is called.
+
+    Receives the active feature columns (``nonzero_indices``), the full feature
+    name axis, and the model coefficients — no scikit-learn objects — so the
+    serving path stays scikit-learn/scipy free.
     """
-    # Decision Drivers
-    feature_names = tfidf.get_feature_names_out()
-    hybrid_feature_names = [
-        "emoji_pos_count",
-        "emoji_neg_count",
-        "word_pos_count",
-        "word_neg_count",
-    ]
-    all_feature_names = np.concatenate([feature_names, hybrid_feature_names])
-
-    nonzero_indices = features.nonzero()[1]
-    coefs = model.coef_[0]
-
     feature_impacts = []
     for idx in nonzero_indices:
-        token = all_feature_names[idx]
-        weight = coefs[idx]
+        token = all_feature_names[int(idx)]
+        weight = coef[int(idx)]
         feature_impacts.append({"token": token, "weight": round(float(weight), 4)})
 
     top_drivers = sorted(feature_impacts, key=lambda x: abs(x["weight"]), reverse=True)

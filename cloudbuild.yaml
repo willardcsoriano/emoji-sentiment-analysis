@@ -1,6 +1,7 @@
 steps:
-  # 0. Download model artifacts from GCS into the workspace before the Docker build.
-  #    COPY . . in the Dockerfile will include these files at /app/src/models/.
+  # 0. Download the trained scikit-learn artifacts from GCS into the workspace.
+  #    These are inputs to the export step only; .dockerignore keeps the .pkl
+  #    files out of the runtime image.
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gsutil
     args: ['-m', 'cp',
@@ -8,7 +9,18 @@ steps:
       'gs://hybrid-sentiment-models/models/tfidf_vectorizer.pkl',
       './src/models/']
 
-  # 1. Build the Docker image
+  # 1. Export scikit-learn-free inference weights (model_lite.npz/json) with a
+  #    hard parity gate. scikit-learn runs here, offline; the runtime image
+  #    (and COPY . .) picks up only the exported weights.
+  - name: 'python:3.12-slim'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        pip install --no-cache-dir scikit-learn==1.8.0 scipy joblib numpy python-dotenv loguru
+        python src/scripts/export_lite_model.py
+
+  # 2. Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -16,14 +28,14 @@ steps:
       '.'
     ]
 
-  # 2. Push the image to Artifact Registry
+  # 3. Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'push',
       'us-central1-docker.pkg.dev/$PROJECT_ID/emoji-repo/hybrid-sentiment-analysis:latest'
     ]
 
-  # 3. Deploy to Cloud Run
+  # 4. Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:

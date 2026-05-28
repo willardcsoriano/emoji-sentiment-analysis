@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
-RUN pip install --no-cache-dir .
+# --no-deps: runtime deps come solely from requirements-prod.txt. Without it,
+# pip would resolve pyproject.toml's dynamic dependencies (the dev
+# requirements.txt — scikit-learn, scipy, pandas, …) and re-bloat the image.
+RUN pip install --no-cache-dir --no-deps .
 
 CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT} --log-level warning"]

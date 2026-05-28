@@ -5,38 +5,40 @@ Production Inference Pipeline
 -----------------------------
 Operationalizes the trained sentiment classification model.
 Synchronized with hybrid Lexicon features (Emoji + Text).
-Purely in-memory: No local file logging to prevent repository bloat.
+
+Runs on the scikit-learn-free :class:`LiteModel` backend: feature extraction
+and the sarcasm veto are pure Python, and the TF-IDF + logistic decision is
+pure NumPy, so the serving path imports neither scikit-learn nor scipy.
 """
 
 from __future__ import annotations
 
-from typing import cast
-
 import numpy as np
 from loguru import logger
-from scipy.sparse import csr_matrix, hstack
 
 from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR, init_logging
 from emoji_sentiment_analysis.features import extract_emoji_polarity_features
+from emoji_sentiment_analysis.modeling.lite_model import LiteModel
 from emoji_sentiment_analysis.services.audit_service import explain_prediction
 
 # -------------------------------------------------------------------
-# Artifact Loading (local fallback for CLI/dev use only)
+# Artifact Loading
 # -------------------------------------------------------------------
 
 
-def load_artifacts():
-    """Load model and vectorizer from the central models directory."""
-    import joblib
+def load_lite_model() -> LiteModel:
+    """Load the lightweight model artifacts from the central models directory."""
+    npz_path = MODELS_DIR / "model_lite.npz"
+    json_path = MODELS_DIR / "model_lite.json"
 
-    model_path = MODELS_DIR / "sentiment_model.pkl"
-    vectorizer_path = MODELS_DIR / "tfidf_vectorizer.pkl"
+    if not npz_path.exists() or not json_path.exists():
+        logger.error(
+            f"Lite artifacts not found in {MODELS_DIR}. "
+            f"Run scripts/export_lite_model.py against the trained .pkl files."
+        )
+        raise FileNotFoundError("Lite model artifacts missing.")
 
-    if not model_path.exists() or not vectorizer_path.exists():
-        logger.error(f"Artifacts not found in {MODELS_DIR}. Run training first.")
-        raise FileNotFoundError("Modeling artifacts missing.")
-
-    return joblib.load(model_path), joblib.load(vectorizer_path)
+    return LiteModel.load(MODELS_DIR)
 
 
 # -------------------------------------------------------------------
@@ -86,36 +88,35 @@ def _apply_sarcasm_veto(e_neg: int, e_pos: int, w_pos: int) -> tuple[bool, int, 
 # -------------------------------------------------------------------
 
 
-def predict_sentiment(text: str, model=None, tfidf=None) -> dict:
+def predict_sentiment(text: str, lite: LiteModel | None = None) -> dict:
     """
     Full inference pipeline with sarcasm veto and explainability.
-    Accepts model and tfidf injected from app.state (production).
+    Accepts a :class:`LiteModel` injected from app.state (production).
     Falls back to loading from disk for CLI/dev use.
     """
     # Fallback for CLI use
-    if model is None or tfidf is None:
+    if lite is None:
         try:
-            model, tfidf = load_artifacts()
+            lite = load_lite_model()
         except Exception:
             return {"error": "Model files not found."}
 
-    # 1. Feature Extraction
+    # 1. Feature Extraction (pure Python)
     e_pos, e_neg, w_pos, w_neg = extract_emoji_polarity_features(text)
 
-    # 2. Vectorization & Assembly
-    text_vec = tfidf.transform([text])
-    numeric_vec = np.array([[e_pos, e_neg, w_pos, w_neg]])
-    features = cast(csr_matrix, hstack([text_vec, numeric_vec]).tocsr())
+    # 2. Vectorization + logistic decision (pure NumPy).
+    #    nonzero_indices feeds the explainer regardless of the veto outcome.
+    model_prediction, model_probs, nonzero_indices = lite.predict(text, e_pos, e_neg, w_pos, w_neg)
 
-    # 3. Sarcasm Veto
+    # 3. Sarcasm Veto (deterministic override)
     is_veto, veto_prediction, veto_probs = _apply_sarcasm_veto(e_neg, e_pos, w_pos)
 
     if is_veto:
         prediction = veto_prediction
         probs = veto_probs
     else:
-        probs = model.predict_proba(features)[0]
-        prediction = int(model.predict(features)[0])
+        prediction = model_prediction
+        probs = model_probs
 
     # 4. Confidence & Ambiguity
     confidence = float(np.max(probs))
@@ -126,9 +127,9 @@ def predict_sentiment(text: str, model=None, tfidf=None) -> dict:
         text=text,
         prediction=prediction,
         probs=probs,
-        features=features,
-        model=model,
-        tfidf=tfidf,
+        nonzero_indices=nonzero_indices,
+        all_feature_names=lite.all_feature_names,
+        coef=lite.coef,
         is_veto=is_veto,
         confidence=confidence,
         entropy_flag=entropy_flag,

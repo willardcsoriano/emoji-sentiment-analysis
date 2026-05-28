@@ -5,7 +5,6 @@ import os
 import time
 from contextlib import asynccontextmanager
 
-import joblib
 import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
@@ -13,20 +12,17 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from emoji_sentiment_analysis.config import AMBIGUITY_THRESHOLD, MODELS_DIR
+from emoji_sentiment_analysis.modeling.lite_model import LiteModel
 from emoji_sentiment_analysis.modeling.predict import predict_sentiment
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Loads model artifacts from the baked-in image path on startup."""
-    app.state.model = await asyncio.to_thread(joblib.load, MODELS_DIR / "sentiment_model.pkl")
-    app.state.vectorizer = await asyncio.to_thread(
-        joblib.load, MODELS_DIR / "tfidf_vectorizer.pkl"
-    )
-    print("✅ Artifacts loaded from baked-in path")
+    """Load the lightweight (scikit-learn-free) model artifacts on startup."""
+    app.state.lite = await asyncio.to_thread(LiteModel.load, MODELS_DIR)
+    print("✅ Lite model loaded (scikit-learn-free)")
     yield
-    del app.state.model
-    del app.state.vectorizer
+    del app.state.lite
     print("🛑 System shutdown complete.")
 
 
@@ -54,11 +50,7 @@ async def home(request: Request):
 async def predict_ui(request: Request, text: str = Form(...)):
     start_time = time.perf_counter()
 
-    result = predict_sentiment(
-        text,
-        model=request.app.state.model,
-        tfidf=request.app.state.vectorizer,
-    )
+    result = predict_sentiment(text, lite=request.app.state.lite)
 
     execution_time_ms = (time.perf_counter() - start_time) * 1000
     result["latency"] = round(execution_time_ms, 2)

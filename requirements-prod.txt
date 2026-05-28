@@ -7,11 +7,11 @@ starlette==0.50.0
 uvicorn==0.40.0
 python-multipart==0.0.22
 
-# ML inference
-scikit-learn==1.8.0
-joblib==1.5.3
+# Inference — pure NumPy. scikit-learn/scipy/joblib are NOT runtime deps; the
+# model is served from exported weights via modeling/lite_model.py. They are
+# only used offline to train and to export those weights (see requirements.txt
+# and scripts/export_lite_model.py).
 numpy==2.4.1
-scipy==1.17.0
 
 # Templates
 Jinja2==3.1.6
@@ -36,6 +36,4 @@ idna==3.11
 h11==0.16.0
 click==8.3.1
 
-# scikit-learn transitive
-threadpoolctl==3.6.0
 packaging==26.0

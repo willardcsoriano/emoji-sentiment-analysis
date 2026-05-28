@@ -67,11 +67,18 @@ logs:
 stream-logs:
 	gcloud alpha logging tail "resource.type=cloud_run_revision AND resource.labels.service_name=emoji-sentiment-app"
 
-## Train the model and update artifacts
+## Train the model, then export scikit-learn-free inference weights
 .PHONY: train
 train:
 	$(PYTHON_INTERPRETER) src/emoji_sentiment_analysis/modeling/train_model.py
-	@echo ">>> Artifacts updated in src/models/"
+	$(MAKE) export
+	@echo ">>> Artifacts updated in src/models/ (.pkl + model_lite.*)"
+
+## Export the lightweight inference weights from the trained .pkl artifacts
+## (runs a hard parity gate against scikit-learn before writing)
+.PHONY: export
+export:
+	$(PYTHON_INTERPRETER) src/scripts/export_lite_model.py
 
 ## Deploy WITH a fresh training run
 .PHONY: deploy-full

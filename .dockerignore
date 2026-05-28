@@ -14,3 +14,8 @@ src/data/
 
 # Tests don't run inside the container
 src/tests/
+
+# Pickled sklearn artifacts: only the build-time export step reads them; the
+# runtime image serves from the exported model_lite.npz/json instead.
+src/models/*.pkl
+.venv-parity/
