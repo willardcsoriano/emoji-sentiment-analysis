@@ -163,7 +163,7 @@ emoji_sentiment_analysis/
     └── tests/              # Pytest suite for model behavior & features
 ```
 
-> **Note on model artifacts:** `.pkl` files are excluded from version control. In production, artifacts are stored in Google Cloud Storage (`gs://hybrid-sentiment-models/models/`) and downloaded by the container at startup. Locally, run `make train` to regenerate them.
+> **Note on model artifacts:** `.pkl` files are excluded from version control and stored in Google Cloud Storage (`gs://hybrid-sentiment-models/models/`) as the training source of truth. The runtime never loads them — it serves from scikit-learn-free weights (`model_lite.*`) exported from the `.pkl`s at build time (see [ADR 0001](docs/adr/0001-numpy-inference-backend.md)). Locally, run `make train` to regenerate both.
 
 ---
 
@@ -192,14 +192,17 @@ make dev
 
 ### Production Deployment
 
-Model artifacts are stored in GCS and loaded at container startup — no `.pkl` files are committed to the repository.
+The runtime serves from lightweight, scikit-learn-free weights (`model_lite.npz` + `model_lite.json`) — see [ADR 0001](docs/adr/0001-numpy-inference-backend.md). The trained `.pkl` artifacts remain the source of truth in GCS; `make deploy` (via Cloud Build) downloads them, re-exports the lite weights through a hard **parity gate** (identical predictions and probabilities within `1e-9` of scikit-learn, or the build fails), builds the image, and deploys.
 
 ```bash
-# Deploy code-only changes
+# Build (with export + parity gate) and deploy
 make deploy
 
 # Retrain model + upload to GCS + deploy
 make deploy-full
+
+# Export lite weights from existing .pkl artifacts (runs the parity gate)
+make export
 ```
 
 ---
@@ -244,7 +247,8 @@ Lifecycle notebooks document the full experimentation process:
 ## Tech Stack
 
 - **Language:** Python 3.12
-- **ML Library:** Scikit-learn (TF-IDF + Logistic Regression)
+- **ML Library:** Scikit-learn (TF-IDF + Logistic Regression) — training & export only
+- **Inference Runtime:** Pure NumPy — scikit-learn-free serving path ([ADR 0001](docs/adr/0001-numpy-inference-backend.md))
 - **Web Framework:** FastAPI + HTMX + TailwindCSS
 - **Containerization:** Docker
 - **Cloud Infrastructure:** Google Cloud Run (Serverless)
