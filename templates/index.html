@@ -21,12 +21,21 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FFD75E'/%3E%3Cpath d='M30 65c10 10 30 10 40 0' stroke='%23000' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='35' cy='40' r='6' fill='%23000'/%3E%3Ccircle cx='65' cy='40' r='6' fill='%23000'/%3E%3C/svg%3E">
 
-    <!-- Core runtime libraries -->
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- Core runtime libraries (version-pinned + Subresource Integrity) -->
+    <script src="https://unpkg.com/htmx.org@1.9.10/dist/htmx.min.js"
+            integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+            crossorigin="anonymous"></script>
+    <!-- Tailwind Play CDN: development-grade and cannot be SRI-pinned (it ships an
+         unversioned bootstrap that JIT-compiles in the browser). It is locked to
+         this origin by the CSP in app.py. Production follow-up: replace with a
+         built, self-hosted stylesheet (drops this CDN and CSP's 'unsafe-eval'). -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Math rendering -->
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Math rendering (pinned 3.2.2 + Subresource Integrity) -->
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"
+            integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei"
+            crossorigin="anonymous"></script>
 
     <style>
         /* ── Base ── */
