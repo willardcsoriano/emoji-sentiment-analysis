@@ -1,0 +1,13 @@
+<!-- templates/components/header/error.html -->
+
+<div class="p-3 sm:p-6 w-full animate-in fade-in zoom-in duration-300" role="alert" aria-live="polite">
+    <div class="flex items-start gap-3 rounded border border-rose-500/30 bg-rose-500/5 p-3 sm:p-4">
+        <span class="mt-0.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0"></span>
+        <div class="min-w-0">
+            <p class="font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-rose-400">
+                Error
+            </p>
+            <p class="font-mono text-xs sm:text-sm text-slate-300 mt-1 break-words">{{ message }}</p>
+        </div>
+    </div>
+</div>
