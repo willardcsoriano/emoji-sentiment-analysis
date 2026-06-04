@@ -267,3 +267,7 @@ Built by **Willard C. Soriano**
 ## License
 
 This project is licensed under the MIT License — see the LICENSE file for details.
+
+The MIT license covers the **source code only**. The third-party datasets under
+`src/data/` carry their own terms; see [DATA.md](DATA.md) for sources, licensing,
+and provenance.
