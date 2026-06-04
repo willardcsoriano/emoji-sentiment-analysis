@@ -1,0 +1,27 @@
+# .gcloudignore — controls what `gcloud builds submit` uploads as the Cloud
+# Build context. Without this file, gcloud falls back to .gitignore and ships
+# the entire repo (notebooks, datasets, tests) to the build's GCS staging
+# bucket on every deploy. The runtime image is assembled by .dockerignore;
+# this file only trims the upload, keeping deploys fast and lean.
+
+.git/
+.gitignore
+
+# Local envs / caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+
+# Not needed to build or deploy the serving image
+src/notebooks/
+src/data/
+src/tests/
+references/
+reports/
+
+# Pickled sklearn artifacts are pulled fresh from GCS by the build's export
+# step, never from the uploaded context.
+src/models/*.pkl
