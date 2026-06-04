@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document records the datasets bundled in this repository, their structure, and — importantly — their provenance and licensing, which are **separate from the project's code license**. The repository's `LICENSE` (MIT) covers the source code only; it does **not** grant any rights over the third-party data files under `src/data/`. The corpora here are small, label-only sentiment sets with no direct personal identifiers (no usernames, user IDs, timestamps, or geolocation), so the privacy surface is low, but redistribution terms depend on each set's original license. Source and license fields below are marked _to confirm_ where the upstream origin was not recorded at ingestion time; fill them from your download record before treating redistribution as cleared.
+This document records the datasets bundled in this repository, their structure, and — importantly — their provenance and licensing, which are **separate from the project's code license**. The repository's `LICENSE` (MIT) covers the source code only; it does **not** grant any rights over the third-party data files under `src/data/`. The corpora here are small, label-only sentiment sets with no direct personal identifiers (no usernames, user IDs, timestamps, or geolocation), so the privacy surface is low, but redistribution terms depend on each set's original license. These files were provided as material for a school activity with no accompanying license, so their redistribution terms are unverified and sharing them should not be treated as cleared.
 
 ## Table of Contents
 
@@ -25,21 +25,23 @@ Derived files are reproducible from the raw inputs via `make train` (data cleani
 
 ## Source & license
 
-> Fill these in from where each file was obtained. Do not assume redistribution is
-> permitted until confirmed — some tweet-derived datasets license only tweet **IDs**,
-> not tweet **text**.
+These files were **provided by the course instructor as material for a school
+activity**. The original upstream origin was not recorded at the time, and no
+license accompanied them, so their **redistribution terms are unverified**.
 
 - **`1k_data_emoji_tweets_senti_posneg.csv`**
-  - Source: _to confirm_ (likely a public Kaggle / academic emoji-sentiment set)
-  - License / terms: _to confirm_
-  - Redistribution of text permitted: _to confirm_
+  - Source: provided as coursework material; upstream origin not recorded
+  - License / terms: unverified
+  - Redistribution of text permitted: unverified
 - **`15_emoticon_data.csv`**
-  - Source: _to confirm_ (emoji metadata; codepoints/names are factual Unicode data)
-  - License / terms: _to confirm_
+  - Source: provided as coursework material; upstream origin not recorded
+  - License / terms: unverified (codepoints/names are factual Unicode data)
 
-If an upstream license forbids redistributing the text, replace the committed CSV
-with a fetch script (mirroring how the trained `.pkl` artifacts are pulled from GCS
-at build time) and document the retrieval steps here instead.
+Because the provenance is a classroom hand-out rather than a licensed public
+release, treat redistribution as **not cleared**. If the upstream terms ever
+surface and forbid sharing the tweet text, replace the committed CSV with a fetch
+script (mirroring how the trained `.pkl` artifacts are pulled from GCS at build
+time) and document the retrieval steps here instead.
 
 ## Privacy
 
