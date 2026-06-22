@@ -180,7 +180,7 @@ def main():
     # Load + clean tweets dataset
     # -----------------------------------------------------------------
 
-    tweets_path = RAW_DATA_DIR / "1k_data_emoji_tweets_senti_posneg.csv"
+    tweets_path = RAW_DATA_DIR / "tweet_corpus.csv"
 
     tweets_df = clean_tweets_dataset(tweets_path)
 
@@ -193,7 +193,7 @@ def main():
     # Load + clean emoji reference
     # -----------------------------------------------------------------
 
-    emoji_path = RAW_DATA_DIR / "15_emoticon_data.csv"
+    emoji_path = RAW_DATA_DIR / "emoji_lexicon.csv"
 
     emoji_df = clean_emoji_reference(emoji_path)
 

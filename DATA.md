@@ -15,8 +15,8 @@ This document records the datasets bundled in this repository, their structure, 
 
 | File | Rows | Columns | Role |
 |------|-----:|---------|------|
-| `src/data/raw/1k_data_emoji_tweets_senti_posneg.csv` | 1,000 | index, `sentiment`, `post` | Raw labeled tweet corpus (training/eval) |
-| `src/data/raw/15_emoticon_data.csv` | 16 | index, `Emoji`, `Unicode codepoint`, `Unicode name` | Emoji reference lexicon |
+| `src/data/raw/tweet_corpus.csv` | 1,000 | index, `sentiment`, `post` | Raw labeled tweet corpus (training/eval) |
+| `src/data/raw/emoji_lexicon.csv` | 16 | index, `Emoji`, `Unicode codepoint`, `Unicode name` | Emoji reference lexicon |
 | `src/data/processed/tweets_clean.csv` | 1,000 | `label`, `text` | Cleaned tweet corpus (derived) |
 | `src/data/processed/features_final.csv` | — | engineered features | Model input matrix (derived) |
 | `src/data/processed/emoji_reference_clean.csv` | — | cleaned lexicon | Derived from the emoticon reference |
@@ -29,11 +29,11 @@ These files were **provided by the course instructor as material for a school
 activity**. The original upstream origin was not recorded at the time, and no
 license accompanied them, so their **redistribution terms are unverified**.
 
-- **`1k_data_emoji_tweets_senti_posneg.csv`**
+- **`tweet_corpus.csv`**
   - Source: provided as coursework material; upstream origin not recorded
   - License / terms: unverified
   - Redistribution of text permitted: unverified
-- **`15_emoticon_data.csv`**
+- **`emoji_lexicon.csv`**
   - Source: provided as coursework material; upstream origin not recorded
   - License / terms: unverified (codepoints/names are factual Unicode data)
 
