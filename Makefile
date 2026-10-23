@@ -4,7 +4,8 @@
 
 PROJECT_NAME = emoji_sentiment_analysis
 PYTHON_VERSION = 3.12
-PYTHON_INTERPRETER = python3
+VENV_PYTHON = .venv/bin/python3
+PYTHON_INTERPRETER = $(shell test -f "$(VENV_PYTHON)" && echo "$(VENV_PYTHON)" || echo python3)
 
 # Automatically detects the IP of the current active Wi-Fi/Ethernet interface
 LOCAL_IP := $(shell $(PYTHON_INTERPRETER) -c "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0]); s.close()")
@@ -13,9 +14,20 @@ LOCAL_IP := $(shell $(PYTHON_INTERPRETER) -c "import socket; s=socket.socket(soc
 # COMMANDS                                                                      #
 #################################################################################
 
+## Create a Python virtual environment (idempotent — skips if .venv/ exists)
+.PHONY: venv
+venv:
+	@if [ -d .venv ]; then \
+		echo ">>> Virtual environment already exists at .venv/"; \
+	else \
+		echo ">>> Creating virtual environment at .venv/ (Python $(PYTHON_VERSION))..."; \
+		python3 -m venv .venv; \
+		echo ">>> Virtual environment created. Run 'source .venv/bin/activate' or let the Makefile use it automatically."; \
+	fi
+
 ## Install Python dependencies
 .PHONY: requirements
-requirements:
+requirements: venv
 	$(PYTHON_INTERPRETER) -m pip install -U pip
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 	$(PYTHON_INTERPRETER) -m pip install -e .
@@ -69,7 +81,7 @@ stream-logs:
 
 ## Train the model, then export scikit-learn-free inference weights
 .PHONY: train
-train:
+train: venv
 	$(PYTHON_INTERPRETER) src/emoji_sentiment_analysis/modeling/train_model.py
 	$(MAKE) export
 	@echo ">>> Artifacts updated in src/models/ (.pkl + model_lite.*)"
@@ -90,19 +102,19 @@ deploy-full: train deploy
 
 ## Run the local FastAPI dev server (with hot reload)
 .PHONY: dev
-dev:
-	uvicorn app:app --reload
+dev: venv
+	$(PYTHON_INTERPRETER) -m uvicorn app:app --reload
 
 ## Run the server exactly as it runs in the container (no reload, port 8080)
 .PHONY: serve
 serve:
-	uvicorn app:app --host 0.0.0.0 --port 8080 --log-level debug
+	$(PYTHON_INTERPRETER) -m uvicorn app:app --host 0.0.0.0 --port 8080 --log-level debug
 
 ## Run dev server accessible to your phone (Same Wi-Fi)
 .PHONY: dev-mobile
 dev-mobile:
 	@echo ">>> Connect your phone to: http://$(LOCAL_IP):8000"
-	uvicorn app:app --host $(LOCAL_IP) --port 8000 --reload
+	$(PYTHON_INTERPRETER) -m uvicorn app:app --host $(LOCAL_IP) --port 8000 --reload
 
 #################################################################################
 # Self Documenting Commands                                                     #
