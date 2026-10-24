@@ -1,0 +1,75 @@
+name: Lint PR Review
+
+# Free, deterministic PR review: runs ruff (lint and format check, configured
+# in pyproject.toml) on changed Python files and shellcheck on changed shell
+# scripts, then posts the result as a COMMENT review from github-actions[bot].
+# Not APPROVE: GitHub refuses APPROVE reviews from the default Actions token by
+# design.  A record, not a merge gate: no branch protection or required check.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Find changed files
+        id: changed
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE_REF" --depth=1
+          changed() { git diff --name-only --diff-filter=d "origin/$BASE_REF...HEAD" -- "$@" || true; }
+          changed '*.py' > py.txt
+          changed '*.sh' '*.bash' > sh.txt
+          echo "py=$([ -s py.txt ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      # The ruff version comes from requirements.txt, so CI lints with the
+      # same ruff the Makefile's `make lint` uses.
+      - name: Install ruff
+        if: steps.changed.outputs.py == 'true'
+        run: pipx install "$(grep -E '^ruff==' requirements.txt)"
+
+      - name: Lint changed files
+        run: |
+          {
+            if [ ! -s py.txt ] && [ ! -s sh.txt ]; then
+              echo "No Python or shell files changed in this PR."
+            fi
+            if [ -s py.txt ]; then
+              # --force-exclude keeps pyproject's excludes (notebooks) even
+              # though the files are passed by name.
+              LINT=$(xargs ruff check --force-exclude --output-format concise < py.txt 2>&1) && LINT=""
+              FMT=$(xargs ruff format --check --force-exclude < py.txt 2>&1) && FMT=""
+              OUT="$LINT${LINT:+${FMT:+$'\n'}}$FMT"
+              if [ -z "$OUT" ]; then
+                echo "ruff found no issues in:"; sed 's/^/- `/; s/$/`/' py.txt
+              else
+                echo "## ruff"; echo; echo '```'; echo "$OUT"; echo '```'
+              fi
+              echo
+            fi
+            if [ -s sh.txt ]; then
+              OUT=$(xargs shellcheck < sh.txt 2>&1) && OUT=""
+              if [ -z "$OUT" ]; then
+                echo "shellcheck found no issues in:"; sed 's/^/- `/; s/$/`/' sh.txt
+              else
+                echo "## shellcheck"; echo; echo '```'; echo "$OUT"; echo '```'
+              fi
+            fi
+          } > review.md
+
+      - name: Post as a GitHub review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr review "$PR_NUMBER" --comment --body-file review.md
